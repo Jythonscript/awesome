@@ -37,7 +37,6 @@ theme.border_width                              = 0
 theme.titlebar_size								= 1
 theme.titlebar_bg_normal 						= "#000000"
 theme.titlebar_bg_focus							= "#11AAFC"
---theme.titlebar_bg_focus							= "#00cbeb"
 theme.border_normal                             = "#1c2022"
 theme.border_focus                              = "#606060"
 theme.border_marked                             = "#3ca4d8"
@@ -104,66 +103,34 @@ theme.titlebar_maximized_button_focus_active    = theme.confdir .. "/icons/title
 
 local markup = lain.util.markup
 
---[[
-theme.tagnames =  {
-	utf8.char(0xf269), -- Firefox
-	utf8.char(0xf120), -- Terminal
-	utf8.char(0xf001), -- Music
-	utf8.char(0xf0e0), -- Mail
-	utf8.char(0xf1b6), -- Steam
-}
-]]--
 
 theme.tagnames =  {
 	utf8.char(0xf269), -- Firefox
 	utf8.char(0xf0e0), -- Mail
 	utf8.char(0xf04b), -- Music
-	--utf8.char(0xf001), -- Music
-	--utf8.char(0xf120), -- Terminal
 	"4",
-	--utf8.char(0xf3f6), -- Steam
 	"5",
 	"6", "7", "8", "9",
 	"F1", "F2", "F3", "F4", "F5", "F6",
 	"F7", "F8", "F9", "F10", "F11", "F12"
 }
 
--- Pomodoro configuration
---beautiful.pomodoro_icon = ""
-
 -- Textclock
 os.setlocale(os.getenv("LANG")) -- to localize the clock
 local clockicon = wibox.widget.imagebox(theme.widget_clock)
---local mytextclock = wibox.widget.textclock(markup("#7788af", "%A %d %B ") .. markup("#535f7a", ">") .. markup("#de5e1e", " %H:%M "))
 local mytextclock = wibox.widget.textclock(markup("#7788af", " %Y/%m/%d ") .. markup("#535f7a", ">") .. markup("#de5e1e", " %H:%M "))
 mytextclock.font = theme.font
 
 -- Calendar
---theme.cal = lain.widget.cal({
 cal = lain.widget.cal({
 	attach_to = { mytextclock },
 	followtag = true,
 	notification_preset = {
-		--font = "xos4 Terminus 10",
 		font = theme.fira_font,
 		fg   = theme.fg_normal,
 		bg   = theme.bg_normal
 	}
 })
---[[
--- Calendar
-theme.cal = lain.widget.calendar({
-attach_to = { mytextclock },
-followtag = true,
-three = true,
-notification_preset = {
---font = "Monospace 10",
-font = theme.fira_font,
-fg   = theme.fg_normal,
-bg   = theme.bg_normal
-}
-})
-]]--
 
 -- Weather
 
@@ -175,63 +142,19 @@ theme.weather = lain.widget.weather({
     weather_na_markup = markup.fontfg(theme.font, "#eca4c4", "N/A "),
     settings = function()
         descr = weather_now["weather"][1]["description"]:lower()
-        --units = math.floor(weather_now["main"]["temp"])
         units = math.floor(weather_now["main"]["temp"])
-        --local min = math.floor(weather_now["main"]["min"])
-        --local max = math.floor(weather_now["main"]["max"])
         widget:set_markup(markup.fontfg(theme.font, "#eca4c4", descr .. " @ " .. units .. "°F "))
     end
 })
 
--- / fs
---[[
 local fsicon = wibox.widget.imagebox(theme.widget_fs)
 theme.fs = lain.widget.fs({
-    options = "--exclude-type=tmpfs",
-	followtag = true,
-    --notification_preset = { font = "xos4 Terminus 10", fg = theme.fg_normal },
-    notification_preset = { font = theme.fira_font, fg = theme.fg_normal },
-    settings  = function()
-        widget:set_markup(markup.fontfg(theme.font, "#80d9d8", fs_now.used .. "% "))
-    end
-})
-]]--
-
--- / fs
-----[[ commented because it needs Gio/Glib >= 2.54
-local fsicon = wibox.widget.imagebox(theme.widget_fs)
-theme.fs = lain.widget.fs({
-    --notification_preset = { font = "xos4 Terminus 10", fg = theme.fg_normal },
 	followtag = true,
     notification_preset = { font = theme.fira_font, fg = theme.fg_normal },
     settings  = function()
         widget:set_markup(markup.fontfg(theme.font, "#80d9d8", string.format("%.1f", fs_now["/"].used) .. "% "))
     end
 })
-----]]
- 
---[[ Mail IMAP check
--- commented because it needs to be set before use
-local mailicon = wibox.widget.imagebox()
-local mail = lain.widget.imap({
-    timeout  = 180,
-    server   = "server",
-    mail     = "mail",
-    password = "keyring get mail",
-    settings = function()
-        if mailcount > 0 then
-            mailicon:set_image(theme.widget_mail)
-            widget:set_markup(markup.fontfg(theme.font, "#cccccc", mailcount .. " "))
-        else
-            widget:set_text("")
-            --mailicon:set_image() -- not working in 4.0
-            mailicon._private.image = nil
-            mailicon:emit_signal("widget::redraw_needed")
-            mailicon:emit_signal("widget::layout_changed")
-        end
-    end
-})
---]]
 
 -- CPU
 local cpuicon = wibox.widget.imagebox(theme.widget_cpu)
@@ -246,8 +169,6 @@ local cpu = lain.widget.cpu({
 		end
     end
 })
---cpu.widget:connect_signal('mouse::enter', function() cpu_toggle() end)
---cpu.widget:connect_signal('mouse::leave', function() cpu_toggle() end)
 
 function cpu_toggle()
 	if not cpu_notification then
@@ -349,45 +270,8 @@ function tableLength(T)
 	return count
 end
 
---[[
-local bat = battery(
-{
-	--settings = function(bat_now, widget)
-	settings = function(bat_now, widget)
-
-		--widget:set_markup(string.format("%3d", bat_now.perc) .. "% ")
-		--widget:set_markup(bat_now.perc .. "%")
-        --widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, "% "))
-		--if bat_now.status == "Discharging" then
-			--widget:set_markup(string.format("%3d", bat_now.perc) .. "% ")
-			--return
-		--end
-		-- We must be on AC
-		--baticon:set_image(beautiful.ac)
-		--widget:set_markup(bat_now.time .. " ")
-	end
-}
-)
-]]--
-
-
 -- ALSA volume
 local volicon = wibox.widget.imagebox(theme.widget_vol)
---[[
-theme.volume = lain.widget.alsa({
-    settings = function()
-        if volume_now.status == "off" then
-            volume_now.level = volume_now.level .. "M"
-        end
-
-		if volume_now.level == nil then
-			volume_now.level = 'nil'
-		end
-
-	    widget:set_markup(markup.fontfg(theme.font, "#7493d2", volume_now.level .. "% "))
-    end
-})
-]]--
 
 theme.volume = lain.widget.pulse({
 
@@ -424,31 +308,11 @@ theme.volume.widget:buttons(awful.util.table.join(
     end)
 ))
 
--- Net
---[[
-local netdownicon = wibox.widget.imagebox(theme.widget_netdown)
-local netdowninfo = wibox.widget.textbox()
-local netupicon = wibox.widget.imagebox(theme.widget_netup)
-local netupinfo = lain.widget.net({
-    settings = function()
-        if iface ~= "network off" and
-           string.match(theme.weather.widget.text, "N/A")
-        then
-            theme.weather.update()
-        end
-
-        widget:set_markup(markup.fontfg(theme.font, "#e54c62", net_now.sent .. " "))
-        netdowninfo:set_markup(markup.fontfg(theme.font, "#87af5f", net_now.received .. " "))
-    end
-})
-]]--
-
 -- MEM
 local memicon = wibox.widget.imagebox(theme.widget_mem)
 local memory = lain.widget.mem({
     settings = function()
         widget:set_markup(markup.fontfg(theme.font, "#e0da37", math.floor((mem_now.used / 1024) * 10 ) / 10 .. "G "))
-        --widget:set_markup(markup.fontfg(theme.font, "#e0da37", mem_now.used .. "MB " ))
     end
 })
 
@@ -457,8 +321,6 @@ local memory = lain.widget.mem({
 theme.tasks = wibox.widget.textbox()
 theme.tasks:set_markup(markup.fontfg(theme.font, "#4286f4", " Tasks"))
 lain.widget.contrib.task.attach(theme.tasks, {})
---lain.widget.contrib.task.show_cmd = 'task rc.verbose:label'
---lain.widget.contrib.task.show_cmd = 'task rc.verbose:nothing'
 
 -- pacman
 pacmanwidget = {}
@@ -477,7 +339,6 @@ lain.widget.contrib.redshift:attach(
 	myredshift,
 	function (active)
 		if active then
-			--myredshift:set_text("RS on")
 			myredshift:set_markup(markup.fontfg(theme.font, "#4fcc2c", " RS"))
 		else
 			myredshift:set_markup(markup.fontfg(theme.font, "#d30000", " RS"))
@@ -493,10 +354,7 @@ mynaughtynotif = wibox.widget.textbox()
 mynaughtynotif:set_markup(markup.fontfg(theme.font, "#4286f4", "mynaughtynotif"))
 
 function naughtywidget.toggle()
-	--naughty.toggle()
-	--naughty.destroy_all_notifications()
 	naughtywidget.disable_notifications = not naughtywidget.disable_notifications
-	--naughty.notify(tostring(theme.mpd.notify))
 	if naughtywidget.disable_notifications then
 		theme.mpd.notify="off"
 	else
@@ -516,12 +374,7 @@ end
 -- Start with correct naughty colors
 naughtywidget.update()
 
--- Unclutter widget
-
-
-
 -- MPD
-
 function theme.mpd_toggle()
 	os.execute("mpc toggle")
 	theme.mpd.update()
@@ -545,7 +398,6 @@ function theme.mpd_prev()
 end
 
 local mpdicon = wibox.widget.imagebox()
---minimized mode boolean
 local minimized = false
 theme.mpd = lain.widget.mpd({
     settings = function()
@@ -585,7 +437,6 @@ theme.mpd = lain.widget.mpd({
 		local totalsongtime =  tstmin .. tstsec
         mpd_notification_preset = {
 			-- SETTINGS 
-			--timeout = 1,
 			followtag = true,
             text = string.format("%s [%s] - %s\n%s", mpd_now.artist, mpd_now.album, mpd_now.date, mpd_now.title)
         }
@@ -593,7 +444,6 @@ theme.mpd = lain.widget.mpd({
         if mpd_now.state == "play" then
             artist = mpd_now.artist .. " > "
 			prefix = " [" .. songnumber .. "/" .. totalsongs .. "]" .. " (" .. currentsongtime .. " / " .. totalsongtime .. ") "
-            --title  = mpd_now.title .. " [" .. songnumber .. "/" .. totalsongs .. "]" .. " (" .. currentsongtime .. " / " .. totalsongtime .. ")" .. " "
             title  = mpd_now.title
             mpdicon:set_image(theme.widget_note_on)
         elseif mpd_now.state == "pause" then
@@ -602,7 +452,6 @@ theme.mpd = lain.widget.mpd({
         else  
             artist = ""
             title  = ""
-            --mpdicon:set_image() -- not working in 4.0
             mpdicon._private.image = nil
             mpdicon:emit_signal("widget::redraw_needed")
             mpdicon:emit_signal("widget::layout_changed")
@@ -610,10 +459,8 @@ theme.mpd = lain.widget.mpd({
 
 		if minimized then
 			widget:set_markup(markup.fontfg(markup.fontfg(theme.font, "#6dc2ff", title)))
-			--naughty.notify({text = "minimized"})
 		else
 			widget:set_markup(markup.fontfg(theme.font, "#e54c62", artist) .. markup.fontfg(theme.font, "#428ff4", prefix) .. markup.fontfg(theme.font, "#6dc2ff", title))
-			--naughty.notify({text = "maximized"})
 		end
     end
 })
@@ -623,10 +470,8 @@ theme.mpd.widget:buttons(gears.table.join(
 		theme.mpd_toggle()
 	end),
 	awful.button({ }, 2, function()
-		--theme.mpd_random_toggle()
 	end),
 	awful.button({ }, 3, function()
-		--theme.mpd_repeat_cycle()
 		minimized = not minimized
 	end),
 	awful.button({ }, 4, function()
@@ -637,19 +482,8 @@ theme.mpd.widget:buttons(gears.table.join(
 	end)
 ))
 
-
 --change systray monitor
 local systray = wibox.widget.systray()
---[[
-if screen:count() > 1 then
-	--systray:set_screen(screen[#screen+1])
-	--systray:set_screen(-1)
-	--wibox.widget.systray:set_screen(screen[#screen+1])
-	for s in screen do
-		wibox.widget.systray:set_screen(s)
-		naughty.notify({text=tostring(s)})
-	end
-]]--
 
 -- Eminent-like task filtering
 local orig_taglist_filter = awful.widget.taglist.filter.all
@@ -673,7 +507,6 @@ function theme.at_screen_connect(s)
     gears.wallpaper.maximized(wallpaper, s, true)
 
     -- Tags
-    --awful.tag(awful.util.tagnames, s, awful.layout.layouts)
     awful.tag(theme.tagnames, s, awful.layout.layouts)
 
     -- Create a promptbox for each screen
@@ -695,86 +528,34 @@ function theme.at_screen_connect(s)
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = 25, bg = "#010101", fg = theme.fg_normal })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = 25, bg = "#000102", fg = theme.fg_normal })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            --s.mylayoutbox,
             s.mytaglist,
             s.mypromptbox,
             mpdicon,
             theme.mpd.widget,
-			--s.mytasklist,
         },
-        --s.mytasklist, -- Middle widget
 		s.mytasklist,
-        --nil,
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
 			systray,
-            --wibox.widget.systray(),
-            --mailicon,
-            --mail.widget,
-            --netdownicon,
-            --netdowninfo,
-            --netupicon,
-            --netupinfo.widget,
-			--pomodoro,
-			--mynaughtynotif,
 			myredshift,
-			--mypacman,
-			--theme.tasks,
             volicon,
             theme.volume.widget,
             memicon,
             memory.widget,
             cpuicon,
             cpu.widget,
-            --fsicon,
-            --theme.fs.widget,
-            --weathericon,
-            --theme.weather.widget,
-            --tempicon,
-            --temp.widget,
             bat.widget,
-            --clockicon,
             mytextclock,
         },
     }
 
-    -- Create the bottom wibox
-	--[[
-    s.mybottomwibox = awful.wibar({ position = "bottom", screen = s, border_width = 0, height = 20, bg = theme.bg_normal, fg = theme.fg_normal })
-
-    -- Add widgets to the bottom wibox
-    s.mybottomwibox:setup {
-        layout = wibox.layout.align.horizontal,
-        { -- Left widgets
-            layout = wibox.layout.fixed.horizontal,
-        },
-        s.mytasklist, -- Middle widget
-        { -- Right widgets
-            layout = wibox.layout.fixed.horizontal,
-            s.mylayoutbox,
-        },
-    }
-	]]--
 end
 
---CUSTOM, get output of cmd command, raw=false strips out some chars
---[[
-function os.capture(cmd, raw)
-	local f = assert(io.popen(cmd, 'r'))
-	local s = assert(f:read('*a'))
-	f:close()
-	if raw then return s end
-	s = string.gsub(s, '^%s+', '')
-	s = string.gsub(s, '%s+$', '')
-	s = string.gsub(s, '[\n\r]+', ' ')
-	return s
-end
-]]--
 return theme
