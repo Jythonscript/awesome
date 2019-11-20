@@ -909,11 +909,6 @@ globalkeys = gears.table.join(
     -- User programs
     awful.key({ modkey }, "q", 
 		function () 
-			awful.spawn(browser, {maximized = true}) 
-		end,
-              {description = "run browser maximized", group = "launcher"}),
-    awful.key({ modkey }, "e", 
-		function () 
 			awful.spawn(browser, {maximized = false}) 
 		end,
               {description = "run browser not maximized", group = "launcher"}),
