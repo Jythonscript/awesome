@@ -14,11 +14,6 @@ local naughty  = require("naughty")
 local ipairs
 local os    = { getenv = os.getenv, setlocale = os.setlocale, execute = os.execute }
 
--- pomodoro widget
-local pomodoro = require("pomodoro")
--- upower battery
---local battery = require("awesome-upower-battery")
-
 theme                                     = {}
 theme.confdir                                   = os.getenv("HOME") .. "/.config/awesome/themes/multicolor"
 theme.wallpaper                                 = theme.confdir .. "/wall.png"
