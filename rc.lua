@@ -116,7 +116,7 @@ local function terminal_program(cmd)
 end
 
 local function popup_program(cmd)
-	return terminal .. " -name popup -geometry 160x20 -e zsh -c \"source ~/.zshrc && " .. cmd .. "\""
+	return terminal .. " -name popup -bg black -geometry 160x20 -e zsh -c \"source ~/.zshrc && " .. cmd .. "\""
 end
 
 local function popup_when_no_args(cmd)
