@@ -200,6 +200,7 @@ run_once({
 	{"ncmpcpp", {tag = beautiful.tagnames[3]}},
 	{"unclutter --timeout 5"},
 	{"mpd"},
+	{"light-locker"},
 	{"~/git/compton-shaders/shader.sh ~/git/compton-shaders/compton-fake-transparency-fshader-win.glsl"},
 })
 
