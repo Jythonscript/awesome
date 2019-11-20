@@ -24,7 +24,7 @@ configs = {
 	"elrond", -- 1
 	"aragorn" -- 2
 }
-selectedConfig = configs[2]
+selectedConfig = configs[1]
 
 doSloppyFocus = true
 keyboardLayouts = {"default", "celeste"}
@@ -923,11 +923,6 @@ globalkeys = gears.table.join(
 		end,
               {description = "run browser not maximized", group = "launcher"}),
 
-    awful.key({ modkey }, "g", 
-		function () 
-			awful.spawn("env GDK_SCALE=2 steam") 
-		end,
-              {description = "start steam with GTK dpi adjust", group = "launcher"}),
     awful.key({ modkey }, "`", 
 		function () 
 			selectedKeyboardLayout = selectedKeyboardLayout + 1
@@ -1031,7 +1026,13 @@ laptopkeys = gears.table.join(
         function ()
 			os.execute("pactl set-source-mute 1 toggle")
         end,
-        {description = "toggle microphone mute", group = "hotkeys"})
+        {description = "toggle microphone mute", group = "hotkeys"}),
+
+    awful.key({ modkey }, "g",
+		function ()
+			awful.spawn("env GDK_SCALE=2 steam")
+		end,
+              {description = "start steam with GTK dpi adjust", group = "launcher"})
 )
 
 
@@ -1088,7 +1089,12 @@ pckeys = gears.table.join(
 			os.execute("mpc volume 100")
             beautiful.mpd.update()
         end,
-        {description = "mpd volume down", group = "mpd"})
+        {description = "mpd volume down", group = "mpd"}),
+    awful.key({ modkey }, "g",
+		function ()
+			awful.spawn("steam")
+		end,
+              {description = "start steam", group = "launcher"})
 )
 
 -- client keys
