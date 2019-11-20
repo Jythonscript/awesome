@@ -18,7 +18,14 @@ local naughty       = require("naughty")
 local lain          = require("lain")
 local freedesktop   = require("freedesktop")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
---
+
+-- Slightly different configs for different machines
+configs = {
+	"elrond", -- 1
+	"aragorn" -- 2
+}
+selectedConfig = configs[2]
+
 doSloppyFocus = true
 keyboardLayouts = {"default", "celeste"}
 selectedKeyboardLayout = 1
@@ -26,7 +33,7 @@ numKeyboardLayouts = 2
 shaders = {"transparent", "grayscale", "crt-pi", "crt-aperture", "none"}
 selectedShader = 1
 numShaders = 5
-local battery = require("awesome-upower-battery")
+--local battery = require("awesome-upower-battery")
 -- }}}
 
 -- {{{ Error handling
@@ -186,19 +193,30 @@ end
 
 run_once({
 	{"thunderbird"},
-	{"redshift -r"},
+	--{"redshift -r"},
 	{"firefox"},
 	{"xscreensaver"},
 	{"discord"},
 	{"ncmpcpp", {tag = beautiful.tagnames[3]}},
 	{"unclutter --timeout 5"},
-	{"NetworkManager"},
-	{"nm-applet"},
 	{"mpd"},
 	{"~/git/compton-shaders/shader.sh ~/git/compton-shaders/compton-fake-transparency-fshader-win.glsl"},
 })
 
-awful.util.taglist_buttons = awful.util.table.join(
+-- append platform run_once
+if selectedConfig == "elrond" then
+	run_once({
+
+	})
+elseif selectedConfig == "aragorn" then
+	run_once({
+		{"NetworkManager"},
+		{"nm-applet"}
+	})
+end
+
+
+awful.util.taglist_buttons = gears.table.join(
                     awful.button({ }, 1, function(t) t:view_only() end),
                     awful.button({ modkey }, 1, function(t)
                                               if client.focus then
@@ -214,7 +232,7 @@ awful.util.taglist_buttons = awful.util.table.join(
                     awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
                     awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
                 )
-awful.util.tasklist_buttons = awful.util.table.join(
+awful.util.tasklist_buttons = gears.table.join(
                      awful.button({ }, 1, function (c)
                                               if c == client.focus then
                                                   c.minimized = true
@@ -311,7 +329,7 @@ awful.screen.connect_for_each_screen(function(s) beautiful.at_screen_connect(s) 
 -- }}}
 
 -- {{{ Mouse bindings
-root.buttons(awful.util.table.join(
+root.buttons(gears.table.join(
     awful.button({ }, 3, function () awful.util.mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
@@ -319,27 +337,8 @@ root.buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Key bindings
-globalkeys = awful.util.table.join(
+globalkeys = gears.table.join(
 	--awful.key({}, "XF86Calculator",
-	awful.key({}, "XF86Launch2",
-		function ()
-			for _, c in ipairs(client.get()) do
-				if c.name == "WP34s" then
-					c:kill()
-					return
-				end
-			end
-
-			awful.spawn("/home/avery/Documents/Applications/wp-34s/wp-34s/WP-34s", { 
-				titlebarsenabled = false 
-			})
-		end,
-        {description = "open wp34s calculator emulator", group = "custom"}),
-	awful.key({}, "XF86Launch1",
-        function ()
-			os.execute("light-locker-command -l");
-        end,
-        {description = "lock screen", group = "custom"}),
 	awful.key({ modkey, "Shift" }, "c",
         function ()
 			if fake_input_mouse3_pressed == true then
@@ -353,11 +352,6 @@ globalkeys = awful.util.table.join(
 			end
         end,
         {description = "toggle secondary mouse pressed", group = "custom"}),
-	awful.key({}, "XF86Tools",
-        function ()
-			os.execute("systemctl hibernate");
-        end,
-        {description = "hibernate", group = "custom"}),
     awful.key({ modkey }, "p", 
 		function() 
 			os.execute("scrot -e 'mv $f ~/Pictures/Screenshots/'") 
@@ -826,12 +820,6 @@ globalkeys = awful.util.table.join(
 			end 
 		end,
         {description = "show weather", group = "widgets"}),
-    -- Brightness
-    awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn("xbacklight -inc 5") end,
-              {description = "+5%", group = "hotkeys"}),
-    awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn("xbacklight -dec 5") end,
-              {description = "-5%", group = "hotkeys"}),
-
     -- Pulse volume control
 	awful.key({}, "XF86AudioRaiseVolume",
         function ()
@@ -852,12 +840,6 @@ globalkeys = awful.util.table.join(
 			theme.volume.update()
         end,
         {description = "toggle mute", group = "hotkeys"}),
-	awful.key({}, "XF86AudioMicMute",
-        function ()
-			os.execute("pactl set-source-mute 1 toggle")
-        end,
-        {description = "toggle microphone mute", group = "hotkeys"}),
-
     awful.key({ altkey, "Control" }, "m",
         function ()
            os.execute(string.format("amixer -D pulse set Master toggle"))
@@ -878,13 +860,6 @@ globalkeys = awful.util.table.join(
             beautiful.mpd.update()
         end,
         {description = "mpc toggle", group = "mpd"}),
-	awful.key({}, "XF86AudioPlay",
-        function ()
-            awful.spawn.with_shell("mpc toggle")
-            beautiful.mpd.update()
-        end,
-        {description = "mpc toggle", group = "mpd"}),
-
     awful.key({ altkey }, ";",
         function ()
             awful.spawn.with_shell("mpc stop")
@@ -1010,7 +985,114 @@ globalkeys = awful.util.table.join(
               {description = "run prompt", group = "launcher"})
 )
 
-clientkeys = awful.util.table.join(
+-- laptop specific shortcuts
+laptopkeys = gears.table.join(
+	-- launch calculator
+	awful.key({}, "XF86Launch2",
+		function ()
+			for _, c in ipairs(client.get()) do
+				if c.name == "WP34s" then
+					c:kill()
+					return
+				end
+			end
+
+			awful.spawn("/home/avery/Documents/Applications/wp-34s/wp-34s/WP-34s", { 
+				titlebarsenabled = false 
+			})
+		end,
+        {description = "open wp34s calculator emulator", group = "custom"}),
+	-- lock screen
+	awful.key({}, "XF86Launch1",
+        function ()
+			os.execute("light-locker-command -l");
+        end,
+        {description = "lock screen", group = "custom"}),
+	-- hibernate
+	awful.key({}, "XF86Tools",
+        function ()
+			os.execute("systemctl hibernate");
+        end,
+        {description = "hibernate", group = "custom"}),
+    -- brightness
+    awful.key({ }, "XF86MonBrightnessUp", 
+		function () 
+			awful.util.spawn("xbacklight -inc 5") 
+		end,
+		{description = "+5%", group = "hotkeys"}),
+
+    awful.key({ }, "XF86MonBrightnessDown", 
+		function () 
+			awful.util.spawn("xbacklight -dec 5") 
+		end,
+		{description = "-5%", group = "hotkeys"}),
+	-- mute microphone
+	awful.key({}, "XF86AudioMicMute",
+        function ()
+			os.execute("pactl set-source-mute 1 toggle")
+        end,
+        {description = "toggle microphone mute", group = "hotkeys"})
+)
+
+
+-- pc specific shortcuts
+pckeys = gears.table.join(
+	-- launch calculator
+	awful.key({}, "XF86Calculator",
+		function ()
+			for _, c in ipairs(client.get()) do
+				if c.name == "WP34s" then
+					c:kill()
+					return
+				end
+			end
+
+			awful.spawn("/home/avery/Documents/Applications/wp-34s/wp-34s/WP-34s", { 
+				titlebarsenabled = false 
+			})
+		end,
+        {description = "open wp34s calculator emulator", group = "custom"}),
+	-- lock screen
+	awful.key({}, "XF86Favorites",
+        function ()
+			os.execute("light-locker-command -l")
+        end,
+        {description = "lock screen", group = "custom"}),
+	-- hibernate
+	awful.key({ modkey }, "XF86Favorites",
+        function ()
+			os.execute("systemctl hibernate")
+        end,
+        {description = "hibernate system", group = "custom"}),
+	-- toggle mpd
+	awful.key({}, "XF86AudioPlay",
+        function ()
+            awful.spawn.with_shell("mpc toggle")
+            beautiful.mpd.update()
+        end,
+        {description = "mpc toggle", group = "mpd"}),
+	awful.key({ modkey }, "XF86AudioRaiseVolume",
+        function ()
+			os.execute("mpc volume +5")
+            beautiful.mpd.update()
+        end,
+        {description = "mpd volume up", group = "mpd"}),   
+	awful.key({ modkey }, "XF86AudioLowerVolume",
+        function ()
+			os.execute("mpc volume -5")
+            beautiful.mpd.update()
+        end,
+        {description = "mpd volume down", group = "mpd"}),
+	awful.key({ modkey }, "XF86AudioMute",
+        function ()
+			os.execute("mpc volume 100")
+            beautiful.mpd.update()
+        end,
+        {description = "mpd volume down", group = "mpd"})
+)
+
+-- client keys
+clientkeys = gears.table.join(
     awful.key({ altkey, "Shift"   }, "m",      lain.util.magnify_client,
               {description = "magnify client", group = "client"}),
     awful.key({ modkey,           }, "f",
@@ -1141,7 +1223,7 @@ for i, k in ipairs(tag_keys) do
 		i = i - 12
 	end
 
-    globalkeys = awful.util.table.join(globalkeys,
+    globalkeys = gears.table.join(globalkeys,
         -- View tag only.
         awful.key({ modkey }, k,
                   function ()
@@ -1187,13 +1269,20 @@ for i, k in ipairs(tag_keys) do
     )
 end
 
-clientbuttons = awful.util.table.join(
+clientbuttons = gears.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize))
 
 -- Set keys
 root.keys(globalkeys)
+
+-- append platform shortcuts
+if selectedConfig == "elrond" then
+	root.keys(gears.table.join(globalkeys, pckeys))
+elseif selectedConfig == "aragorn" then
+	root.keys(gears.table.join(globalkeys, laptopkeys))
+end
 -- }}}
 
 -- {{{ Rules
@@ -1326,7 +1415,7 @@ client.connect_signal("request::titlebars", function(c)
 
     -- Default
     -- buttons for the titlebar
-    local buttons = awful.util.table.join(
+    local buttons = gears.table.join(
         awful.button({ }, 1, function()
             client.focus = c
             c:raise()

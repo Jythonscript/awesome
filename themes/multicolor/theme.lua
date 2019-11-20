@@ -17,7 +17,7 @@ local os    = { getenv = os.getenv, setlocale = os.setlocale, execute = os.execu
 -- pomodoro widget
 local pomodoro = require("pomodoro")
 -- upower battery
-local battery = require("awesome-upower-battery")
+--local battery = require("awesome-upower-battery")
 
 theme                                     = {}
 theme.confdir                                   = os.getenv("HOME") .. "/.config/awesome/themes/multicolor"
@@ -528,7 +528,18 @@ function theme.at_screen_connect(s)
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = 25, bg = "#000102", fg = theme.fg_normal })
+	--naughty.notify({text = "" .. selectedConfig})
+	-- append platform shortcuts
+	if selectedConfig == "elrond" then
+		s.mywibox = awful.wibar({ position = "top", screen = s, height = 18, bg = "#000102", fg = theme.fg_normal })
+		naughty.notify({text = "18"})
+	elseif selectedConfig == "aragorn" then
+		s.mywibox = awful.wibar({ position = "top", screen = s, height = 25, bg = "#000102", fg = theme.fg_normal })
+		naughty.notify({text = "25"})
+	end
+
+
+	
 
     -- Add widgets to the wibox
     s.mywibox:setup {
