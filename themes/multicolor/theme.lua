@@ -238,6 +238,11 @@ bat.widget:buttons(awful.util.table.join(
 bat.widget:connect_signal('mouse::enter', function() battery_info_toggle() end)
 bat.widget:connect_signal('mouse::leave', function() battery_info_toggle() end)
 
+-- don't show battery if on desktop
+if selectedConfig == "elrond" then
+	bat.widget = nil
+end
+
 -- display status, battery count, each percentage, and watts
 function battery_info_toggle()
 	if not battery_notification then
