@@ -911,7 +911,7 @@ globalkeys = gears.table.join(
 		function () 
 			awful.spawn(browser, {maximized = false}) 
 		end,
-              {description = "run browser not maximized", group = "launcher"}),
+              {description = "run browser", group = "launcher"}),
     awful.key({ modkey }, "a", 
 		function () 
 			os.execute("rofi -show window -disable-history");
@@ -1226,7 +1226,7 @@ for i, k in ipairs(tag_keys) do
 
     globalkeys = gears.table.join(globalkeys,
         -- View tag only.
-        awful.key({ modkey, "Control" }, k,
+        awful.key({ modkey }, k,
                   function ()
                         local screen = awful.screen.focused()
                         local tag = screen.tags[i]
@@ -1236,7 +1236,7 @@ for i, k in ipairs(tag_keys) do
                   end,
                   descr_view),
         -- Toggle tag display.
-        awful.key({ modkey}, k,
+        awful.key({ modkey, "Control"}, k,
                   function ()
                       local screen = awful.screen.focused()
                       local tag = screen.tags[i]
