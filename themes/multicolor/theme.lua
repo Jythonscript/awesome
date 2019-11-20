@@ -532,10 +532,8 @@ function theme.at_screen_connect(s)
 	-- append platform shortcuts
 	if selectedConfig == "elrond" then
 		s.mywibox = awful.wibar({ position = "top", screen = s, height = 18, bg = "#000102", fg = theme.fg_normal })
-		naughty.notify({text = "18"})
 	elseif selectedConfig == "aragorn" then
 		s.mywibox = awful.wibar({ position = "top", screen = s, height = 25, bg = "#000102", fg = theme.fg_normal })
-		naughty.notify({text = "25"})
 	end
 
 
