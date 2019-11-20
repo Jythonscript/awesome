@@ -1231,7 +1231,7 @@ for i, k in ipairs(tag_keys) do
 
     globalkeys = gears.table.join(globalkeys,
         -- View tag only.
-        awful.key({ modkey }, k,
+        awful.key({ modkey, "Control" }, k,
                   function ()
                         local screen = awful.screen.focused()
                         local tag = screen.tags[i]
@@ -1241,7 +1241,7 @@ for i, k in ipairs(tag_keys) do
                   end,
                   descr_view),
         -- Toggle tag display.
-        awful.key({ modkey, "Control" }, k,
+        awful.key({ modkey}, k,
                   function ()
                       local screen = awful.screen.focused()
                       local tag = screen.tags[i]
