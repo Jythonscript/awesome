@@ -276,7 +276,11 @@ local volicon = wibox.widget.imagebox(theme.widget_vol)
 theme.volume = lain.widget.pulse({
 
 	settings = function()
-		vlevel = math.floor((volume_now.left + volume_now.right)/2)
+		if type(volume_now.left) == "number" and type(volume_now.right) == "number" then
+			vlevel = math.floor((volume_now.left + volume_now.right)/2)
+		else
+			vlevel = ""
+		end
 		if volume_now.muted == "yes" then
 			vlevel = vlevel .. "M"
 		else
