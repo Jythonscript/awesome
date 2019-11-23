@@ -135,7 +135,7 @@ local special_run_commands = {
 	{"top", terminal_program},
 	{"man", terminal_program},
 	{"m", popup_when_no_args},
-	{"ms", popup_program}
+	{"mp", popup_when_no_args}
 }
 
 local function parse_for_special_run_commands(in_cmd)
