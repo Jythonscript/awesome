@@ -402,9 +402,9 @@ local minimized = false
 theme.mpd = lain.widget.mpd({
     settings = function()
 
+		-- playlist position
 		local songnumber = 0
 		local totalsongs = 0
-
 		if mpd_now.pls_pos ~= "N/A" then
 			songnumber = math.floor(mpd_now.pls_pos + 1)
 		end
@@ -412,6 +412,8 @@ theme.mpd = lain.widget.mpd({
 			totalsongs = mpd_now.pls_len
 		end
 
+		local display_text = ""
+		-- song time
 		local cstmin = 0
 		local cstsec = 0
 		local currentsongtime = 0
@@ -431,21 +433,32 @@ theme.mpd = lain.widget.mpd({
 			if tstsec < 10 then
 				tstsec = "0" .. tstsec
 			end
-		else
-			
+			display_text = string.format("%s [%s] - %s\n%s", mpd_now.artist, mpd_now.album, mpd_now.date, mpd_now.title)
 		end
+
 		local totalsongtime =  tstmin .. tstsec
         mpd_notification_preset = {
 			-- SETTINGS 
 			followtag = true,
-            text = string.format("%s [%s] - %s\n%s", mpd_now.artist, mpd_now.album, mpd_now.date, mpd_now.title)
+            text = display_text
         }
+
+		-- widget text
 		local prefix = ""
         if mpd_now.state == "play" then
-            artist = mpd_now.artist .. " > "
+
+			if mpd_now.artist == "N/A" then
+				artist = ""
+			else
+				artist = mpd_now.artist .. " > "
+			end
+
 			prefix = " [" .. songnumber .. "/" .. totalsongs .. "]" .. " (" .. currentsongtime .. " / " .. totalsongtime .. ") "
-            title  = mpd_now.title
-            mpdicon:set_image(theme.widget_note_on)
+			if mpd_now.title == "N/A" then
+				title = mpd_now.name
+			else
+				title  = mpd_now.title
+			end
         elseif mpd_now.state == "pause" then
             artist = "mpd "
             title  = "paused "
