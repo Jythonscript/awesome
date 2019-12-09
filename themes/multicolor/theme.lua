@@ -220,6 +220,8 @@ bat.widget:buttons(awful.util.table.join(
 	awful.button({}, 1, function() -- left click
 		-- update battery percentage number in widget
 		bat.update()
+		battery_info_toggle()
+		battery_info_toggle()
 	end),
 	awful.button({}, 2, function() -- middle click
 
