@@ -380,7 +380,11 @@ globalkeys = gears.table.join(
     awful.key({ modkey,  "Shift"         }, "Return",
 		function()
 			local term_id = "/run/user/$(id --user)/urxvtc_ids/" .. client.focus.window
-			awful.spawn.with_shell(terminal .. " -cd $([ -f " .. term_id .. " ] && readlink -e /proc/$(cat " .. term_id .. ")/cwd || echo $HOME)")
+			awful.spawn.with_shell(terminal ..
+				" -cd \"$([ -f " .. term_id .. " ] && \
+				readlink -e /proc/$(cat " .. term_id .. ")/cwd || \
+				echo $HOME)\""
+			)
 
 		end,
         	  {description = "new terminal w/ same directory", group = "launcher"}),
