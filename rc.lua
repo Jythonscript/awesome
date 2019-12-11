@@ -901,6 +901,18 @@ globalkeys = gears.table.join(
 			os.execute("mpc seek 0")
         end,
         {description = "restart song", group = "mpd"}),
+	awful.key({ modkey }, "Up",
+        function ()
+			os.execute("mpc volume +5")
+            beautiful.mpd.update()
+        end,
+        {description = "mpd volume up", group = "mpd"}),   
+	awful.key({ modkey }, "Down",
+        function ()
+			os.execute("mpc volume -5")
+            beautiful.mpd.update()
+        end,
+        {description = "mpd volume down", group = "mpd"}),
 	awful.key({ modkey }, "v",
 		function()
 			local s = awful.screen.focused()
@@ -1073,18 +1085,6 @@ pckeys = gears.table.join(
             beautiful.mpd.update()
         end,
         {description = "mpc toggle", group = "mpd"}),
-	awful.key({ modkey }, "XF86AudioRaiseVolume",
-        function ()
-			os.execute("mpc volume +5")
-            beautiful.mpd.update()
-        end,
-        {description = "mpd volume up", group = "mpd"}),   
-	awful.key({ modkey }, "XF86AudioLowerVolume",
-        function ()
-			os.execute("mpc volume -5")
-            beautiful.mpd.update()
-        end,
-        {description = "mpd volume down", group = "mpd"}),
 	awful.key({ modkey }, "XF86AudioMute",
         function ()
 			os.execute("mpc volume 100")
