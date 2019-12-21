@@ -1340,6 +1340,13 @@ awful.rules.rules = {
 			ontop = true
 		}
 	},
+	-- development
+	{
+		rule = {class = "Sudoku"},
+		properties = {
+			floating = true
+		}
+	},
 	{
 	    rule = { class = "URxvt", instance = "vis" },
 	    properties = {
