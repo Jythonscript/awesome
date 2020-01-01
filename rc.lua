@@ -236,7 +236,6 @@ elseif selectedConfig == "aragorn" then
 	})
 end
 
-
 awful.util.taglist_buttons = gears.table.join(
                     awful.button({ }, 1, function(t) t:view_only() end),
                     awful.button({ modkey }, 1, function(t)
@@ -1066,7 +1065,6 @@ laptopkeys = gears.table.join(
 		end,
               {description = "start steam with GTK dpi adjust", group = "launcher"})
 )
-
 
 -- pc specific shortcuts
 pckeys = gears.table.join(

@@ -98,7 +98,6 @@ theme.titlebar_maximized_button_focus_active    = theme.confdir .. "/icons/title
 
 local markup = lain.util.markup
 
-
 theme.tagnames =  {
 	utf8.char(0xf269), -- Firefox
 	utf8.char(0xf0e0), -- Mail
@@ -543,16 +542,12 @@ function theme.at_screen_connect(s)
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
 
     -- Create the wibox
-	--naughty.notify({text = "" .. selectedConfig})
 	-- append platform shortcuts
 	if selectedConfig == "elrond" then
 		s.mywibox = awful.wibar({ position = "top", screen = s, height = 18, bg = "#000102", fg = theme.fg_normal })
 	elseif selectedConfig == "aragorn" then
 		s.mywibox = awful.wibar({ position = "top", screen = s, height = 25, bg = "#000102", fg = theme.fg_normal })
 	end
-
-
-	
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -579,7 +574,6 @@ function theme.at_screen_connect(s)
             mytextclock,
         },
     }
-
 end
 
 return theme
