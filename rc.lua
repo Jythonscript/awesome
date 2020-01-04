@@ -198,7 +198,6 @@ run_once({
 	{"firefox"},
 	{"xscreensaver"},
 	{"discord"},
-	{"ncmpcpp", {tag = beautiful.tagnames[3]}},
 	{"unclutter --timeout 5"},
 	{"mpd"},
 	{"light-locker"},
