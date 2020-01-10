@@ -1062,7 +1062,18 @@ laptopkeys = gears.table.join(
 		function ()
 			awful.spawn("env GDK_SCALE=2 steam")
 		end,
-              {description = "start steam with GTK dpi adjust", group = "launcher"})
+              {description = "start steam with GTK dpi adjust", group = "launcher"}),
+    awful.key({ }, "XF86Display",
+		function ()
+			os.execute("xinput enable 21")
+		end,
+              {description = "enable trackpad", group = "custom"}),
+    awful.key({ }, "XF86Bluetooth",
+		function ()
+			os.execute("xinput disable 21")
+		end,
+              {description = "disable trackpad", group = "custom"})
+
 )
 
 -- pc specific shortcuts
