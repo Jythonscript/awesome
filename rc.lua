@@ -131,6 +131,7 @@ local special_run_commands = {
 	{"ncmpcpp", terminal_program},
 	{"n", popup_program},
 	{"t", popup_program},
+	{"sym", popup_program},
 	{"vim", terminal_program},
 	{"htop", terminal_program},
 	{"top", terminal_program},
