@@ -33,6 +33,7 @@ numKeyboardLayouts = 2
 shaders = {"transparent", "grayscale", "crt-pi", "crt-aperture", "none"}
 selectedShader = 1
 numShaders = 5
+
 --local battery = require("awesome-upower-battery")
 -- }}}
 
@@ -985,6 +986,27 @@ globalkeys = gears.table.join(
 			end
 		end,
 			{description = "change shader", group = "custom"}),
+	-- Change popup program location
+	awful.key({ modkey, altkey, "Control"}, "Up",
+		function()
+			local popupPlacement = awful.placement.top+awful.placement.center_horizontal
+			for _, c in ipairs(client.get()) do
+				if c.instance == "popup" then
+					popupPlacement(c)
+				end
+			end
+		end,
+		{description = "move popups up"}),
+	awful.key({ modkey, altkey, "Control"}, "Down",
+		function()
+			local popupPlacement = awful.placement.bottom+awful.placement.center_horizontal
+			for _, c in ipairs(client.get()) do
+				if c.instance == "popup" then
+					popupPlacement(c)
+				end
+			end
+		end,
+		{description = "move popups down"}),
     -- Prompt
     awful.key({ modkey }, "r", 
 		function () 
