@@ -991,7 +991,7 @@ globalkeys = gears.table.join(
 		function()
 			local popupPlacement = awful.placement.top+awful.placement.center_horizontal
 			for _, c in ipairs(client.get()) do
-				if c.instance == "popup" then
+				if c.above and c.sticky then
 					popupPlacement(c)
 				end
 			end
@@ -1001,7 +1001,7 @@ globalkeys = gears.table.join(
 		function()
 			local popupPlacement = awful.placement.bottom+awful.placement.center_horizontal
 			for _, c in ipairs(client.get()) do
-				if c.instance == "popup" then
+				if c.above and c.sticky then
 					popupPlacement(c)
 				end
 			end
@@ -1242,7 +1242,9 @@ clientkeys = gears.table.join(
 				above = true,
 				sticky = true,
 				skip_taskbar = true,
-				floating = true
+				floating = true,
+				width = c.screen.geometry.width * 0.94,
+				height = c.screen.geometry.height * 0.42
 			}
 
 			local normal_properties = {
@@ -1257,6 +1259,7 @@ clientkeys = gears.table.join(
 				awful.rules.execute(c, normal_properties)
 				awful.rules.apply(c)
 			else
+				awful.rules.execute(c, float_properties)
 				awful.rules.execute(c, float_properties)
 			end
 		end,
