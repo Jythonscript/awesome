@@ -1234,6 +1234,33 @@ clientkeys = gears.table.join(
 			end
         end ,
         {description = "unmaximize", group = "client"}),
+	awful.key({ modkey }, "i",
+		function (c)
+
+			local float_properties = {
+				placement = awful.placement.top+awful.placement.center_horizontal,
+				above = true,
+				sticky = true,
+				skip_taskbar = true,
+				floating = true
+			}
+
+			local normal_properties = {
+				placement = awful.placement.top+awful.placement.center_horizontal,
+				above = false,
+				sticky = false,
+				skip_taskbar = false,
+				floating = false
+			}
+
+			if c.above and c.sticky then
+				awful.rules.execute(c, normal_properties)
+				awful.rules.apply(c)
+			else
+				awful.rules.execute(c, float_properties)
+			end
+		end,
+		{description = "toggle client as popup", group = "custom"}),
 	awful.key({ modkey, altkey}, "h",
 		function (c)
 
