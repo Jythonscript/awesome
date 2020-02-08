@@ -1409,7 +1409,7 @@ awful.rules.rules = {
       properties = { screen = 1, tag = beautiful.tagnames[3] } },
 
     { rule = { class = "Steam" },
-      properties = { screen = 1, tag = beautiful.tagnames[5] } },
+      properties = { tag = beautiful.tagnames[5] } },
 	{
 	    rule = { class = "URxvt" },
 	    except_any = { instance = { "vis", "ncmpcpp" } },
