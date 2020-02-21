@@ -204,7 +204,6 @@ run_once({
 	{"discord"},
 	{"unclutter --timeout 5"},
 	{"mpd"},
-	{"light-locker"},
 	{"compton --backend glx --force-win-blend --use-damage --glx-fshader-win '\
 		uniform float opacity;\
 		uniform bool invert_color;\
@@ -230,7 +229,7 @@ run_once({
 -- append platform run_once
 if selectedConfig == "elrond" then
 	run_once({
-
+		{"light-locker"}
 	})
 elseif selectedConfig == "aragorn" then
 	run_once({
