@@ -969,7 +969,7 @@ globalkeys = gears.table.join(
 
 			-- also reload home layout if default is selected
 			if keyboardLayouts[selectedKeyboardLayout] == "default" then
-				cmd = cmd .. " && xmodmap ~/.Xmodmap"
+				cmd = cmd .. " ~/.Xmodmap"
 			end
 
 			os.execute(cmd)
