@@ -963,7 +963,17 @@ globalkeys = gears.table.join(
 			if selectedKeyboardLayout > numKeyboardLayouts then
 				selectedKeyboardLayout = selectedKeyboardLayout - numKeyboardLayouts
 			end
-			os.execute("xmodmap ~/.config/xmodmap/" .. keyboardLayouts[selectedKeyboardLayout] .. ".xmodmap")
+
+			-- load custom layout
+			local cmd = "xmodmap ~/.config/xmodmap/" .. keyboardLayouts[selectedKeyboardLayout] .. ".xmodmap"
+
+			-- also reload home layout if default is selected
+			if keyboardLayouts[selectedKeyboardLayout] == "default" then
+				cmd = cmd .. " && xmodmap ~/.Xmodmap"
+			end
+
+			os.execute(cmd)
+
 			naughty.notify({text = "Keyboard layout '" .. keyboardLayouts[selectedKeyboardLayout] .. "' selected"})
 		end,
               {description = "change keyboard layout", group = "custom"}),
