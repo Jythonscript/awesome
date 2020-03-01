@@ -200,7 +200,6 @@ run_once({
 	{"thunderbird"},
 	--{"redshift -r"},
 	{"firefox"},
-	{"xscreensaver"},
 	{"discord"},
 	{"unclutter --timeout 5"},
 	{"mpd"},
