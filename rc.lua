@@ -1105,8 +1105,18 @@ laptopkeys = gears.table.join(
 		function ()
 			os.execute("xinput disable 21")
 		end,
-              {description = "disable trackpad", group = "custom"})
-
+              {description = "disable trackpad", group = "custom"}),
+	awful.key({ modkey, altkey }, "b",
+		function()
+			awful.prompt.run {
+				prompt = "Brightness: ",
+				textbox = awful.screen.focused().mypromptbox.widget,
+				exe_callback = function(cmd)
+					os.execute("xbacklight -set " .. cmd)
+				end
+			}
+		end,
+			  {description = "brightness prompt", group = "custom"})
 )
 
 -- pc specific shortcuts
