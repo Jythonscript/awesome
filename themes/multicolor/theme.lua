@@ -101,7 +101,7 @@ local markup = lain.util.markup
 theme.tagnames =  {
 	utf8.char(0xf269), -- Firefox
 	utf8.char(0xf0e0), -- Mail
-	utf8.char(0xf04b), -- Music
+	utf8.char(0xf086), -- Chat
 	"4",
 	"5",
 	"6", "7", "8", "9",
