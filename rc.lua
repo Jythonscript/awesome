@@ -1019,7 +1019,7 @@ globalkeys = gears.table.join(
     -- Prompt
     awful.key({ modkey }, "r", 
 		function () 
-			os.execute("dmenu_run");
+			os.execute("dmenu_run -nb '#000000' -sb '#428ff4'");
 		end,
               {description = "run prompt", group = "launcher"}),
 
