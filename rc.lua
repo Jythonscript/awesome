@@ -272,10 +272,7 @@ awful.button({ }, 1, function (c)
 		c:raise()
 	end
 end),
-awful.button({ }, 2, function(c)
-	c:kill()
-end),
-awful.button({ }, 3, function()
+awful.button({ }, 2, function()
 	local instance = nil
 
 	return function ()
@@ -286,6 +283,9 @@ awful.button({ }, 3, function()
 			instance = awful.menu.clients({ theme = { width = 250 } })
 		end
 	end
+end),
+awful.button({ }, 3, function(c)
+	c:kill()
 end),
 awful.button({ }, 4, function ()
 	awful.client.focus.byidx(1)
