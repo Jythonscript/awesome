@@ -817,6 +817,10 @@ globalkeys = gears.table.join(
     -- Widgets popups
     awful.key({ altkey, modkey}, "c", 
 		function () 
+			if theme.mytextclock then
+				theme.mytextclock:force_update()
+			end
+
 			if not cal.notification then
 				cal.show(0)
 			else

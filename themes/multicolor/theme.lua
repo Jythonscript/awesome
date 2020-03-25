@@ -112,12 +112,12 @@ theme.tagnames =  {
 -- Textclock
 os.setlocale(os.getenv("LANG")) -- to localize the clock
 local clockicon = wibox.widget.imagebox(theme.widget_clock)
-local mytextclock = wibox.widget.textclock(markup("#7788af", " %Y/%m/%d ") .. markup("#535f7a", ">") .. markup("#de5e1e", " %H:%M "))
-mytextclock.font = theme.font
+theme.mytextclock = wibox.widget.textclock(markup("#7788af", " %Y/%m/%d ") .. markup("#535f7a", ">") .. markup("#de5e1e", " %H:%M "))
+theme.mytextclock.font = theme.font
 
 -- Calendar
 cal = lain.widget.cal({
-	attach_to = { mytextclock },
+	attach_to = { theme.mytextclock },
 	followtag = true,
 	notification_preset = {
 		font = theme.fira_font,
@@ -127,7 +127,6 @@ cal = lain.widget.cal({
 })
 
 -- Weather
-
 local weathericon = wibox.widget.imagebox(theme.widget_weather)
 theme.weather = lain.widget.weather({
     city_id = 5025219, -- Eden Prairie, MN 
@@ -318,7 +317,6 @@ local memory = lain.widget.mem({
 })
 
 -- taskwarrior
-
 theme.tasks = wibox.widget.textbox()
 theme.tasks:set_markup(markup.fontfg(theme.font, "#4286f4", " Tasks"))
 lain.widget.contrib.task.attach(theme.tasks, {})
@@ -334,7 +332,6 @@ function pacmanwidget.showpackages()
 end
 
 -- redshift
-
 myredshift = wibox.widget.textbox()
 lain.widget.contrib.redshift:attach(
 	myredshift,
@@ -348,7 +345,6 @@ lain.widget.contrib.redshift:attach(
 )
 
 -- naughty suspended notifications toggle
-
 naughtywidget = {}
 naughtywidget.disable_notifications=false
 mynaughtynotif = wibox.widget.textbox()
@@ -571,7 +567,7 @@ function theme.at_screen_connect(s)
             cpuicon,
             cpu.widget,
             bat.widget,
-            mytextclock,
+            theme.mytextclock,
         },
     }
 end
