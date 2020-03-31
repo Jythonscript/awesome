@@ -1209,6 +1209,12 @@ clientkeys = gears.table.join(
 			end
         end,
         {description = "disable fullscreen", group = "client"}),
+	awful.key({ modkey, "Control" }, "f",
+		function(c)
+			c.fullscreen = not c.fullscreen
+			c.fullscreen = not c.fullscreen
+		end,
+		{description = "reload window geometry", group = "client"}),
 	awful.key({modkey, "Control" }, "t",
 		function (c)
 			awful.titlebar.toggle(c)
