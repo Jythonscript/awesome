@@ -1113,12 +1113,12 @@ laptopkeys = gears.table.join(
               {description = "start steam with GTK dpi adjust", group = "launcher"}),
     awful.key({ }, "XF86Display",
 		function ()
-			os.execute("xinput enable 24")
+			os.execute('xinput enable $(xinput list | grep -oP "Synaptics TM3276.*id=\\K(\\d+)")')
 		end,
               {description = "enable trackpad", group = "custom"}),
     awful.key({ }, "XF86Bluetooth",
 		function ()
-			os.execute("xinput disable 24")
+			os.execute('xinput disable $(xinput list | grep -oP "Synaptics TM3276.*id=\\K(\\d+)")')
 		end,
               {description = "disable trackpad", group = "custom"}),
 	awful.key({ modkey, altkey }, "b",
