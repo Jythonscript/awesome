@@ -1082,7 +1082,7 @@ laptopkeys = gears.table.join(
         end,
         {description = "lock screen", group = "custom"}),
 	-- hibernate
-	awful.key({}, "XF86Tools",
+	awful.key({ modkey, altkey }, "XF86Tools",
         function ()
 			os.execute("systemctl hibernate");
         end,
