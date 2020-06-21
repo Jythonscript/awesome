@@ -204,7 +204,7 @@ run_once({
 	{"discord"},
 	{"unclutter --timeout 5"},
 	{"mpd"},
-	{"compton --backend glx --force-win-blend --use-damage --glx-fshader-win '\
+	{"picom --backend glx --force-win-blend --use-damage --glx-fshader-win '\
 		uniform float opacity;\
 		uniform bool invert_color;\
 		uniform sampler2D tex;\
