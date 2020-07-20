@@ -30,9 +30,6 @@ doSloppyFocus = true
 keyboardLayouts = {"default", "celeste"}
 selectedKeyboardLayout = 1
 numKeyboardLayouts = 2
-shaders = {"transparent", "grayscale", "crt-pi", "crt-aperture", "none"}
-selectedShader = 1
-numShaders = 5
 local shaderstring =
 	"picom --backend glx --force-win-blend --use-damage --glx-fshader-win '\
 		uniform float opacity;\
@@ -994,25 +991,6 @@ globalkeys = gears.table.join(
 			naughty.notify({text = "Keyboard layout '" .. keyboardLayouts[selectedKeyboardLayout] .. "' selected"})
 		end,
               {description = "change keyboard layout", group = "custom"}),
-	-- work-in-progress shader changer
-	awful.key({ modkey }, "\\",
-		function() 
-			selectedShader = selectedShader + 1
-
-			if selectedShader > numShaders then
-				selectedShader = selectedShader - numShaders
-			end
-			--os.execute("pkill compton && compton --backend glx --force-win-blend --unredir-if-possible --glx-no-stencil --glx-no-rebind-pixmap --use-damage --sw-opti --glx-fshader-win '$(cat ~/Documents/shaders/" .. shaders[selectedShader] .. ")'")
-			if shaders[selectedShader] ~= "none" then
-				--naughty.notify({text = "pkill compton && compton --backend glx --force-win-blend --unredir-if-possible --glx-no-stencil --glx-no-rebind-pixmap --use-damage --sw-opti --glx-fshader-win '$(cat ~/Documents/shaders/" .. shaders[selectedShader] .. ".glsl)'"})
-				--os.execute("pkill compton && sleep 2 && sh -c 'compton --backend glx --force-win-blend --unredir-if-possible --glx-no-stencil --glx-no-rebind-pixmap --use-damage --sw-opti --glx-fshader-win \"$(cat ~/Documents/shaders/" .. shaders[selectedShader] .. ")\"'")
-				naughty.notify({text = "Shader " .. shaders[selectedShader] .. " selected"})
-			else
-				--os.execute("pkill compton && sleep 1 && compton")
-				naughty.notify({text = "Shaders disabled"})
-			end
-		end,
-			{description = "change shader", group = "custom"}),
 	-- Change popup program location
 	awful.key({ modkey, altkey, "Control"}, "Up",
 		function()
