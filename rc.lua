@@ -30,9 +30,27 @@ doSloppyFocus = true
 keyboardLayouts = {"default", "celeste"}
 selectedKeyboardLayout = 1
 numKeyboardLayouts = 2
-shaders = {"transparent", "grayscale", "crt-pi", "crt-aperture", "none"}
-selectedShader = 1
-numShaders = 5
+local shaderstring =
+	"picom --backend glx --force-win-blend --use-damage --glx-fshader-win '\
+		uniform float opacity;\
+		uniform bool invert_color;\
+		uniform sampler2D tex;\
+		void main() {\
+			vec4 c = texture2D(tex, gl_TexCoord[0].xy);\
+			if (!invert_color) { // Hack to allow compton exceptions\
+				// Change the vec4 to your desired key color\
+				//vec4 vdiff = abs(vec4(0.0039, 0.0039, 0.0039, 1.0) - c); // #010101\
+				vec4 vdiff = abs(vec4(0, 0.0039, 0.0078, 1.0) - c); // #000102\
+				float diff = max(max(max(vdiff.r, vdiff.g), vdiff.b), vdiff.a);\
+				// Change the vec4 to your desired output color\
+				if (diff < 0.001)\
+					c = vec4(0.0, 0.0, 0.0, 0.7); // #000000E3\
+					//c = vec4(0.0, 0.0, 0.0, 0.890196); // #000000E3\
+			}\
+			c *= opacity;\
+			gl_FragColor = c;\
+		}'\
+	 ";
 
 --local battery = require("awesome-upower-battery")
 -- }}}
@@ -139,6 +157,7 @@ local special_run_commands = {
 	{"man", terminal_program},
 	{"m", popup_when_no_args},
 	{"mp", popup_when_no_args},
+	{"shaders", popup_when_no_args},
 	{"tx", popup_program},
 	{"td", popup_program},
 }
@@ -204,26 +223,7 @@ run_once({
 	{"discord"},
 	{"unclutter --timeout 5"},
 	{"mpd"},
-	{"picom --backend glx --force-win-blend --use-damage --glx-fshader-win '\
-		uniform float opacity;\
-		uniform bool invert_color;\
-		uniform sampler2D tex;\
-		void main() {\
-			vec4 c = texture2D(tex, gl_TexCoord[0].xy);\
-			if (!invert_color) { // Hack to allow compton exceptions\
-				// Change the vec4 to your desired key color\
-				//vec4 vdiff = abs(vec4(0.0039, 0.0039, 0.0039, 1.0) - c); // #010101\
-				vec4 vdiff = abs(vec4(0, 0.0039, 0.0078, 1.0) - c); // #000102\
-				float diff = max(max(max(vdiff.r, vdiff.g), vdiff.b), vdiff.a);\
-				// Change the vec4 to your desired output color\
-				if (diff < 0.001)\
-					c = vec4(0.0, 0.0, 0.0, 0.7); // #000000E3\
-					//c = vec4(0.0, 0.0, 0.0, 0.890196); // #000000E3\
-			}\
-			c *= opacity;\
-			gl_FragColor = c;\
-		}'\
-	 "};
+	{shaderstring}
 })
 
 -- append platform run_once
@@ -991,25 +991,6 @@ globalkeys = gears.table.join(
 			naughty.notify({text = "Keyboard layout '" .. keyboardLayouts[selectedKeyboardLayout] .. "' selected"})
 		end,
               {description = "change keyboard layout", group = "custom"}),
-	-- work-in-progress shader changer
-	awful.key({ modkey }, "\\",
-		function() 
-			selectedShader = selectedShader + 1
-
-			if selectedShader > numShaders then
-				selectedShader = selectedShader - numShaders
-			end
-			--os.execute("pkill compton && compton --backend glx --force-win-blend --unredir-if-possible --glx-no-stencil --glx-no-rebind-pixmap --use-damage --sw-opti --glx-fshader-win '$(cat ~/Documents/shaders/" .. shaders[selectedShader] .. ")'")
-			if shaders[selectedShader] ~= "none" then
-				--naughty.notify({text = "pkill compton && compton --backend glx --force-win-blend --unredir-if-possible --glx-no-stencil --glx-no-rebind-pixmap --use-damage --sw-opti --glx-fshader-win '$(cat ~/Documents/shaders/" .. shaders[selectedShader] .. ".glsl)'"})
-				--os.execute("pkill compton && sleep 2 && sh -c 'compton --backend glx --force-win-blend --unredir-if-possible --glx-no-stencil --glx-no-rebind-pixmap --use-damage --sw-opti --glx-fshader-win \"$(cat ~/Documents/shaders/" .. shaders[selectedShader] .. ")\"'")
-				naughty.notify({text = "Shader " .. shaders[selectedShader] .. " selected"})
-			else
-				--os.execute("pkill compton && sleep 1 && compton")
-				naughty.notify({text = "Shaders disabled"})
-			end
-		end,
-			{description = "change shader", group = "custom"}),
 	-- Change popup program location
 	awful.key({ modkey, altkey, "Control"}, "Up",
 		function()
@@ -1495,7 +1476,7 @@ awful.rules.rules = {
 		  titlebars_enabled = false
 	    }
 	},
-{
+	{
 	rule = { class = "URxvt", instance = "popup" },
 		properties = {
 			placement = awful.placement.top+awful.placement.center_horizontal,
@@ -1503,6 +1484,15 @@ awful.rules.rules = {
 			sticky = true,
 			skip_taskbar = true,
 			floating = true
+		}
+	},
+	{
+		rule = { class = "portal2_linux" },
+		properties = {
+			--callback = no_picom_when_focused_setup(c)
+			callback = function(c)
+				no_picom_when_focused_setup(c)
+			end
 		}
 	},
 }
@@ -1539,6 +1529,19 @@ function border_adjust(c)
 			position = titlebar_position
 		})
 	end
+end
+
+-- sets up the given client to not have picom active when it is focused
+function no_picom_when_focused_setup(c)
+	c:connect_signal("focus",
+	function(c)
+		awful.spawn("killall picom")
+	end)
+
+	c:connect_signal("unfocus",
+		function(c)
+			awful.spawn(shaderstring)
+	end)
 end
 
 -- {{{ Signals
