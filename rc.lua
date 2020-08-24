@@ -1073,7 +1073,7 @@ laptopkeys = gears.table.join(
         end,
         {description = "lock screen", group = "custom"}),
 	-- hibernate
-	awful.key({ modkey, altkey }, "XF86Tools",
+	awful.key({ modkey, altkey }, "XF86Display",
         function ()
 			os.execute("systemctl hibernate");
         end,
@@ -1102,12 +1102,12 @@ laptopkeys = gears.table.join(
 			awful.spawn("env GDK_SCALE=2 steam")
 		end,
               {description = "start steam with GTK dpi adjust", group = "launcher"}),
-    awful.key({ }, "XF86Display",
+    awful.key({ altkey }, "XF86Tools",
 		function ()
 			os.execute('xinput enable $(xinput list | grep -oP "Synaptics.*id=\\K(\\d+)")')
 		end,
               {description = "enable trackpad", group = "custom"}),
-    awful.key({ }, "XF86Bluetooth",
+    awful.key({ }, "XF86Tools",
 		function ()
 			os.execute('xinput disable $(xinput list | grep -oP "Synaptics.*id=\\K(\\d+)")')
 		end,
