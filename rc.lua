@@ -378,10 +378,21 @@ globalkeys = gears.table.join(
 			end
         end,
         {description = "toggle secondary mouse pressed", group = "custom"}),
-    awful.key({ modkey }, "p", 
+	awful.key({ modkey }, "p",
+		function()
+			local s_geo = mouse.screen.geometry
+			awful.spawn("import -window root -crop " ..
+			s_geo.width .. "x" .. s_geo.height ..
+			"+" .. s_geo.x .. "+" .. s_geo.y ..
+			" " .. os.getenv("HOME") .. "/Pictures/Screenshots/" ..
+			os.date("%Y-%m-%d@%H:%M:%S") .. ".png")
+			naughty.notify({text = "screenshot taken"})
+		end,
+		{description = "single display screenshot", group = "hotkeys"}),
+    awful.key({ modkey, "Shift" }, "p", 
 		function() 
 			os.execute("scrot -e 'mv $f ~/Pictures/Screenshots/'") 
-			naughty.notify({text = "screenshot taken"})
+			naughty.notify({text = "full screenshot taken"})
 		end,
         {description = "take a scrot screenshot", group = "hotkeys"}),
 
