@@ -120,10 +120,6 @@ awful.util.terminal = terminal
 awful.util.tagnames = { "ff(1)", "term(2)", "3", "4", "5" }
 awful.layout.layouts = {
     awful.layout.suit.tile,
-	awful.layout.suit.tile,
-	awful.layout.suit.tile,
-	awful.layout.suit.tile,
-	awful.layout.suit.tile
 }
 
 -- {{{ Special run prompt commands
@@ -786,15 +782,13 @@ globalkeys = gears.table.join(
               {description = "decrease the number of columns", group = "layout"}),
     awful.key({ modkey,           }, "space", 
 		function ()
-			awful.layout.inc(1)
+			if awful.layout.get(awful.screen.focused()) == awful.layout.suit.tile then
+				awful.layout.set(awful.layout.suit.tile.bottom)
+			else
+				awful.layout.set(awful.layout.suit.tile)
+			end
 		end,
-              {description = "select next layout", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "space", 
-		function ()
-			awful.layout.inc(-1)
-		end,
-              {description = "select previous layout", group = "layout"}),
-
+              {description = "switch between tile left and tile above", group = "layout"}),
     awful.key({ modkey, "Control" }, "n",
               function ()
                   local c = awful.client.restore()
