@@ -397,8 +397,8 @@ end
 local mpdicon = wibox.widget.imagebox()
 local minimized = false
 theme.mpd = lain.widget.mpd({
+	timeout = 1,
     settings = function()
-
 		-- playlist position
 		local songnumber = 0
 		local totalsongs = 0
