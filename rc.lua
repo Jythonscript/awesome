@@ -382,7 +382,6 @@ globalkeys = gears.table.join(
 			"+" .. s_geo.x .. "+" .. s_geo.y ..
 			" " .. os.getenv("HOME") .. "/Pictures/Screenshots/" ..
 			os.date("%Y-%m-%d@%H:%M:%S") .. ".png")
-			naughty.notify({text = "screenshot taken"})
 		end,
 		{description = "single display screenshot", group = "hotkeys"}),
     awful.key({ modkey, "Shift" }, "p", 
