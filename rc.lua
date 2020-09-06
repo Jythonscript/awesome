@@ -202,7 +202,7 @@ end
 -- Accepts rules; however, the current release (4.2) applies rules in a weird order: rules won't work
 local function run_once(cmd_arr)
 	for _, cmd in ipairs(cmd_arr) do
-		awful.spawn.easy_async_with_shell(string.format("pgrep -u $USER -x '%s' > /dev/null", cmd[1]),
+		awful.spawn.easy_async_with_shell(string.format("pgrep -u $USER -f '%s' > /dev/null", cmd[1]),
 			function(stdout, stderr, reason, exit_code)
 				if exit_code ~= 0 then
 					awful.spawn(parse_for_special_run_commands(cmd[1]), cmd[2])
