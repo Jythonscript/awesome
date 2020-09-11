@@ -44,7 +44,7 @@ local shaderstring =
 				float diff = max(max(max(vdiff.r, vdiff.g), vdiff.b), vdiff.a);\
 				// Change the vec4 to your desired output color\
 				if (diff < 0.001)\
-					c = vec4(0.0, 0.0, 0.0, 0.7); // #000000E3\
+					c = vec4(0.0, 0.0, 0.0, 0.85); // #000000E3\
 					//c = vec4(0.0, 0.0, 0.0, 0.890196); // #000000E3\
 			}\
 			c *= opacity;\
