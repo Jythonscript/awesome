@@ -522,7 +522,7 @@ globalkeys = gears.table.join(
 		end,
         {description = "secondary click mouse", group = "custom"}),
 	-- Hotkeys
-    awful.key({ modkey,           }, "y",      hotkeys_popup.show_help,
+    awful.key({ modkey, "Shift" }, "y",      hotkeys_popup.show_help,
               {description = "show help", group="awesome"}),
     -- Tag browsing
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
@@ -708,7 +708,24 @@ globalkeys = gears.table.join(
     -- Dynamic tagging
     awful.key({ modkey, "Shift" }, "n", function () lain.util.add_tag() end,
               {description = "add new tag", group = "tag"}),
-    awful.key({ modkey, "Shift" }, "r", function () lain.util.rename_tag() end,
+    awful.key({ modkey }, "y",
+		function ()
+			awful.prompt.run {
+				prompt       = "Rename tag: ",
+				textbox      = awful.screen.focused().mypromptbox.widget,
+				exe_callback = function(new_name)
+					if not new_name or #new_name == 0 then return end
+					local t = awful.screen.focused().selected_tag
+					if t then
+						if new_name == " " then
+							t.name = theme.tagnames[t.index]
+						else
+							t.name = theme.tagnames[t.index] .. "-" .. new_name
+						end
+					end
+				end
+			}
+		end,
               {description = "rename tag", group = "tag"}),
     awful.key({ modkey, "Shift" }, "Left", 
 		function () 
@@ -717,14 +734,20 @@ globalkeys = gears.table.join(
 			local old_index = current_tag.index
 			lain.util.move_tag(-1) 
 			local new_tag = awful.screen.focused().tags[old_index]
+			local new_name = new_tag.name
 
 			if current_tag and new_tag then
-				current_tag.name = new_tag.name
-				new_tag.name = current_name
-			end
+				current_tag.name = theme.tagnames[current_tag.index]
+				if string.find(current_name, "-") then
+					current_tag.name = current_tag.name .. "-" .. string.sub(current_name, 
+					(string.find(current_name, "-") or string.len(current_name)) + 1)
+				end
 
-			if t then
-
+				new_tag.name = theme.tagnames[new_tag.index]
+				if string.find(new_name, "-") then
+					new_tag.name = new_tag.name .. "-" .. string.sub(new_name, 
+					(string.find(new_name, "-") or string.len(new_name)) + 1)
+				end
 			end
 		end,
               {description = "move tag to the left", group = "tag"}),
@@ -735,14 +758,20 @@ globalkeys = gears.table.join(
 			local old_index = current_tag.index
 			lain.util.move_tag(1) 
 			local new_tag = awful.screen.focused().tags[old_index]
+			local new_name = new_tag.name
 
 			if current_tag and new_tag then
-				current_tag.name = new_tag.name
-				new_tag.name = current_name
-			end
+				current_tag.name = theme.tagnames[current_tag.index]
+				if string.find(current_name, "-") then
+					current_tag.name = current_tag.name .. "-" .. string.sub(current_name, 
+					(string.find(current_name, "-") or string.len(current_name)) + 1)
+				end
 
-			if t then
-
+				new_tag.name = theme.tagnames[new_tag.index]
+				if string.find(new_name, "-") then
+					new_tag.name = new_tag.name .. "-" .. string.sub(new_name, 
+					(string.find(new_name, "-") or string.len(new_name)) + 1)
+				end
 			end
 		end,
               {description = "move tag to the right", group = "tag"}),
