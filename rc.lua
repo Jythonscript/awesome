@@ -1522,9 +1522,8 @@ awful.rules.rules = {
 	{
 		rule = { class = "portal2_linux" },
 		properties = {
-			--callback = no_picom_when_focused_setup(c)
 			callback = function(c)
-				no_picom_when_focused_setup(c)
+				--no_picom_when_focused_setup(c)
 			end
 		}
 	},
