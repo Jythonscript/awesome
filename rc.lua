@@ -1016,6 +1016,11 @@ globalkeys = gears.table.join(
 			os.execute("rofi -show window -disable-history");
 		end,
               {description = "run browser not maximized", group = "launcher"}),
+	awful.key({ modkey }, "e",
+		function ()
+			awful.spawn("todoist")
+		end,
+			{description = "run todoist", group = "launcher"}),
 
     awful.key({ modkey }, "`", 
 		function () 
