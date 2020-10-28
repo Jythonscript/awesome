@@ -781,7 +781,21 @@ globalkeys = gears.table.join(
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
-    awful.key({ modkey, "Control" }, "r", awesome.restart,
+    awful.key({ modkey, "Control" }, "r",
+		function()
+            local cmd = "find ~/.config/awesome/ -iname '*.lua' -exec luac -o - {} \\;"
+            awful.spawn.easy_async_with_shell(cmd, function(stdout, stderr, reason, exit_code)
+                if stderr == "" then
+                    awesome.restart()
+                else
+                    naughty.notify({
+                        preset = naughty.config.presets.critical,
+                        title = "An error was detected, aborting restart!",
+                        text = stderr
+                    })
+                end
+            end)
+        end,
               {description = "reload awesome", group = "awesome"}),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
