@@ -536,17 +536,27 @@ globalkeys = gears.table.join(
               {description = "view previous", group = "tag"}),
     awful.key({ altkey,           }, "l",  awful.tag.viewnext,
               {description = "view next", group = "tag"}),
+	awful.key({ altkey }, "j",
+		function ()
+			awful.screen.focus_bydirection("left")
+		end,
+		{description = "focus screen to left", group = "screen"}),
+	awful.key({ altkey }, "k",
+		function ()
+			awful.screen.focus_bydirection("right")
+		end,
+		{description = "focus screen to right", group = "screen"}),
 
     -- Default client focus
 	-- (This has been modified to be the opposite of the default)
-    awful.key({ altkey,           }, "j",
+    awful.key({ modkey, altkey,           }, "j",
         function ()
             awful.client.focus.byidx(-1)
         end,
         {description = "focus left index", group = "client"}
     ),
 	-- (This has been modified to be the opposite of the default)
-    awful.key({ altkey,           }, "k",
+    awful.key({ modkey, altkey,           }, "k",
         function ()
             awful.client.focus.byidx( 1)
         end,
