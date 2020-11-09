@@ -337,6 +337,7 @@ screen.connect_signal("property::geometry", function(s)
     end
 end)
 
+--[[
 client.connect_signal("focus", function(c)
 	c.opacity=1
 	for _, client in ipairs(c.screen.clients) do
@@ -345,6 +346,7 @@ client.connect_signal("focus", function(c)
 		end
 	end
 end)
+]]--
 
 -- Create a wibox for each screen and add it
 awful.screen.connect_for_each_screen(function(s) beautiful.at_screen_connect(s) end)
@@ -1015,6 +1017,17 @@ globalkeys = gears.table.join(
 			end
 		end,
 		{description = "toggle visualizer", group = "mpd"}),
+	awful.key({ modkey, "Shift" }, "v",
+		function()
+			local s = awful.screen.focused()
+			local c = client_instance_exists(s.all_clients, "surf")
+			if c then
+				c:kill()	
+			else
+				awful.spawn("surf /home/avery/git/WebGL-Fluid-Simulation/index.html")
+			end
+		end,
+		{description = "toggle visualizer", group = "mpd"}),
     -- User programs
     awful.key({ modkey }, "q", 
 		function () 
@@ -1528,6 +1541,18 @@ awful.rules.rules = {
 	},
 	{
 	    rule = { class = "URxvt", instance = "vis" },
+	    properties = {
+		  tag = beautiful.tagnames[4],
+	  	  maximized = true,
+	  	  focusable = false,
+	  	  below = true,
+	  	  sticky = true,
+	  	  skip_taskbar = true,
+		  titlebars_enabled = false
+	    }
+	},
+	{
+	    rule = { class = "Surf", instance = "surf" },
 	    properties = {
 		  tag = beautiful.tagnames[4],
 	  	  maximized = true,
