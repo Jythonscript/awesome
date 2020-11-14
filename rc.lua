@@ -1232,10 +1232,14 @@ pckeys = gears.table.join(
 	-- toggle mpd
 	awful.key({}, "XF86AudioPlay",
         function ()
-            awful.spawn.with_shell("mpc toggle")
-            beautiful.mpd.update()
+			awful.spawn("playerctl play-pause")
         end,
-        {description = "mpc toggle", group = "mpd"}),
+        {description = "playerctl play-pause", group = "custom"}),
+	awful.key({ altkey, "Shift" }, "'",
+		function ()
+			awful.spawn("playerctl play-pause")
+		end,
+		{description = "playerctl play-pause", group = "custom"}),
 	awful.key({ modkey }, "XF86AudioMute",
         function ()
 			os.execute("mpc volume 100")
