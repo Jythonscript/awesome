@@ -498,7 +498,7 @@ local orig_taglist_filter = awful.widget.taglist.filter.all
 
 -- Taglist label functions
 awful.widget.taglist.filter.all = function(t, args)
-	if t.selected or #focusable(t:clients()) > 0 then
+	if t.selected or #focusable(t:clients()) > 0 or string.match(t.name, "-") then
 		return orig_taglist_filter(t, args)
 	end
 end
