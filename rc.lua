@@ -1521,7 +1521,7 @@ awful.rules.rules = {
       properties = { tag = beautiful.tagnames[2], titlebars_enabled = false } },
 
     { rule = { class = "discord" },
-      properties = { screen = 1, tag = beautiful.tagnames[3] } },
+      properties = { tag = beautiful.tagnames[3] } },
 
     { rule = { class = "Steam" },
       properties = { tag = beautiful.tagnames[5] } },
