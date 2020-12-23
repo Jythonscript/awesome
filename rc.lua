@@ -1027,7 +1027,7 @@ globalkeys = gears.table.join(
 				awful.spawn("surf /home/avery/git/WebGL-Fluid-Simulation/index.html")
 			end
 		end,
-		{description = "toggle visualizer", group = "mpd"}),
+		{description = "toggle fluid simulation", group = "custom"}),
     -- User programs
     awful.key({ modkey }, "q", 
 		function () 
