@@ -953,6 +953,11 @@ globalkeys = gears.table.join(
         {description = "volume 0%", group = "hotkeys"}),
 
     -- MPD control
+	awful.key({ altkey, "Shift" }, "'",
+		function ()
+			awful.spawn("playerctl play-pause")
+		end,
+		{description = "playerctl play-pause", group = "custom"}),
     awful.key({ altkey }, "'",
         function ()
             awful.spawn.with_shell("mpc toggle")
@@ -1235,11 +1240,6 @@ pckeys = gears.table.join(
 			awful.spawn("playerctl play-pause")
         end,
         {description = "playerctl play-pause", group = "custom"}),
-	awful.key({ altkey, "Shift" }, "'",
-		function ()
-			awful.spawn("playerctl play-pause")
-		end,
-		{description = "playerctl play-pause", group = "custom"}),
 	awful.key({ modkey }, "XF86AudioMute",
         function ()
 			os.execute("mpc volume 100")
