@@ -730,9 +730,9 @@ globalkeys = gears.table.join(
 					local t = awful.screen.focused().selected_tag
 					if t then
 						if new_name == " " then
-							t.name = theme.tagnames[t.index]
+							t.name = beautiful.get().tagnames[t.index]
 						else
-							t.name = theme.tagnames[t.index] .. "-" .. new_name
+							t.name = beautiful.get().tagnames[t.index] .. "-" .. new_name
 						end
 					end
 				end
@@ -749,13 +749,13 @@ globalkeys = gears.table.join(
 			local new_name = new_tag.name
 
 			if current_tag and new_tag then
-				current_tag.name = theme.tagnames[current_tag.index]
+				current_tag.name = beautiful.get().tagnames[current_tag.index]
 				if string.find(current_name, "-") then
 					current_tag.name = current_tag.name .. "-" .. string.sub(current_name, 
 					(string.find(current_name, "-") or string.len(current_name)) + 1)
 				end
 
-				new_tag.name = theme.tagnames[new_tag.index]
+				new_tag.name = beautiful.get().tagnames[new_tag.index]
 				if string.find(new_name, "-") then
 					new_tag.name = new_tag.name .. "-" .. string.sub(new_name, 
 					(string.find(new_name, "-") or string.len(new_name)) + 1)
@@ -773,13 +773,13 @@ globalkeys = gears.table.join(
 			local new_name = new_tag.name
 
 			if current_tag and new_tag then
-				current_tag.name = theme.tagnames[current_tag.index]
+				current_tag.name = beautiful.get().tagnames[current_tag.index]
 				if string.find(current_name, "-") then
 					current_tag.name = current_tag.name .. "-" .. string.sub(current_name, 
 					(string.find(current_name, "-") or string.len(current_name)) + 1)
 				end
 
-				new_tag.name = theme.tagnames[new_tag.index]
+				new_tag.name = beautiful.get().tagnames[new_tag.index]
 				if string.find(new_name, "-") then
 					new_tag.name = new_tag.name .. "-" .. string.sub(new_name, 
 					(string.find(new_name, "-") or string.len(new_name)) + 1)
@@ -882,8 +882,8 @@ globalkeys = gears.table.join(
     -- Widgets popups
     awful.key({ altkey, modkey}, "c", 
 		function () 
-			if theme.mytextclock then
-				theme.mytextclock:force_update()
+			if beautiful.get().mytextclock then
+				beautiful.get().mytextclock:force_update()
 			end
 
 			if not cal.notification then
@@ -922,21 +922,21 @@ globalkeys = gears.table.join(
     -- Pulse volume control
 	awful.key({}, "XF86AudioRaiseVolume",
         function ()
-			os.execute(string.format("pactl set-sink-volume %d +2%%", theme.volume.device))
-			theme.volume.update()
+			os.execute(string.format("pactl set-sink-volume %d +2%%", beautiful.get().volume.device))
+			beautiful.get().volume.update()
         end,
         {description = "volume up", group = "hotkeys"}),
 
 	awful.key({}, "XF86AudioLowerVolume", 
 		function ()
-			os.execute(string.format("pactl set-sink-volume %d -2%%", theme.volume.device))
-			theme.volume.update()
+			os.execute(string.format("pactl set-sink-volume %d -2%%", beautiful.get().volume.device))
+			beautiful.get().volume.update()
         end,
         {description = "volume down", group = "hotkeys"}),
 	awful.key({}, "XF86AudioMute",
         function ()
-			os.execute(string.format("pactl set-sink-mute %d toggle", theme.volume.device))
-			theme.volume.update()
+			os.execute(string.format("pactl set-sink-mute %d toggle", beautiful.get().volume.device))
+			beautiful.get().volume.update()
         end,
         {description = "toggle mute", group = "hotkeys"}),
     awful.key({ altkey, "Control" }, "m",
