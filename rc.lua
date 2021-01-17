@@ -1572,7 +1572,6 @@ awful.rules.rules = {
 		properties = {
 			placement = awful.placement.top+awful.placement.center_horizontal,
 			above = true,
-			sticky = true,
 			skip_taskbar = true,
 			floating = true
 		}
