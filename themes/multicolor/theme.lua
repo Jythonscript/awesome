@@ -291,8 +291,8 @@ theme.volume.widget:buttons(awful.util.table.join(
         awful.spawn("pavucontrol")
     end),
     awful.button({}, 2, function() -- middle click
-        os.execute(string.format("pactl set-sink-volume %d 100%%", theme.volume.device))
-        theme.volume.update()
+        --os.execute(string.format("pactl set-sink-volume %d 100%%", theme.volume.device))
+        --theme.volume.update()
     end),
     awful.button({}, 3, function() -- right click
         os.execute(string.format("pactl set-sink-mute %d toggle", theme.volume.device))

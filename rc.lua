@@ -944,7 +944,7 @@ globalkeys = gears.table.join(
            os.execute(string.format("amixer -D pulse set Master toggle"))
             beautiful.volume.update()
         end,
-        {description = "volume 100%", group = "hotkeys"}),
+        {description = "toggle mute", group = "hotkeys"}),
     awful.key({ altkey, "Control" }, "0",
         function ()
             os.execute(string.format("amixer -q set %s 0%%", beautiful.volume.channel))
