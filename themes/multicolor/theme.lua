@@ -271,40 +271,71 @@ end
 -- ALSA volume
 local volicon = wibox.widget.imagebox(theme.widget_vol)
 
-theme.volume = lain.widget.pulse({
+theme.volume = {}
+theme.volume.widget = wibox.widget.textbox()
 
-	settings = function()
-		if volume_now.left then
-			vlevel = math.floor((volume_now.left + volume_now.right)/2)
-			if volume_now.muted == "yes" then
-				vlevel = vlevel .. "M"
-			else
-				vlevel = vlevel .. "%"
-			end
-			widget:set_markup(lain.util.markup("#7493d2", vlevel))
-		end
+theme.volume.inc = function(percent)
+	if percent >= 0 then
+		percent = percent .. "%+"
+	else
+		percent = -1 * percent .. "%-"
 	end
-})
+	awful.spawn.easy_async("amixer set Master " .. percent, theme.volume.update)
+end
+
+theme.volume.toggle_mute = function()
+	awful.spawn.easy_async("amixer -q set Master toggle", theme.volume.update)
+end
+
+theme.volume.toggle_mic_mute = function()
+	awful.spawn.easy_async("amixer set Capture toggle", theme.volume.update)
+end
+
+theme.volume.update = function()
+	local cmd = "amixer get Master && amixer get Capture"
+
+	awful.spawn.easy_async_with_shell(cmd, function(stdout)
+		local vol, playback = string.match(stdout, "Playback [%d]+ %[([%d]+)%%%] %[([%l]*)")
+		local mic_vol, mic_playback = string.match(stdout, "Capture [%d]+ %[([%d]+)%%%] %[([%l]*)")
+
+		if not vol or not playback or not mic_vol or not mic_playback then return end
+
+		vol = tonumber(vol)
+		mic_vol = tonumber(mic_vol)
+
+		local text = "" .. vol
+		if vol == 0 or playback == "off" then
+			text = text .. "M"
+		else
+			text = text .. "%"
+		end
+
+		if mic_playback == "off" then
+			text = text .. " " .. utf8.char(0xf131)
+		end
+
+		theme.volume.widget:set_markup(lain.util.markup("#7493d2", text))
+	end)
+end
+
+-- run it once so that the volume is shown on startup
+theme.volume.update()
 
 theme.volume.widget:buttons(awful.util.table.join(
     awful.button({}, 1, function() -- left click
         awful.spawn("pavucontrol")
     end),
     awful.button({}, 2, function() -- middle click
-        --os.execute(string.format("pactl set-sink-volume %d 100%%", theme.volume.device))
-        --theme.volume.update()
+		theme.volume.toggle_mic_mute()
     end),
     awful.button({}, 3, function() -- right click
-        os.execute(string.format("pactl set-sink-mute %d toggle", theme.volume.device))
-        theme.volume.update()
+		theme.volume.toggle_mute()
     end),
     awful.button({}, 4, function() -- scroll up
-        os.execute(string.format("pactl set-sink-volume %d +1%%", theme.volume.device))
-        theme.volume.update()
+		theme.volume.inc(1)
     end),
     awful.button({}, 5, function() -- scroll down
-        os.execute(string.format("pactl set-sink-volume %d -1%%", theme.volume.device))
-        theme.volume.update()
+		theme.volume.inc(-1)
     end)
 ))
 
@@ -337,9 +368,9 @@ lain.widget.contrib.redshift:attach(
 	myredshift,
 	function (active)
 		if active then
-			myredshift:set_markup(markup.fontfg(theme.font, "#4fcc2c", " RS"))
+			myredshift:set_markup(markup.fontfg(theme.font, "#4fcc2c", " RS "))
 		else
-			myredshift:set_markup(markup.fontfg(theme.font, "#d30000", " RS"))
+			myredshift:set_markup(markup.fontfg(theme.font, "#d30000", " RS "))
 		end
 	end
 )
@@ -561,7 +592,6 @@ function theme.at_screen_connect(s)
             layout = wibox.layout.fixed.horizontal,
 			systray,
 			myredshift,
-            volicon,
             theme.volume.widget,
             memicon,
             memory.widget,
