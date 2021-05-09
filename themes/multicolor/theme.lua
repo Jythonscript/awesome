@@ -110,7 +110,7 @@ theme.tagnames =  {
 -- Textclock
 os.setlocale(os.getenv("LANG")) -- to localize the clock
 local clockicon = wibox.widget.imagebox(theme.widget_clock)
-theme.mytextclock = wibox.widget.textclock(markup("#7788af", " %Y/%m/%d ") .. markup("#535f7a", ">") .. markup("#de5e1e", " %H:%M "))
+theme.mytextclock = wibox.widget.textclock(markup("#7788af", "%Y/%m/%d ") .. markup("#535f7a", ">") .. markup("#de5e1e", " %H:%M"))
 theme.mytextclock.font = theme.font
 
 -- Calendar
@@ -154,9 +154,9 @@ local cpu = lain.widget.cpu({
 		local percent = cpu_now.usage - (cpu_now.usage % 5)
 		--leading zero
 		if percent < 10 then
-			widget:set_markup(markup.fontfg(theme.font, "#e33a6e", "0" .. percent .. "% "))
+			widget:set_markup(markup.fontfg(theme.font, "#e33a6e", "0" .. percent .. "%"))
 		else
-			widget:set_markup(markup.fontfg(theme.font, "#e33a6e", percent .. "% "))
+			widget:set_markup(markup.fontfg(theme.font, "#e33a6e", percent .. "%"))
 		end
     end
 })
@@ -340,12 +340,33 @@ theme.volume.widget:buttons(awful.util.table.join(
 ))
 
 -- MEM
-local memicon = wibox.widget.imagebox(theme.widget_mem)
-local memory = lain.widget.mem({
-    settings = function()
-        widget:set_markup(markup.fontfg(theme.font, "#e0da37", math.floor((mem_now.used / 1024) * 10 ) / 10 .. "G "))
-    end
-})
+theme.memory = {}
+theme.memory.widget = wibox.widget.textbox()
+
+theme.memory.update = function()
+	mem = {}
+	swap = {}
+
+	local cmd = "free --mebi"
+	awful.spawn.easy_async(cmd, function(stdout)
+		mem.total, mem.used, mem.free, mem.shared, mem.buf, mem.available
+			= string.match(stdout, "Mem:[%s]+([%d]+)[%s]+([%d]+)[%s]+([%d]+)[%s]+([%d]+)[%s]+([%d]+)[%s]+([%d]+)")
+		swap.total, swap.used, swap.free
+			= string.match(stdout, "Swap:[%s]+([%d]+)[%s]+([%d]+)[%s]+([%d]+)")
+
+		local text = ""
+		if mem.used and swap.used then
+			text = string.format("%.1fG", (mem.used + swap.used) / 1024)
+		end
+		theme.memory.widget:set_markup(lain.util.markup("#e0da37", text))
+	end)
+end
+gears.timer({timeout = 3,
+	autostart = true,
+	call_now = true,
+	callback = theme.memory.update})
+theme.memory.update()
+
 
 -- taskwarrior
 theme.tasks = wibox.widget.textbox()
@@ -368,9 +389,9 @@ lain.widget.contrib.redshift:attach(
 	myredshift,
 	function (active)
 		if active then
-			myredshift:set_markup(markup.fontfg(theme.font, "#4fcc2c", " RS "))
+			myredshift:set_markup(markup.fontfg(theme.font, "#4fcc2c", "RS"))
 		else
-			myredshift:set_markup(markup.fontfg(theme.font, "#d30000", " RS "))
+			myredshift:set_markup(markup.fontfg(theme.font, "#d30000", "RS"))
 		end
 	end
 )
@@ -588,18 +609,17 @@ function theme.at_screen_connect(s)
             theme.mpd.widget,
         },
 		s.mytasklist,
-        { -- Right widgets
-            layout = wibox.layout.fixed.horizontal,
+		{ -- Right widgets
+			layout = wibox.layout.fixed.horizontal,
+			spacing = 5,
 			systray,
 			myredshift,
-            theme.volume.widget,
-            memicon,
-            memory.widget,
-            cpuicon,
-            cpu.widget,
-            bat.widget,
-            theme.mytextclock,
-        },
+			theme.volume.widget,
+			theme.memory.widget,
+			cpu.widget,
+			bat.widget,
+			theme.mytextclock,
+		},
     }
 end
 
