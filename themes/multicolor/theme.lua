@@ -94,6 +94,9 @@ theme.titlebar_maximized_button_focus_inactive  = theme.confdir .. "/icons/title
 theme.titlebar_maximized_button_normal_active   = theme.confdir .. "/icons/titlebar/maximized_normal_active.png"
 theme.titlebar_maximized_button_focus_active    = theme.confdir .. "/icons/titlebar/maximized_focus_active.png"
 
+beautiful.tooltip_bg                                = "#000000"
+beautiful.tooltip_fg                                = "#ffffff"
+
 local markup = lain.util.markup
 
 theme.tagnames =  {
@@ -374,14 +377,35 @@ theme.tasks:set_markup(markup.fontfg(theme.font, "#4286f4", " Tasks"))
 lain.widget.contrib.task.attach(theme.tasks, {})
 
 -- pacman
-pacmanwidget = {}
-mypacman = wibox.widget.textbox()
-mypacman:set_markup(markup.fontfg(theme.font, "#4286f4", " pacman"))
+pacman = {}
 
-function pacmanwidget.showpackages()
-	--for number of packages
-	--pacman -Qu | grep -oP "^[^\s]+" | wc -l
-end
+pacman.widget = awful.widget.watch("checkupdates", 3600,
+function(widget,stdout)
+	local _, lines = stdout:gsub('\n','\n')
+	pacman.last_output = stdout
+	widget:set_markup(lain.util.markup("#4286f4", lines))
+end)
+
+pacman_t = awful.tooltip {}
+pacman_t:add_to_object(pacman.widget)
+
+pacman.widget:connect_signal("mouse::enter", function()
+	local cmd = "grep \"Running 'pacman -Syu'\" /var/log/pacman.log | tail -n 1"
+	awful.spawn.easy_async_with_shell(cmd, function(stdout)
+		local text = ""
+
+		if stdout then
+			local last_date = string.match(stdout, "%[(%d+%-%d+%-%d+)")
+			text = text .. "Last update: " .. last_date .. "\n\n"
+		end
+
+		if pacman.last_output then
+			text = text .. pacman.last_output
+		end
+
+		pacman_t.text = text
+	end)
+end)
 
 -- redshift
 myredshift = wibox.widget.textbox()
@@ -613,6 +637,7 @@ function theme.at_screen_connect(s)
 			layout = wibox.layout.fixed.horizontal,
 			spacing = 5,
 			systray,
+			pacman.widget,
 			myredshift,
 			theme.volume.widget,
 			theme.memory.widget,
