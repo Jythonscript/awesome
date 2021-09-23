@@ -1043,7 +1043,7 @@ globalkeys = gears.table.join(
               {description = "run browser not maximized", group = "launcher"}),
 	awful.key({ modkey }, "e",
 		function ()
-			awful.spawn("todoist")
+			awful.spawn("flatpak run com.todoist.Todoist")
 		end,
 			{description = "run todoist", group = "launcher"}),
 
