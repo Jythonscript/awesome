@@ -55,6 +55,17 @@ local shaderstring =
 --local battery = require("awesome-upower-battery")
 -- }}}
 
+-- {{{ Hasten garbage collection
+collectgarbage("setstepmul", 10000)
+gears.timer {
+	timeout = 60,
+	autostart = true,
+	callback = function()
+		collectgarbage()
+	end
+}
+-- }}}
+
 -- {{{ Error handling
 if awesome.startup_errors then
     naughty.notify({ preset = naughty.config.presets.critical,
