@@ -417,18 +417,15 @@ globalkeys = gears.table.join(
 			lain.widget.contrib.redshift:toggle() 
 		end,
 		{description = "task popup", group = "widgets"}),
-	--Task prompt
+	-- train popup
 	awful.key({ altkey, modkey}, "t", 
 		function ()
-			lain.widget.contrib.task.prompt()
+			cmd = "source $HOME/.zshrc && trains"
+			awful.spawn.easy_async_with_shell(cmd, function(stdout, stderr, reason, exit_code)
+				naughty.notify({text = stdout})
+			end)
 		end
 	),
-	--Toggle task popup
-	awful.key({ altkey, modkey}, "u", 
-		function () 
-			lain.widget.contrib.task.show(scr) 
-		end),
-
 	--Toggle widgets with 1-5 macro keys
 	awful.key({}, "XF86Launch5", 
 		function ()
