@@ -1243,30 +1243,12 @@ clientkeys = gears.table.join(
               {description = "magnify client", group = "client"}),
     awful.key({ modkey,           }, "f",
         function (c)
-
-			local opacity = c.fullscreen and 1 or 0
-			c.screen.mywibox.visible = c.fullscreen
 			c.fullscreen = not c.fullscreen
-			c:raise()
-			for _, client in ipairs(c.screen.clients) do
-				if client ~= c and awful.client.focus.filter(client) then
-					client.opacity = opacity
-				end
-			end
         end,
         {description = "toggle fullscreen", group = "client"}),
     awful.key({ modkey, "Shift" }, "f",
         function (c)
-
 			c.fullscreen = false
-			local opacity = 1
-			c.screen.mywibox.visible = true
-			c:raise()
-			for _, client in ipairs(c.screen.clients) do
-				if client ~= c and awful.client.focus.filter(client) then
-					client.opacity = opacity
-				end
-			end
         end,
         {description = "disable fullscreen", group = "client"}),
 	awful.key({ modkey, "Control" }, "f",
