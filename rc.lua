@@ -1699,7 +1699,6 @@ end)
 
 -- Custom borders
 client.connect_signal("focus", border_adjust)
-client.connect_signal("property::position", border_adjust)
 
 -- No border for maximized clients
 client.connect_signal("focus",
