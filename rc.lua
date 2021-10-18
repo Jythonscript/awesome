@@ -1169,12 +1169,12 @@ laptopkeys = gears.table.join(
               {description = "start steam with GTK dpi adjust", group = "launcher"}),
     awful.key({ altkey }, "XF86Tools",
 		function ()
-			os.execute('xinput enable $(xinput list | grep -oP "Synaptics.*id=\\K(\\d+)")')
+			awful.spawn.easy_async_with_shell('xinput enable $(xinput list | grep -oP "Synaptics.*id=\\K(\\d+)")', function () end)
 		end,
               {description = "enable trackpad", group = "custom"}),
     awful.key({ }, "XF86Tools",
 		function ()
-			os.execute('xinput disable $(xinput list | grep -oP "Synaptics.*id=\\K(\\d+)")')
+			awful.spawn.easy_async_with_shell('xinput disable $(xinput list | grep -oP "Synaptics.*id=\\K(\\d+)")', function () end)
 		end,
               {description = "disable trackpad", group = "custom"}),
 	awful.key({ modkey, altkey }, "b",
