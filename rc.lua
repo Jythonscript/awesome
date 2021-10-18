@@ -203,6 +203,7 @@ local function run_once(cmd_arr)
 end
 
 run_once({
+	{"light-locker"},
 	{"thunderbird"},
 	--{"redshift -r"},
 	{"firefox"},
@@ -216,7 +217,6 @@ run_once({
 -- append platform run_once
 if selectedConfig == "elrond" then
 	run_once({
-		{"light-locker"}
 	})
 elseif selectedConfig == "aragorn" then
 	run_once({
@@ -1169,12 +1169,12 @@ laptopkeys = gears.table.join(
               {description = "start steam with GTK dpi adjust", group = "launcher"}),
     awful.key({ altkey }, "XF86Tools",
 		function ()
-			os.execute('xinput enable $(xinput list | grep -oP "Synaptics.*id=\\K(\\d+)")')
+			awful.spawn.easy_async_with_shell('xinput enable $(xinput list | grep -oP "Synaptics.*id=\\K(\\d+)")', function () end)
 		end,
               {description = "enable trackpad", group = "custom"}),
     awful.key({ }, "XF86Tools",
 		function ()
-			os.execute('xinput disable $(xinput list | grep -oP "Synaptics.*id=\\K(\\d+)")')
+			awful.spawn.easy_async_with_shell('xinput disable $(xinput list | grep -oP "Synaptics.*id=\\K(\\d+)")', function () end)
 		end,
               {description = "disable trackpad", group = "custom"}),
 	awful.key({ modkey, altkey }, "b",
@@ -1622,7 +1622,7 @@ end
 client.connect_signal("manage", function (c)
     -- Set the windows at the slave,
     -- i.e. put it at the end of others instead of setting it master.
-    -- if not awesome.startup then awful.client.setslave(c) end
+     if not awesome.startup then awful.client.setslave(c) end
 
     if awesome.startup and
       not c.size_hints.user_position
@@ -1699,6 +1699,7 @@ end)
 
 -- Custom borders
 client.connect_signal("focus", border_adjust)
+client.connect_signal("property::position", border_adjust)
 
 -- No border for maximized clients
 client.connect_signal("focus",
