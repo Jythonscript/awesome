@@ -825,7 +825,7 @@ globalkeys = gears.table.join(
     awful.key({ modkey,           }, "space", 
 		function ()
 			if awful.layout.get(awful.screen.focused()) == awful.layout.suit.tile then
-				awful.layout.set(awful.layout.suit.tile.bottom)
+				awful.layout.set(lain.layout.centerwork)
 			else
 				awful.layout.set(awful.layout.suit.tile)
 			end
