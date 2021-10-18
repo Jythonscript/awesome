@@ -203,6 +203,7 @@ local function run_once(cmd_arr)
 end
 
 run_once({
+	{"light-locker"},
 	{"thunderbird"},
 	--{"redshift -r"},
 	{"firefox"},
@@ -216,7 +217,6 @@ run_once({
 -- append platform run_once
 if selectedConfig == "elrond" then
 	run_once({
-		{"light-locker"}
 	})
 elseif selectedConfig == "aragorn" then
 	run_once({
