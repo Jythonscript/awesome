@@ -390,7 +390,7 @@ pacman_t = awful.tooltip {}
 pacman_t:add_to_object(pacman.widget)
 
 pacman.widget:connect_signal("mouse::enter", function()
-	local cmd = "grep \"Running 'pacman -Syu'\" /var/log/pacman.log | tail -n 1"
+	local cmd = "grep \"Running 'pacman -Syu\" /var/log/pacman.log | tail -n 1"
 	awful.spawn.easy_async_with_shell(cmd, function(stdout)
 		local text = ""
 
