@@ -385,7 +385,7 @@ globalkeys = gears.table.join(
         {description = "take a scrot screenshot", group = "hotkeys"}),
 
 	awful.key({ modkey }, "s", function() 
-		awful.spawn.with_shell("sleep 0.2;scrot -sfe 'mv $f ~/Pictures/Screenshots/';zsh;")
+		awful.spawn.with_shell("sleep 0.2;scrot -s -fe 'mv $f ~/Pictures/Screenshots/';zsh;")
 	end,
               {description = "take a scrot screenshot with selection", group = "hotkeys"}),
 
