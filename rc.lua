@@ -146,6 +146,7 @@ local special_run_commands = {
 	{"shaders", popup_when_no_args},
 	{"tx", popup_program},
 	{"td", popup_program},
+	{"q", popup_program},
 }
 
 local function parse_for_special_run_commands(in_cmd)
