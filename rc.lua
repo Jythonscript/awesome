@@ -1551,6 +1551,22 @@ awful.rules.rules = {
 			end
 		}
 	},
+	{
+		rule = { class = "origin.exe" },
+		properties = {
+			below = true,
+			floating = true,
+			minimized = true,
+		}
+	},
+	{
+		rule = { class = "steam_app_1182480" },
+		properties = {
+			below = true,
+			floating = true,
+			minimized = true,
+		}
+	},
 }
 -- }}}
 
