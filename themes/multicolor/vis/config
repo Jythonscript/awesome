@@ -9,4 +9,4 @@ visualizer.spectrum.top.margin=0.6
 visualizer.spectrum.bar.width=1
 visualizer.spectrum.bar.spacing=1
 visualizer.spectrum.smoothing.mode=none
-colors.scheme=little_parade
+colors.scheme=red
