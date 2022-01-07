@@ -1,0 +1,27 @@
+
+local prefs = {}
+
+prefs.tagnames = {
+	utf8.char(0xf269), -- Firefox
+	utf8.char(0xf0e0), -- Mail
+	utf8.char(0xf086), -- Chat
+	"4", "5", "6", "7", "8", "9",
+	"F1", "F2", "F3", "F4", "F5", "F6",
+	"F7", "F8", "F9", "F10", "F11", "F12"
+}
+
+prefs.theme = "multicolor"
+prefs.theme_path = string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), prefs.theme)
+
+--prefs.city_id = 5025219 -- Eden Prairie, MN
+prefs.city_id = 5037649 -- Minneapolis, MN
+
+prefs.terminal = "urxvt"
+prefs.browser = "firefox"
+prefs.editor = "vim"
+prefs.compositor = "picom"
+
+prefs.laptop = true
+prefs.wibar_height = 25
+
+return prefs
