@@ -13,8 +13,8 @@ prefs.tagnames = {
 prefs.theme = "multicolor"
 prefs.theme_path = string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), prefs.theme)
 
---prefs.city_id = 5025219 -- Eden Prairie, MN
-prefs.city_id = 5037649 -- Minneapolis, MN
+-- openstreetmap city id
+prefs.city_id = 0
 
 prefs.terminal = "urxvt"
 prefs.browser = "firefox"
