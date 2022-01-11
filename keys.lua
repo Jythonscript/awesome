@@ -1,7 +1,6 @@
 local gears = require("gears")
 local awful = require("awful")
 local naughty = require("naughty")
-local beautiful = require("beautiful")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 local prefs = require("prefs")
 local helpers = require("feign.helpers")
@@ -18,7 +17,6 @@ local keys = {}
 
 -- {{{ Key bindings
 keys.globalkeys = gears.table.join(
-	--awful.key({}, "XF86Calculator",
 	awful.key({ modkey, "Shift" }, "c",
         function ()
 			if fake_input_mouse3_pressed == true then
@@ -65,7 +63,7 @@ keys.globalkeys = gears.table.join(
 		end,
 	{description = "toggle sloppy focus", group = "awesome"}),
 	--terminal in same directory
-    awful.key({ modkey,  "Shift"         }, "Return",
+    awful.key({ modkey, "Shift" }, "Return",
 		function()
 			local term_id = "/run/user/$(id --user)/urxvtc_ids/" .. client.focus.window
 			awful.spawn.with_shell(prefs.terminal ..
@@ -159,16 +157,15 @@ keys.globalkeys = gears.table.join(
     awful.key({ modkey, "Shift" }, "y",      hotkeys_popup.show_help,
               {description = "show help", group="awesome"}),
     -- Tag browsing
-    awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
+    awful.key({ modkey,           }, "Left", awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
-    awful.key({ modkey,           }, "Right",  awful.tag.viewnext,
+    awful.key({ modkey,           }, "Right", awful.tag.viewnext,
               {description = "view next", group = "tag"}),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
-	--alternate Tag browsing
-	awful.key({ altkey,           }, "h",   awful.tag.viewprev,
+	awful.key({ altkey }, "h", awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
-    awful.key({ altkey,           }, "l",  awful.tag.viewnext,
+    awful.key({ altkey }, "l",  awful.tag.viewnext,
               {description = "view next", group = "tag"}),
 	awful.key({ altkey }, "j",
 		function ()
@@ -183,16 +180,16 @@ keys.globalkeys = gears.table.join(
 
     -- Default client focus
 	-- (This has been modified to be the opposite of the default)
-    awful.key({ modkey, altkey,           }, "j",
+    awful.key({ modkey, altkey }, "j",
         function ()
             awful.client.focus.byidx(-1)
         end,
         {description = "focus left index", group = "client"}
     ),
 	-- (This has been modified to be the opposite of the default)
-    awful.key({ modkey, altkey,           }, "k",
+    awful.key({ modkey, altkey }, "k",
         function ()
-            awful.client.focus.byidx( 1)
+            awful.client.focus.byidx(1)
         end,
         {description = "focus right index", group = "client"}
     ),
@@ -209,7 +206,6 @@ keys.globalkeys = gears.table.join(
 			os.execute("transset-df -at")
         end,
         {description = "toggle transparency", group = "custom"}),
-
     awful.key({ modkey }, "k",
         function()
             awful.client.focus.bydirection("up")
@@ -235,15 +231,21 @@ keys.globalkeys = gears.table.join(
 		{description = "show main menu", group = "awesome"}),
 
     -- Layout manipulation
-    awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx( -1)    end,
-              {description = "swap with next client by index", group = "client"}),
-    awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( 1)    end,
-              {description = "swap with previous client by index", group = "client"}),
+    awful.key({ modkey, "Shift"   }, "j",
+		function ()
+			awful.client.swap.byidx(-1)
+		end,
+		{description = "swap with next client by index", group = "client"}),
+    awful.key({ modkey, "Shift"   }, "k",
+		function ()
+			awful.client.swap.byidx(1)
+		end,
+		{description = "swap with previous client by index", group = "client"}),
     awful.key({ modkey, "Control" }, "j",
 		function ()
 			awful.screen.focus_bydirection("left")
 		end,
-              {description = "focus the screen to the right", group = "screen"}),
+		{description = "focus the screen to the right", group = "screen"}),
     awful.key({ modkey, "Control" }, "k",
 		function ()
 			awful.screen.focus_bydirection("right")
@@ -357,12 +359,12 @@ keys.globalkeys = gears.table.join(
 		function ()
 			helpers.add_tag()
 		end,
-              {description = "add new tag", group = "tag"}),
+		{description = "add new tag", group = "tag"}),
     awful.key({ modkey }, "y",
 		function ()
 			helpers.rename_tag()
 		end,
-              {description = "rename tag", group = "tag"}),
+		{description = "rename tag", group = "tag"}),
     awful.key({ modkey, "Shift" }, "Left",
 		function ()
 			helpers.move_tag_left()
@@ -380,8 +382,11 @@ keys.globalkeys = gears.table.join(
 		{description = "delete tag", group = "tag"}),
 
     -- Standard program
-    awful.key({ modkey,           }, "Return", function () awful.spawn(prefs.terminal) end,
-              {description = "open a terminal", group = "launcher"}),
+    awful.key({ modkey }, "Return",
+		function ()
+			awful.spawn(prefs.terminal)
+		end,
+		{description = "open a terminal", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r",
 		function()
             local cmd = "find ~/.config/awesome/ -iname '*.lua' -exec luac -o - {} \\;"
@@ -481,33 +486,15 @@ keys.globalkeys = gears.table.join(
 		end,
         {description = "toggle weather popup", group = "widgets"}),
     -- Pulse volume control
-	awful.key({}, "XF86AudioRaiseVolume",
-        function ()
-			feign.widget.volume.inc(2)
-        end,
-        {description = "volume up", group = "hotkeys"}),
-
-	awful.key({}, "XF86AudioLowerVolume",
-		function ()
-			feign.widget.volume.inc(-2)
-        end,
+	awful.key({}, "XF86AudioRaiseVolume", feign.widget.volume.inc,
+		{description = "volume up", group = "hotkeys"}),
+	awful.key({}, "XF86AudioLowerVolume", feign.widget.volume.dec,
         {description = "volume down", group = "hotkeys"}),
-	awful.key({}, "XF86AudioMute",
-        function ()
-			feign.widget.volume.toggle_mute()
-        end,
+	awful.key({}, "XF86AudioMute", feign.widget.volume.toggle_mute,
         {description = "toggle mute", group = "hotkeys"}),
-    awful.key({ altkey, "Control" }, "m",
-        function ()
-           os.execute(string.format("amixer -D pulse set Master toggle"))
-            beautiful.volume.update()
-        end,
+    awful.key({ altkey, "Control" }, "m", feign.widget.volume.toggle_mute,
         {description = "toggle mute", group = "hotkeys"}),
-    awful.key({ altkey, "Control" }, "0",
-        function ()
-            os.execute(string.format("amixer -q set %s 0%%", beautiful.volume.channel))
-            beautiful.volume.update()
-        end,
+    awful.key({ altkey, "Control" }, "0", feign.widget.volume.set,
         {description = "volume 0%", group = "hotkeys"}),
 
     -- MPD control
@@ -676,20 +663,19 @@ local laptopkeys = gears.table.join(
         {description = "hibernate", group = "custom"}),
     -- brightness
     awful.key({ }, "XF86MonBrightnessUp",
-		function ()
-			awful.util.spawn("xbacklight -inc 5")
-		end,
-		{description = "+5%", group = "hotkeys"}),
+		feign.widget.brightness.increase,
+		{description = "brightness up", group = "hotkeys"}),
 
     awful.key({ }, "XF86MonBrightnessDown",
-		function ()
-			awful.util.spawn("xbacklight -dec 5")
-		end,
-		{description = "-5%", group = "hotkeys"}),
+		feign.widget.brightness.decrease,
+		{description = "brightness down", group = "hotkeys"}),
+	awful.key({ modkey, altkey }, "b",
+		feign.widget.brightness.prompt ,
+		{description = "brightness prompt", group = "custom"}),
 	-- mute microphone
 	awful.key({}, "XF86AudioMicMute",
         function ()
-			os.execute("pactl set-source-mute 1 toggle")
+			feign.widget.volume.toggle_mic_mute()
         end,
         {description = "toggle microphone mute", group = "hotkeys"}),
 
@@ -707,18 +693,7 @@ local laptopkeys = gears.table.join(
 		function ()
 			awful.spawn.easy_async_with_shell('xinput disable $(xinput list | grep -oP "Synaptics.*id=\\K(\\d+)")', function () end)
 		end,
-              {description = "disable trackpad", group = "custom"}),
-	awful.key({ modkey, altkey }, "b",
-		function()
-			awful.prompt.run {
-				prompt = "Brightness: ",
-				textbox = awful.screen.focused().mypromptbox.widget,
-				exe_callback = function(cmd)
-					os.execute("xbacklight -set " .. cmd)
-				end
-			}
-		end,
-			  {description = "brightness prompt", group = "custom"})
+              {description = "disable trackpad", group = "custom"})
 )
 
 -- pc specific shortcuts
@@ -758,7 +733,7 @@ local pckeys = gears.table.join(
         {description = "playerctl play-pause", group = "custom"}),
 	awful.key({ altkey }, "XF86AudioMute",
         function ()
-			theme.volume.toggle_mic_mute()
+			feign.widget.volume.toggle_mic_mute()
         end,
         {description = "mpd volume down", group = "mpd"}),
     awful.key({ modkey }, "g",

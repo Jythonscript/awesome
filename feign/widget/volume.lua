@@ -7,12 +7,23 @@ local volume = {}
 volume.widget = wibox.widget.textbox()
 
 volume.inc = function(percent)
+	if not percent then percent = 2 end
 	if percent >= 0 then
 		percent = percent .. "%+"
 	else
 		percent = -1 * percent .. "%-"
 	end
 	awful.spawn.easy_async("amixer set Master " .. percent, volume.update)
+end
+
+volume.dec = function(percent)
+	if not percent then percent = 2 end
+	volume.inc(-percent)
+end
+
+volume.set = function(percent)
+	if not percent then percent = 0 end
+	awful.spawn.easy_async("amixer set Master " .. percent .. "%", volume.update)
 end
 
 volume.toggle_mute = function()
@@ -67,7 +78,7 @@ volume.widget:buttons(awful.util.table.join(
 		volume.inc(1)
     end),
     awful.button({}, 5, function() -- scroll down
-		volume.inc(-1)
+		volume.dec(1)
     end)
 ))
 
