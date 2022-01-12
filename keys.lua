@@ -503,15 +503,9 @@ keys.globalkeys = gears.table.join(
 			awful.spawn("playerctl play-pause")
 		end,
 		{description = "playerctl play-pause", group = "custom"}),
-    awful.key({ altkey }, "'",
-        function ()
-			feign.widget.mpd.toggle()
-        end,
+    awful.key({ altkey }, "'", feign.widget.mpd.toggle,
         {description = "mpc toggle", group = "mpd"}),
-    awful.key({ altkey }, ";",
-        function ()
-			feign.widget.mpd.stop()
-        end,
+    awful.key({ altkey }, ";", feign.widget.mpd.stop,
         {description = "mpc stop", group = "mpd"}),
     awful.key({ altkey }, "[",
         function ()
@@ -548,15 +542,9 @@ keys.globalkeys = gears.table.join(
 			feign.widget.mpd.volume(-5)
         end,
         {description = "mpd volume down", group = "mpd"}),
-	awful.key({ modkey }, "v",
-		function()
-			feign.widget.visualizer.toggle()
-		end,
+	awful.key({ modkey }, "v", feign.widget.visualizer.toggle,
 		{description = "toggle visualizer", group = "mpd"}),
-	awful.key({ modkey, "Shift" }, "v",
-		function()
-			feign.widget.fluidsim.toggle()
-		end,
+	awful.key({ modkey, "Shift" }, "v", feign.widget.fluidsim.toggle,
 		{description = "toggle fluid simulation", group = "custom"}),
     -- User programs
     awful.key({ modkey }, "q",
@@ -999,6 +987,29 @@ for i, k in ipairs(tag_keys) do
     )
 end
 
+keys.desktopkeys = gears.table.join(
+	awful.key({}, "t",
+		function ()
+			awful.spawn(prefs.terminal)
+		end),
+	awful.key({}, "q",
+		function ()
+			awful.spawn(prefs.browser)
+		end),
+	awful.key({}, "c",
+		function ()
+			awful.spawn("chromium")
+		end),
+	awful.key({}, "h",
+		awful.tag.viewprev),
+	awful.key({}, "l",
+		awful.tag.viewnext),
+	awful.key({}, "g",
+		function ()
+			awful.spawn("steam")
+		end)
+)
+
 keys.clientbuttons = gears.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
@@ -1034,9 +1045,38 @@ keys.root_buttons = gears.table.join(
 )
 -- }}}
 
+local check_desktop_keymaps = function()
+	local tags = awful.screen.focused().selected_tags
+	for _,t in ipairs(tags) do
+		local cl = t:clients()
+		if cl and not (#cl == 0) then
+			return
+		end
+	end
+	-- no clients in any selected tags
+	keys.keymode = "desktop"
+	root.keys(gears.table.join(keys.globalkeys, keys.desktopkeys))
+end
+
+local restore_original_keymaps = function()
+	-- exists at least one client in any selected tag
+	if keys.keymode == "desktop" then
+		keys.keymode = "normal"
+	end
+	root.keys(keys.globalkeys)
+end
+
+client.connect_signal("unfocus", check_desktop_keymaps)
+client.connect_signal("unmanage", check_desktop_keymaps)
+
+client.connect_signal("focus", restore_original_keymaps)
+
 -- set keys
 root.keys(keys.globalkeys)
 root.buttons(keys.root_buttons)
+keys.keymode = "normal"
+
+check_desktop_keymaps()
 
 return keys
 
