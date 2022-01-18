@@ -7,6 +7,7 @@ local helpers = require("feign.helpers")
 local feign = require("feign")
 local mouse = mouse
 local os = os
+local beautiful = require("beautiful")
 
 local prefs = require("prefs")
 
@@ -229,6 +230,14 @@ keys.globalkeys = gears.table.join(
 			feign.widget.main_menu:toggle()
 		end,
 		{description = "show main menu", group = "awesome"}),
+	-- key modes
+	awful.key({ altkey }, ",",
+		function ()
+			root.keys(gears.table.join(keys.globalkeys, keys.quick_keys, keys.mode_keys))
+			keys.keymode = "quick"
+			feign.widget.keymodebox.set_text("- QUICK -")
+		end,
+		{description = "enable quick key mode", group = "hotkeys"}),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j",
@@ -987,27 +996,49 @@ for i, k in ipairs(tag_keys) do
     )
 end
 
-keys.desktopkeys = gears.table.join(
+keys.mode_keys = gears.table.join(
+	awful.key({}, "Escape",
+		function ()
+			-- check if you should go back to desktopkeys, unless if they are already loaded
+			if keys.keymode == "desktop" then
+				keys.undo_desktop_keymaps()
+			else
+				root.keys(keys.globalkeys)
+				keys.keymode = "normal"
+				feign.widget.keymodebox.set_text("")
+				keys.check_desktop_keymaps()
+			end
+		end
+	)
+)
+
+keys.quickspawn_keys = gears.table.join(
 	awful.key({}, "t",
-		function ()
-			awful.spawn(prefs.terminal)
-		end),
+		function () awful.spawn(prefs.terminal) end),
 	awful.key({}, "q",
-		function ()
-			awful.spawn(prefs.browser)
-		end),
+		function () awful.spawn(prefs.browser) end),
 	awful.key({}, "c",
-		function ()
-			awful.spawn("chromium")
-		end),
+		function () awful.spawn("chromium") end),
+	awful.key({}, "g",
+		function () awful.spawn("steam") end)
+)
+
+keys.quick_keys = gears.table.join(
 	awful.key({}, "h",
 		awful.tag.viewprev),
 	awful.key({}, "l",
 		awful.tag.viewnext),
-	awful.key({}, "g",
-		function ()
-			awful.spawn("steam")
-		end)
+	awful.key({}, "j",
+		function () awful.screen.focus_bydirection("left") end),
+	awful.key({}, "k",
+		function () awful.screen.focus_bydirection("right") end),
+	awful.key({}, "f",
+		function () client.focus.fullscreen = not client.focus.fullscreen end)
+)
+
+keys.desktopkeys = gears.table.join(
+	keys.quickspawn_keys,
+	keys.quick_keys
 )
 
 keys.clientbuttons = gears.table.join(
@@ -1045,7 +1076,7 @@ keys.root_buttons = gears.table.join(
 )
 -- }}}
 
-local check_desktop_keymaps = function()
+keys.check_desktop_keymaps = function()
 	local tags = awful.screen.focused().selected_tags
 	for _,t in ipairs(tags) do
 		local cl = t:clients()
@@ -1055,28 +1086,30 @@ local check_desktop_keymaps = function()
 	end
 	-- no clients in any selected tags
 	keys.keymode = "desktop"
-	root.keys(gears.table.join(keys.globalkeys, keys.desktopkeys))
+	feign.widget.keymodebox.set_text("- DESKTOP -")
+	root.keys(gears.table.join(keys.globalkeys, keys.desktopkeys, keys.mode_keys))
 end
 
-local restore_original_keymaps = function()
+keys.undo_desktop_keymaps = function()
 	-- exists at least one client in any selected tag
 	if keys.keymode == "desktop" then
 		keys.keymode = "normal"
+		feign.widget.keymodebox.set_text("")
 	end
 	root.keys(keys.globalkeys)
 end
 
-client.connect_signal("unfocus", check_desktop_keymaps)
-client.connect_signal("unmanage", check_desktop_keymaps)
+client.connect_signal("unfocus", keys.check_desktop_keymaps)
+client.connect_signal("unmanage", keys.check_desktop_keymaps)
 
-client.connect_signal("focus", restore_original_keymaps)
+client.connect_signal("focus", keys.undo_desktop_keymaps)
 
 -- set keys
 root.keys(keys.globalkeys)
 root.buttons(keys.root_buttons)
 keys.keymode = "normal"
 
-check_desktop_keymaps()
+keys.check_desktop_keymaps()
 
 return keys
 

@@ -22,7 +22,7 @@ theme                                     = {}
 theme.confdir                                   = os.getenv("HOME") .. "/.config/awesome/themes/multicolor"
 theme.wallpaper                                 = theme.confdir .. "/wall.png"
 theme.font                                      = "xos4 Terminus 8"
-theme.fira_font                                 = "Fira Mono 11"
+theme.mono_font                                 = "Fira Mono 11"
 theme.bg_normal                                 = "#000102"
 theme.bg_focus                                  = "#000102"
 theme.bg_urgent                                 = "#000102"
@@ -164,7 +164,12 @@ function theme.at_screen_connect(s)
             layout = wibox.layout.fixed.horizontal,
             s.mytaglist,
             s.mypromptbox,
-			feign.widget.mpd.widget,
+			{
+				layout = wibox.layout.fixed.horizontal,
+				spacing = 5,
+				feign.widget.keymodebox.widget,
+				feign.widget.mpd.widget,
+			},
         },
 		s.mytasklist,
 		{ -- Right widgets

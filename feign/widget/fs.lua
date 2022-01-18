@@ -3,7 +3,7 @@ local markup = require("feign.markup")
 
 local fs = lain.widget.fs({
 	followtag = true,
-    notification_preset = { font = theme.fira_font, fg = theme.fg_normal },
+    notification_preset = { font = theme.mono_font, fg = theme.fg_normal },
     settings  = function()
         widget:set_markup(markup.fontfg(theme.font, "#80d9d8", string.format("%.1f", fs_now["/"].used) .. "% "))
     end

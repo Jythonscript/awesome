@@ -9,7 +9,7 @@ cal.init = function(widget)
 		attach_to = { widget },
 		followtag = true,
 		notification_preset = {
-			font = theme.fira_font,
+			font = theme.mono_font,
 			fg   = theme.fg_normal,
 			bg   = theme.bg_normal
 		}
