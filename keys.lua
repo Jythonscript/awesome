@@ -233,8 +233,7 @@ keys.globalkeys = gears.table.join(
 	-- key modes
 	awful.key({ altkey }, ",",
 		function ()
-			root.keys(gears.table.join(keys.globalkeys, keys.quick_keys, keys.mode_keys))
-			keys.keymode = "quick"
+			root.keys(gears.table.join(keys.globalkeys, keys.quick_keys, keys.quickspawn_keys, keys.mode_keys))
 			feign.widget.keymodebox.set_text("- QUICK -")
 		end,
 		{description = "enable quick key mode", group = "hotkeys"}),
@@ -999,15 +998,8 @@ end
 keys.mode_keys = gears.table.join(
 	awful.key({}, "Escape",
 		function ()
-			-- check if you should go back to desktopkeys, unless if they are already loaded
-			if keys.keymode == "desktop" then
-				keys.undo_desktop_keymaps()
-			else
-				root.keys(keys.globalkeys)
-				keys.keymode = "normal"
-				feign.widget.keymodebox.set_text("")
-				keys.check_desktop_keymaps()
-			end
+			root.keys(keys.globalkeys)
+			feign.widget.keymodebox.set_text("")
 		end
 	)
 )
@@ -1034,11 +1026,6 @@ keys.quick_keys = gears.table.join(
 		function () awful.screen.focus_bydirection("right") end),
 	awful.key({}, "f",
 		function () client.focus.fullscreen = not client.focus.fullscreen end)
-)
-
-keys.desktopkeys = gears.table.join(
-	keys.quickspawn_keys,
-	keys.quick_keys
 )
 
 keys.clientbuttons = gears.table.join(
@@ -1076,40 +1063,9 @@ keys.root_buttons = gears.table.join(
 )
 -- }}}
 
-keys.check_desktop_keymaps = function()
-	local tags = awful.screen.focused().selected_tags
-	for _,t in ipairs(tags) do
-		local cl = t:clients()
-		if cl and not (#cl == 0) then
-			return
-		end
-	end
-	-- no clients in any selected tags
-	keys.keymode = "desktop"
-	feign.widget.keymodebox.set_text("- DESKTOP -")
-	root.keys(gears.table.join(keys.globalkeys, keys.desktopkeys, keys.mode_keys))
-end
-
-keys.undo_desktop_keymaps = function()
-	-- exists at least one client in any selected tag
-	if keys.keymode == "desktop" then
-		keys.keymode = "normal"
-		feign.widget.keymodebox.set_text("")
-	end
-	root.keys(keys.globalkeys)
-end
-
-client.connect_signal("unfocus", keys.check_desktop_keymaps)
-client.connect_signal("unmanage", keys.check_desktop_keymaps)
-
-client.connect_signal("focus", keys.undo_desktop_keymaps)
-
 -- set keys
 root.keys(keys.globalkeys)
 root.buttons(keys.root_buttons)
-keys.keymode = "normal"
-
-keys.check_desktop_keymaps()
 
 return keys
 
