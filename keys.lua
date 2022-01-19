@@ -277,69 +277,10 @@ keys.globalkeys = gears.table.join(
         {description = "switch to previous tag", group = "tag"}),
 
     awful.key({ modkey }, "]",
-        function()
-            local og_c = client.focus
-
-            if og_c == nil then
-                return
-            end
-
-            local matcher = function(c)
-				return (c.window == og_c.window
-					or awful.widget.tasklist.filter.minimizedcurrenttags(c, c.screen))
-					and c:tags()[#c:tags()] == og_c:tags()[#og_c:tags()]
-            end
-
-            local n = 0
-            for c in awful.client.iterate(matcher) do
-                if n == 0 then
-                elseif n == 1 then
-                    og_c.minimized = true
-                    c.minimized = false
-                    client.focus = c
-                    c:raise()
-                else
-                    c.minimized = true
-                end
-                c:swap(og_c)
-                n = n + 1
-            end
-        end,
+		helpers.stacknext,
 		{description = "cycle forward between minimized windows", group = "client"}),
     awful.key({ modkey }, "[",
-		function()
-            local og_c = client.focus
-
-            if og_c == nil then
-                return
-            end
-
-            local matcher = function(c)
-                return awful.widget.tasklist.filter.minimizedcurrenttags(c, c.screen)
-                    and c:tags()[#c:tags()] == og_c:tags()[#og_c:tags()]
-            end
-
-            local stack = {}
-            for c in awful.client.iterate(matcher) do
-                stack[#stack+1] = c
-            end
-            stack[#stack+1] = og_c
-
-            local n = 0
-            for _, c in ipairs(gears.table.reverse(stack))  do
-                if n == 0 then
-                elseif n == 1 then
-                    og_c.minimized = true
-                    c.minimized = false
-                    client.focus = c
-                    c:raise()
-                else
-                    c.minimized = true
-                end
-                c:swap(og_c)
-                n = n + 1
-            end
-        end,
+		helpers.stackprev,
 		{description = "cycle backwards between minimized windows", group = "client"}),
 
     -- Show/Hide Wibox
@@ -921,7 +862,9 @@ keys.tasklist_buttons = gears.table.join(
 	end),
 	awful.button({ }, 5, function ()
 		awful.client.focus.byidx(-1)
-	end)
+	end),
+	awful.button({ }, 8, helpers.stackprev),
+	awful.button({ }, 9, helpers.stacknext)
 )
 
 -- Bind all key numbers to tags.
