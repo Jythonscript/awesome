@@ -271,9 +271,7 @@ keys.globalkeys = gears.table.join(
         {description = "go back", group = "client"}),
 
     awful.key({ altkey,           }, "Tab",
-        function ()
-			awful.tag.history.restore()
-        end,
+		awful.tag.history.restore,
         {description = "switch to previous tag", group = "tag"}),
 
     awful.key({ modkey }, "]",
@@ -287,18 +285,12 @@ keys.globalkeys = gears.table.join(
     awful.key({ modkey }, "b", function ()
             for s in screen do
                 s.mywibox.visible = not s.mywibox.visible
-                if s.mybottomwibox then
-                    s.mybottomwibox.visible = not s.mybottomwibox.visible
-                end
             end
         end,
         {description = "toggle wibox", group = "awesome"}),
     awful.key({ modkey, "Shift" }, "b", function ()
             for s in screen do
                 s.mywibox.visible = true
-                if s.mybottomwibox then
-                    s.mybottomwibox.visible = true
-                end
             end
         end,
         {description = "enable all wiboxes", group = "awesome"}),
