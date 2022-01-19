@@ -99,13 +99,31 @@ mpd.stop = function()
 end
 
 mpd.next = function()
-	os.execute("mpc next")
-	mpd.update()
+	local cmd = "playerctl status"
+	if mpd_now.state == "stop" then
+		awful.spawn.easy_async(cmd, function(stdout)
+			if string.find(stdout,"Playing") then
+				awful.spawn("playerctl next")
+			end
+		end)
+	else
+		os.execute("mpc next")
+		mpd.update()
+	end
 end
 
 mpd.prev = function()
-	os.execute("mpc prev")
-	mpd.update()
+	local cmd = "playerctl status"
+	if mpd_now.state == "stop" then
+		awful.spawn.easy_async(cmd, function(stdout)
+			if string.find(stdout,"Playing") then
+				awful.spawn("playerctl previous")
+			end
+		end)
+	else
+		os.execute("mpc prev")
+		mpd.update()
+	end
 end
 
 mpd.seek = function(sec)
