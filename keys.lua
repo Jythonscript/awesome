@@ -231,9 +231,9 @@ keys.globalkeys = gears.table.join(
 		end,
 		{description = "show main menu", group = "awesome"}),
 	-- key modes
-	awful.key({ altkey }, ",",
+	awful.key({ altkey }, "f",
 		function ()
-			root.keys(gears.table.join(keys.globalkeys, keys.quick_keys, keys.quickspawn_keys, keys.mode_keys))
+			root.keys(gears.table.join(keys.globalkeys, keys.quick_keys, keys.mode_keys))
 			feign.widget.keymodebox.set_text("- QUICK -")
 		end,
 		{description = "enable quick key mode", group = "hotkeys"}),
@@ -307,19 +307,13 @@ keys.globalkeys = gears.table.join(
 		end,
 		{description = "rename tag", group = "tag"}),
     awful.key({ modkey, "Shift" }, "Left",
-		function ()
-			helpers.move_tag_left()
-		end,
+		helpers.move_tag_left,
 		{description = "move tag to the left", group = "tag"}),
     awful.key({ modkey, "Shift" }, "Right",
-		function ()
-			helpers.move_tag_right()
-		end,
+		helpers.move_tag_right,
 		{description = "move tag to the right", group = "tag"}),
     awful.key({ modkey, "Shift" }, "d",
-		function ()
-			helpers.delete_tag()
-		end,
+		helpers.delete_tag,
 		{description = "delete tag", group = "tag"}),
 
     -- Standard program
@@ -865,70 +859,82 @@ keys.tasklist_buttons = gears.table.join(
 
 local tag_keys = {
 	"1", "2", "3", "4", "5", "6", "7", "8", "9",
-	"F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12",
-	"XF86AudioMute", "XF86AudioLowerVolume", "XF86AudioRaiseVolume", "XF86AudioMicMute",
-	"XF86MonBrightnessDown", "XF86MonBrightnessUp", "XF86Display", "XF86WLAN",
-	"XF86Tools", "XF86Bluetooth", "XF86Launch2", "XF86Launch1"
+	{"F1",  "XF86AudioMute"},         {"F2",  "XF86AudioLowerVolume"},
+	{"F3",  "XF86AudioRaiseVolume"},  {"F4",  "XF86AudioMicMute"},
+	{"F5",  "XF86MonBrightnessDown"}, {"F6",  "XF86MonBrightnessUp"},
+	{"F7",  "XF86Display"},           {"F8",  "XF86WLAN"},
+	{"F9",  "XF86Tools"},             {"F10", "XF86Bluetooth"},
+	{"F11", "XF86Launch2"},           {"F12", "XF86Launch1"}
 }
 
-for i, k in ipairs(tag_keys) do
-    -- Hack to only show tags 1 and 9 in the shortcut window (mod+s)
-    local descr_view, descr_toggle, descr_move, descr_toggle_focus
-    if i == 1 or i == 9 or i == 10 or i == 21 then
-        descr_view = {description = "view tag #", group = "tag"}
-        descr_toggle = {description = "toggle tag #", group = "tag"}
-        descr_move = {description = "move focused client to tag #", group = "tag"}
-        descr_toggle_focus = {description = "toggle focused client on tag #", group = "tag"}
-    end
-	if i > 21 then
-		i = i - 12
+local create_num_keys = function(key_func, keymaps)
+	if not keymaps then keymaps = tag_keys end
+	local keytable = {}
+
+	for i, k in ipairs(keymaps) do
+		-- Hack to only show tags 1 and 9 in the shortcut window (mod+s)
+		local descr_view, descr_toggle, descr_move, descr_toggle_focus
+		if i == 1 or i == 9 or i == 10 or i == 21 then
+			descr_view = {description = "view tag #", group = "tag"}
+			descr_toggle = {description = "toggle tag #", group = "tag"}
+			descr_move = {description = "move focused client to tag #", group = "tag"}
+			descr_toggle_focus = {description = "toggle focused client on tag #", group = "tag"}
+		end
+
+		local key_list = {}
+		if type(k) == "table" then
+			key_list = k
+		else
+			key_list[1] = k
+		end
+
+		for _, key in ipairs(key_list) do
+			local temp = key_func(i, key, descr_view, descr_toggle, descr_move, descr_toggle_focus)
+			for _, x in ipairs(temp) do
+				keytable = gears.table.join(keytable, x)
+			end
+
+			-- Only show first in list for help
+			descr_view = nil
+			descr_toggle = nil
+			descr_move = nil
+			descr_toggle_focus = nil
+		end
+
 	end
 
-    keys.globalkeys = gears.table.join(keys.globalkeys,
-        -- View tag only.
-        awful.key({ modkey }, k,
-                  function ()
-                        local screen = awful.screen.focused()
-                        local tag = screen.tags[i]
-                        if tag then
-                           tag:view_only()
-                        end
-                  end,
-                  descr_view),
-        -- Toggle tag display.
-        awful.key({ modkey, "Control"}, k,
-                  function ()
-                      local screen = awful.screen.focused()
-                      local tag = screen.tags[i]
-                      if tag then
-                         awful.tag.viewtoggle(tag)
-                      end
-                  end,
-                  descr_toggle),
-        -- Move client to tag.
-        awful.key({ modkey, "Shift" }, k,
-                  function ()
-                      if client.focus then
-                          local tag = client.focus.screen.tags[i]
-                          if tag then
-                              client.focus:move_to_tag(tag)
-                          end
-                     end
-                  end,
-                  descr_move),
-        -- Toggle tag on focused client.
-        awful.key({ modkey, "Control", "Shift" }, k,
-                  function ()
-                      if client.focus then
-                          local tag = client.focus.screen.tags[i]
-                          if tag then
-                              client.focus:toggle_tag(tag)
-                          end
-                      end
-                  end,
-                  descr_toggle_focus)
-    )
+	return keytable
 end
+
+keys.globalkeys = gears.table.join(keys.globalkeys, create_num_keys(
+	function (i, key, descr_view, descr_toggle, descr_move, descr_toggle_focus)
+		return {
+			-- View tag only.
+			awful.key({ modkey }, key,
+			function ()
+				helpers.view_tag_index(i)
+			end,
+			descr_view),
+			-- Toggle tag display.
+			awful.key({ modkey, "Control"}, key,
+			function ()
+				helpers.toggle_tag_index(i)
+			end,
+			descr_toggle),
+			-- Move client to tag.
+			awful.key({ modkey, "Shift" }, key,
+			function ()
+				helpers.move_client_to_tag_index(i)
+			end,
+			descr_move),
+			-- Toggle tag on focused client.
+			awful.key({ modkey, "Control", "Shift" }, key,
+			function ()
+				helpers.toggle_client_in_tag_index(i)
+			end,
+			descr_toggle_focus)
+		}
+end))
 
 keys.mode_keys = gears.table.join(
 	awful.key({}, "Escape",
@@ -936,7 +942,12 @@ keys.mode_keys = gears.table.join(
 			root.keys(keys.globalkeys)
 			feign.widget.keymodebox.set_text("")
 		end
-	)
+	),
+	awful.key({}, "f",
+		function ()
+			root.keys(gears.table.join(keys.globalkeys, keys.quick_keys, keys.mode_keys))
+			feign.widget.keymodebox.set_text("- QUICK -")
+		end)
 )
 
 keys.quickspawn_keys = gears.table.join(
@@ -950,18 +961,60 @@ keys.quickspawn_keys = gears.table.join(
 		function () awful.spawn("steam") end)
 )
 
-keys.quick_keys = gears.table.join(
-	awful.key({}, "h",
-		awful.tag.viewprev),
-	awful.key({}, "l",
-		awful.tag.viewnext),
-	awful.key({}, "j",
-		function () awful.screen.focus_bydirection("left") end),
-	awful.key({}, "k",
-		function () awful.screen.focus_bydirection("right") end),
-	awful.key({}, "f",
-		function () client.focus.fullscreen = not client.focus.fullscreen end)
+keys.move_keys = gears.table.join(
+	awful.key({}, "a",
+		function ()
+			awful.client.swap.byidx(-1)
+		end),
+	awful.key({}, "d",
+		function ()
+			awful.client.swap.byidx(1)
+		end),
+	awful.key({ "Shift" }, "a",
+		helpers.move_tag_left),
+	awful.key({ "Shift" }, "d",
+		helpers.move_tag_right)
 )
+
+keys.quick_keys = gears.table.join(
+	awful.key({}, "a",
+		awful.tag.viewprev),
+	awful.key({}, "d",
+		awful.tag.viewnext),
+	awful.key({ "Shift" }, "a",
+		function () awful.screen.focus_bydirection("left") end),
+	awful.key({ "Shift" }, "d",
+		function () awful.screen.focus_bydirection("right") end),
+	awful.key({}, "v",
+		function ()
+			root.keys(gears.table.join(keys.globalkeys, keys.move_keys, keys.mode_keys))
+			feign.widget.keymodebox.set_text("- MOVE -")
+		end)
+)
+
+keys.quick_keys = gears.table.join(keys.quick_keys, create_num_keys(
+	function (i, key)
+		return {
+			-- view tag
+			awful.key({}, key,
+				function ()
+					helpers.view_tag_index(i)
+				end)
+		}
+	end
+))
+
+keys.move_keys = gears.table.join(keys.move_keys, create_num_keys(
+	function (i, key)
+		return {
+			-- move client to tag
+			awful.key({}, key,
+				function ()
+					helpers.move_client_to_tag_index(i)
+				end)
+		}
+	end
+))
 
 keys.clientbuttons = gears.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),

@@ -239,6 +239,40 @@ helpers.move_tag_right = function()
 	end
 end
 
+helpers.view_tag_index = function(i)
+	local screen = awful.screen.focused()
+	local tag = screen.tags[i]
+	if tag then
+		tag:view_only()
+	end
+end
+
+helpers.toggle_tag_index = function(i)
+	local screen = awful.screen.focused()
+	local tag = screen.tags[i]
+	if tag then
+		awful.tag.viewtoggle(tag)
+	end
+end
+
+helpers.move_client_to_tag_index = function(i)
+	if client.focus then
+		local tag = client.focus.screen.tags[i]
+		if tag then
+			client.focus:move_to_tag(tag)
+		end
+	end
+end
+
+helpers.toggle_client_in_tag_index = function(i)
+	if client.focus then
+		local tag = client.focus.screen.tags[i]
+		if tag then
+			client.focus:toggle_tag(tag)
+		end
+	end
+end
+
 helpers.stacknext = function()
 	local og_c = client.focus
 
