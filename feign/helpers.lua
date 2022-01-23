@@ -193,6 +193,14 @@ helpers.delete_tag = function()
     t:delete()
 end
 
+helpers.unminimize = function()
+	local c = awful.client.restore()
+	if c then
+		client.focus = c
+		c:raise()
+	end
+end
+
 helpers.move_tag_left = function()
 	local current_tag = awful.screen.focused().selected_tag
 	local current_name = current_tag.name
@@ -334,6 +342,15 @@ helpers.stackprev = function()
 		c:swap(og_c)
 		n = n + 1
 	end
+end
+
+helpers.terminal_same_directory = function()
+	local term_id = "/run/user/$(id --user)/urxvtc_ids/" .. client.focus.window
+	awful.spawn.with_shell(prefs.terminal ..
+	" -cd \"$([ -f " .. term_id .. " ] && \
+	readlink -e /proc/$(cat " .. term_id .. ")/cwd || \
+	echo $HOME)\""
+	)
 end
 
 return helpers
