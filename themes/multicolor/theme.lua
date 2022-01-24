@@ -98,6 +98,7 @@ theme.titlebar_maximized_button_normal_active   = theme.confdir .. "/icons/title
 theme.titlebar_maximized_button_focus_active    = theme.confdir .. "/icons/titlebar/maximized_focus_active.png"
 theme.tooltip_bg                                = "#000000"
 theme.tooltip_fg                                = "#ffffff"
+theme.notification_icon_size                    = 100
 
 theme.tagnames = prefs.tagnames
 
