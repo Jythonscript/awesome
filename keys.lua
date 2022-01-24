@@ -981,13 +981,13 @@ keys.quick_keys = gears.table.join(
 		awful.tag.viewprev),
 	awful.key({}, "d",
 		awful.tag.viewnext),
-	awful.key({ "Shift" }, "a",
-		function () awful.screen.focus_bydirection("left") end),
-	awful.key({ "Shift" }, "d",
-		function () awful.screen.focus_bydirection("right") end),
 	awful.key({}, "q",
-		function () awful.client.focus.byidx(-1) end),
+		function () awful.screen.focus_bydirection("left") end),
 	awful.key({}, "e",
+		function () awful.screen.focus_bydirection("right") end),
+	awful.key({ "Shift" }, "a",
+		function () awful.client.focus.byidx(-1) end),
+	awful.key({ "Shift" }, "d",
 		function () awful.client.focus.byidx(1) end),
 	awful.key({ "Shift" }, "q",
 		helpers.stackprev),
@@ -1019,6 +1019,10 @@ keys.quick_keys = gears.table.join(keys.quick_keys, create_num_keys(
 			awful.key({}, key,
 				function ()
 					helpers.view_tag_index(i)
+				end),
+			awful.key({ "Shift" }, key,
+				function ()
+					helpers.toggle_tag_index(i)
 				end)
 		}
 	end
