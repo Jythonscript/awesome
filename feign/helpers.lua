@@ -353,10 +353,15 @@ helpers.terminal_same_directory = function()
 	)
 end
 
-helpers.keypress = function(key, window)
-	if not window then window = client.focus.window end
-	awful.spawn("xdotool key --window "
-		.. tostring(window).." '"..key.."'")
+if not prefs.laptop then
+	helpers.keypress = function(key, window)
+		if not window then window = client.focus.window end
+		awful.spawn("xdotool key --window " .. tostring(window).." '"..key.."'")
+	end
+else
+	helpers.keypress = function(key, window)
+		awful.spawn.with_shell("sleep 0.15 && xdotool key '"..key.."'")
+	end
 end
 
 return helpers
