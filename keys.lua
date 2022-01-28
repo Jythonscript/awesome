@@ -963,7 +963,7 @@ keys.quickrun_keys = gears.table.join(
 		function () awful.spawn("dmenu_run -nb '#000000' -sb '#428ff4'") end)
 )
 
-keys.move_keys = gears.table.join(
+keys.quickmove_keys = gears.table.join(
 	awful.key({}, "a",
 		function () awful.client.swap.byidx(-1) end),
 	awful.key({}, "d",
@@ -974,6 +974,45 @@ keys.move_keys = gears.table.join(
 		helpers.move_tag_right),
 	awful.key({}, "s",
 		function () client.focus:move_to_screen() end)
+)
+
+keys.quickfirefox_keys = gears.table.join(
+	awful.key({}, "e",
+		function ()
+			helpers.keypress("Ctrl+e")
+		end),
+	awful.key({}, "w",
+		function ()
+			helpers.keypress("Ctrl+Shift+Tab")
+		end),
+	awful.key({}, "a",
+		function ()
+			helpers.keypress("Ctrl+Shift+Tab")
+		end),
+	awful.key({}, "s",
+		function ()
+			helpers.keypress("Ctrl+Tab")
+		end),
+	awful.key({}, "d",
+		function ()
+			helpers.keypress("Ctrl+Tab")
+		end),
+	awful.key({}, "q",
+		function ()
+			helpers.keypress("F1")
+		end),
+	awful.key({}, "x",
+		function ()
+			helpers.keypress("Ctrl+w")
+		end),
+	awful.key({ "Shift" }, "x",
+		function ()
+			helpers.keypress("Ctrl+Shift+t")
+		end),
+	awful.key({}, "t",
+		function ()
+			helpers.keypress("Ctrl+t")
+		end)
 )
 
 keys.quick_keys = gears.table.join(
@@ -1001,13 +1040,27 @@ keys.quick_keys = gears.table.join(
 		helpers.unminimize),
 	awful.key({}, "v",
 		function ()
-			root.keys(gears.table.join(keys.globalkeys, keys.move_keys, keys.mode_keys))
+			root.keys(gears.table.join(keys.globalkeys, keys.quickmove_keys, keys.mode_keys))
 			feign.widget.keymodebox.set_text("- MOVE -")
 		end),
 	awful.key({}, "r",
 		function ()
 			root.keys(gears.table.join(keys.globalkeys, keys.quickrun_keys, keys.mode_keys))
 			feign.widget.keymodebox.set_text("- RUN -")
+		end),
+	awful.key({}, "c",
+		function ()
+			local jointable = nil;
+			local c = client.focus
+			if not c then return end
+			if c.class == "firefox" then
+				jointable = keys.quickfirefox_keys
+			end
+
+			if jointable then
+				root.keys(gears.table.join(keys.globalkeys, keys.quickfirefox_keys, keys.mode_keys))
+				feign.widget.keymodebox.set_text("- FIREFOX -")
+			end
 		end)
 )
 
@@ -1028,7 +1081,7 @@ keys.quick_keys = gears.table.join(keys.quick_keys, create_num_keys(
 	end
 ))
 
-keys.move_keys = gears.table.join(keys.move_keys, create_num_keys(
+keys.quickmove_keys = gears.table.join(keys.quickmove_keys, create_num_keys(
 	function (i, key)
 		return {
 			-- move client to tag
@@ -1038,6 +1091,17 @@ keys.move_keys = gears.table.join(keys.move_keys, create_num_keys(
 				end)
 		}
 	end
+))
+
+keys.quickfirefox_keys = gears.table.join(keys.quickfirefox_keys, create_num_keys(
+	function (i,key)
+		return {
+			awful.key({}, key,
+			function ()
+				helpers.keypress("Alt+"..key)
+			end)
+		}
+	end, {"1","2","3","4","5","6","7","8","9"}
 ))
 
 keys.clientbuttons = gears.table.join(

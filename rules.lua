@@ -25,7 +25,7 @@ awful.rules.rules = {
 
 	--Special rules
     { rule = { class = "firefox" },
-      properties = { maximized = false, titlebars_enabled = false}
+      properties = { maximized = false, titlebars_enabled = false }
     },
 
     { rule = { class = "Gimp", role = "gimp-image-window" },
