@@ -861,15 +861,24 @@ keys.tasklist_buttons = gears.table.join(
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
 
-local tag_keys = {
-	"1", "2", "3", "4", "5", "6", "7", "8", "9",
-	{"F1",  "XF86AudioMute"},         {"F2",  "XF86AudioLowerVolume"},
-	{"F3",  "XF86AudioRaiseVolume"},  {"F4",  "XF86AudioMicMute"},
-	{"F5",  "XF86MonBrightnessDown"}, {"F6",  "XF86MonBrightnessUp"},
-	{"F7",  "XF86Display"},           {"F8",  "XF86WLAN"},
-	{"F9",  "XF86Tools"},             {"F10", "XF86Bluetooth"},
-	{"F11", "XF86Launch2"},           {"F12", "XF86Launch1"}
-}
+local tag_keys = {}
+
+if not prefs.laptop then
+	tag_keys = {
+		"1", "2", "3", "4", "5", "6", "7", "8", "9",
+		"F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12"
+	}
+else
+	tag_keys = {
+		"1", "2", "3", "4", "5", "6", "7", "8", "9",
+		{"F1",  "XF86AudioMute"},         {"F2",  "XF86AudioLowerVolume"},
+		{"F3",  "XF86AudioRaiseVolume"},  {"F4",  "XF86AudioMicMute"},
+		{"F5",  "XF86MonBrightnessDown"}, {"F6",  "XF86MonBrightnessUp"},
+		{"F7",  "XF86Display"},           {"F8",  "XF86WLAN"},
+		{"F9",  "XF86Tools"},             {"F10", "XF86Bluetooth"},
+		{"F11", "XF86Launch2"},           {"F12", "XF86Launch1"}
+	}
+end
 
 local create_num_keys = function(key_func, keymaps)
 	if not keymaps then keymaps = tag_keys end
