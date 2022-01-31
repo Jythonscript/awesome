@@ -962,6 +962,8 @@ keys.quickrun_keys = gears.table.join(
 		helpers.terminal_same_directory),
 	awful.key({}, "q",
 		function () awful.spawn(prefs.browser) end),
+	awful.key({}, "d",
+		function () awful.spawn("discord") end),
 	awful.key({}, "c",
 		function () awful.spawn("chromium") end),
 	awful.key({}, "g",
@@ -1041,6 +1043,8 @@ keys.quick_keys = gears.table.join(
 		helpers.stackprev),
 	awful.key({ "Shift" }, "e",
 		helpers.stacknext),
+	awful.key({}, "Tab",
+		awful.tag.history.restore),
 	awful.key({}, "z",
 		function ()
 			client.focus.minimized = true
