@@ -1101,6 +1101,11 @@ keys.quickmove_keys = gears.table.join(keys.quickmove_keys, create_num_keys(
 			awful.key({}, key,
 				function ()
 					helpers.move_client_to_tag_index(i)
+				end),
+			awful.key({ "Shift" }, key,
+				function ()
+					helpers.move_client_to_tag_index(i)
+					helpers.view_tag_index(i)
 				end)
 		}
 	end
