@@ -1020,6 +1020,10 @@ keys.quickfirefox_keys = gears.table.join(
 		function ()
 			helpers.keypress("Ctrl+Shift+t")
 		end),
+	awful.key({}, "r",
+		function ()
+			helpers.keypress("Ctrl+r")
+		end),
 	awful.key({}, "t",
 		function ()
 			helpers.keypress("Ctrl+t")
