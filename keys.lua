@@ -1051,7 +1051,10 @@ keys.quick_keys = gears.table.join(
 		awful.tag.history.restore),
 	awful.key({}, "z",
 		function ()
-			client.focus.minimized = true
+			local c = client.focus
+			if c then
+				c.minimized = true
+			end
 		end),
 	awful.key({ "Shift" }, "z",
 		helpers.unminimize),
