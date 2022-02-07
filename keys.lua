@@ -1047,6 +1047,13 @@ keys.quick_keys = gears.table.join(
 		helpers.stackprev),
 	awful.key({ "Shift" }, "e",
 		helpers.stacknext),
+	awful.key({ "Shift" }, "f",
+		function ()
+			local c = client.focus
+			if c then
+				c.fullscreen = not c.fullscreen
+			end
+		end),
 	awful.key({}, "Tab",
 		awful.tag.history.restore),
 	awful.key({}, "z",
