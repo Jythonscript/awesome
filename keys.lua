@@ -232,7 +232,7 @@ keys.globalkeys = gears.table.join(
 	-- key modes
 	awful.key({ altkey }, "f",
 		function ()
-			root.keys(gears.table.join(keys.globalkeys, keys.quick_keys, keys.mode_keys))
+			root.keys(keys.quick_keys)
 			feign.widget.keymodebox.set_text("- QUICK -")
 		end,
 		{description = "enable quick key mode", group = "hotkeys"}),
@@ -950,7 +950,7 @@ keys.mode_keys = gears.table.join(
 	),
 	awful.key({}, "f",
 		function ()
-			root.keys(gears.table.join(keys.globalkeys, keys.quick_keys, keys.mode_keys))
+			root.keys(keys.quick_keys)
 			feign.widget.keymodebox.set_text("- QUICK -")
 		end)
 )
@@ -1067,12 +1067,12 @@ keys.quick_keys = gears.table.join(
 		helpers.unminimize),
 	awful.key({}, "v",
 		function ()
-			root.keys(gears.table.join(keys.globalkeys, keys.quickmove_keys, keys.mode_keys))
+			root.keys(keys.quickmove_keys)
 			feign.widget.keymodebox.set_text("- MOVE -")
 		end),
 	awful.key({}, "r",
 		function ()
-			root.keys(gears.table.join(keys.globalkeys, keys.quickrun_keys, keys.mode_keys))
+			root.keys(keys.quickrun_keys)
 			feign.widget.keymodebox.set_text("- RUN -")
 		end),
 	awful.key({}, "c",
@@ -1085,7 +1085,7 @@ keys.quick_keys = gears.table.join(
 			end
 
 			if jointable then
-				root.keys(gears.table.join(keys.globalkeys, keys.quickfirefox_keys, keys.mode_keys))
+				root.keys(keys.quickfirefox_keys)
 				feign.widget.keymodebox.set_text("- FIREFOX -")
 			end
 		end)
@@ -1136,6 +1136,12 @@ keys.quickfirefox_keys = gears.table.join(keys.quickfirefox_keys, create_num_key
 	end, {"1","2","3","4","5","6","7","8","9"}
 ))
 
+-- join quick key tables ahead of time
+keys.quick_keys = gears.table.join(keys.globalkeys, keys.quick_keys, keys.mode_keys)
+keys.quickrun_keys = gears.table.join(keys.globalkeys, keys.quickrun_keys, keys.mode_keys)
+keys.quickmove_keys = gears.table.join(keys.globalkeys, keys.quickmove_keys, keys.mode_keys)
+keys.quickfirefox_keys = gears.table.join(keys.globalkeys, keys.quickfirefox_keys, keys.mode_keys)
+
 keys.clientbuttons = gears.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
@@ -1143,7 +1149,6 @@ keys.clientbuttons = gears.table.join(
 
 -- append platform shortcuts
 if not prefs.laptop then
-	root.keys(gears.table.join(keys.globalkeys, pckeys))
 	keys.globalkeys = gears.table.join(keys.globalkeys, pckeys)
 else
 	keys.globalkeys = gears.table.join(keys.globalkeys, laptopkeys)
