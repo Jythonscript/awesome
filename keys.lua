@@ -1078,15 +1078,17 @@ keys.quick_keys = gears.table.join(
 	awful.key({}, "c",
 		function ()
 			local jointable = nil;
+			local mode_text;
 			local c = client.focus
 			if not c then return end
 			if c.class == "firefox" then
 				jointable = keys.quickfirefox_keys
+				mode_text = "- FIREFOX -"
 			end
 
 			if jointable then
 				root.keys(keys.quickfirefox_keys)
-				feign.widget.keymodebox.set_text("- FIREFOX -")
+				feign.widget.keymodebox.set_text(mode_text)
 			end
 		end)
 )
