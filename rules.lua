@@ -36,7 +36,8 @@ awful.rules.rules = {
 
     { rule = { class = "discord" },
       properties = { tag = beautiful.tagnames[3] } },
-
+	{ rule = { class = "Todoist" },
+	  properties = { tag = beautiful.tagnames[3] } },
     { rule = { class = "Steam" },
       properties = { tag = beautiful.tagnames[5] } },
 	{

@@ -65,6 +65,7 @@ helpers.run_once({
 	--{"redshift -r"},
 	{"firefox"},
 	{"discord"},
+	{"flatpak run com.todoist.Todoist"},
 	{"unclutter --timeout 5"},
 	{"mpd"},
 	{"easystroke"},
