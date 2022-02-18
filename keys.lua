@@ -1003,6 +1003,21 @@ keys.quickmove_keys = gears.table.join(
 		end)
 )
 
+keys.quickresize_keys = gears.table.join(
+	awful.key({}, "w",
+		function () awful.tag.incnmaster(1,nil,true) end),
+	awful.key({}, "a",
+		function () awful.tag.incmwfact(-0.05) end),
+	awful.key({}, "s",
+		function () awful.tag.incnmaster(-1,nil,true) end),
+	awful.key({}, "d",
+		function () awful.tag.incmwfact(0.05) end),
+	awful.key({}, "Tab",
+		function () awful.tag.setmwfact(0.5) end),
+	awful.key({ "Shift" }, "Tab",
+		function () awful.screen.focused().selected_tag.master_count = 1 end)
+)
+
 keys.quickfirefox_keys = gears.table.join(
 	awful.key({}, "e",
 		function ()
@@ -1091,6 +1106,11 @@ keys.quick_keys = gears.table.join(
 			root.keys(keys.quickrun_keys)
 			feign.widget.keymodebox.set_text("- RUN -")
 		end),
+	awful.key({ "Shift" }, "r",
+		function ()
+			root.keys(keys.quickresize_keys)
+			feign.widget.keymodebox.set_text("- RESIZE -")
+		end),
 	awful.key({}, "c",
 		function ()
 			local jointable = nil;
@@ -1158,6 +1178,7 @@ keys.quickfirefox_keys = gears.table.join(keys.quickfirefox_keys, create_num_key
 keys.quick_keys = gears.table.join(keys.globalkeys, keys.quick_keys, keys.mode_keys)
 keys.quickrun_keys = gears.table.join(keys.globalkeys, keys.quickrun_keys, keys.mode_keys)
 keys.quickmove_keys = gears.table.join(keys.globalkeys, keys.quickmove_keys, keys.mode_keys)
+keys.quickresize_keys = gears.table.join(keys.globalkeys, keys.quickresize_keys, keys.mode_keys)
 keys.quickfirefox_keys = gears.table.join(keys.globalkeys, keys.quickfirefox_keys, keys.mode_keys)
 
 keys.clientbuttons = gears.table.join(
