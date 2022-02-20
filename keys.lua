@@ -76,7 +76,7 @@ keys.globalkeys = gears.table.join(
 	-- train popup
 	awful.key({ altkey, modkey}, "t",
 		function ()
-			cmd = "source $HOME/.zshrc && trains"
+			cmd = "source $HOME/.extra.zsh && trains"
 			awful.spawn.easy_async_with_shell(cmd, function(stdout, stderr, reason, exit_code)
 				naughty.notify({text = stdout})
 			end)
@@ -552,7 +552,7 @@ keys.globalkeys = gears.table.join(
 				history_path = gears.filesystem.get_dir("cache") .. "/history",
 				completion_callback = awful.completion.shell,
 				exe_callback = function(cmd)
-					awful.spawn.with_shell("source $HOME/.zshrc && " .. cmd)
+					awful.spawn.with_shell("source $HOME/.func.zsh && " .. cmd)
 				end
 			}
 		end,
