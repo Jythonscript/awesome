@@ -39,7 +39,7 @@ local special_run_commands = {
 	{"shaders", popup_when_no_args},
 	{"tx", popup_program},
 	{"td", popup_program},
-	{"q", popup_program},
+	{"q", popup_when_no_args},
 }
 
 helpers.parse_for_special_run_commands = function(in_cmd)
