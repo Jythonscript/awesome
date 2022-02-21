@@ -3,8 +3,8 @@ local awful = require("awful")
 local naughty = require("naughty")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 local prefs = require("prefs")
-local helpers = require("feign.helpers")
-local feign = require("feign")
+local helpers = require("lame.helpers")
+local lame = require("lame")
 local mouse = mouse
 local os = os
 local beautiful = require("beautiful")
@@ -70,7 +70,7 @@ keys.globalkeys = gears.table.join(
 	-- Toggle redshift with Mod+Shift+t
     awful.key({ modkey, "Shift" }, "t",
 		function ()
-			feign.widget.redshift:toggle()
+			lame.widget.redshift:toggle()
 		end,
 		{description = "toggle redshift", group = "widgets"}),
 	-- train popup
@@ -85,28 +85,28 @@ keys.globalkeys = gears.table.join(
 	--Toggle widgets with 1-5 macro keys
 	awful.key({}, "XF86Launch5",
 		function ()
-			feign.widget.task.show()
+			lame.widget.task.show()
         end,
         {description = "task popup", group = "widgets"}),
 	awful.key({}, "XF86Launch6",
 		function ()
-			feign.widget.cal.toggle()
+			lame.widget.cal.toggle()
 		end,
 		  {description = "show cal", group = "widgets"}),
     awful.key({}, "XF86Launch7",
 		function ()
-			feign.widget.weather.toggle()
+			lame.widget.weather.toggle()
 		end,
         {description = "toggle weather popup", group = "widgets"}),
     awful.key({}, "XF86Launch8",
 		function ()
-			feign.widget.fs.toggle()
+			lame.widget.fs.toggle()
 		end,
               {description = "show filesystem", group = "widgets"}),
 	--Task prompt
 	awful.key({}, "XF86Launch9",
 		function ()
-			feign.widget.task.prompt()
+			lame.widget.task.prompt()
 		end,
 		{description = "task prompt", group = "widgets"}),
 
@@ -226,14 +226,14 @@ keys.globalkeys = gears.table.join(
         {description = "focus right", group = "client"}),
     awful.key({ modkey }, "w",
 		function ()
-			feign.widget.main_menu:toggle()
+			lame.widget.main_menu:toggle()
 		end,
 		{description = "show main menu", group = "awesome"}),
 	-- key modes
 	awful.key({ altkey }, "f",
 		function ()
 			root.keys(keys.quick_keys)
-			feign.widget.keymodebox.set_text("- QUICK -")
+			lame.widget.keymodebox.set_text("- QUICK -")
 		end,
 		{description = "enable quick key mode", group = "hotkeys"}),
 
@@ -411,29 +411,29 @@ keys.globalkeys = gears.table.join(
     -- Widgets popups
     awful.key({ altkey, modkey}, "c",
 		function ()
-			feign.widget.cal.toggle()
+			lame.widget.cal.toggle()
 		end,
               {description = "toggle cal", group = "widgets"}),
     awful.key({ altkey, modkey}, "f",
 		function ()
-			feign.widget.fs.toggle()
+			lame.widget.fs.toggle()
 		end,
               {description = "show filesystem", group = "widgets"}),
     awful.key({ altkey, modkey}, "w",
 		function ()
-			feign.widget.weather.toggle()
+			lame.widget.weather.toggle()
 		end,
         {description = "toggle weather popup", group = "widgets"}),
     -- Pulse volume control
-	awful.key({}, "XF86AudioRaiseVolume", feign.widget.volume.inc,
+	awful.key({}, "XF86AudioRaiseVolume", lame.widget.volume.inc,
 		{description = "volume up", group = "hotkeys"}),
-	awful.key({}, "XF86AudioLowerVolume", feign.widget.volume.dec,
+	awful.key({}, "XF86AudioLowerVolume", lame.widget.volume.dec,
         {description = "volume down", group = "hotkeys"}),
-	awful.key({}, "XF86AudioMute", feign.widget.volume.toggle_mute,
+	awful.key({}, "XF86AudioMute", lame.widget.volume.toggle_mute,
         {description = "toggle mute", group = "hotkeys"}),
-    awful.key({ altkey, "Control" }, "m", feign.widget.volume.toggle_mute,
+    awful.key({ altkey, "Control" }, "m", lame.widget.volume.toggle_mute,
         {description = "toggle mute", group = "hotkeys"}),
-    awful.key({ altkey, "Control" }, "0", feign.widget.volume.set,
+    awful.key({ altkey, "Control" }, "0", lame.widget.volume.set,
         {description = "volume 0%", group = "hotkeys"}),
 
     -- MPD control
@@ -442,48 +442,48 @@ keys.globalkeys = gears.table.join(
 			awful.spawn("playerctl play-pause")
 		end,
 		{description = "playerctl play-pause", group = "custom"}),
-    awful.key({ altkey }, "'", feign.widget.mpd.toggle,
+    awful.key({ altkey }, "'", lame.widget.mpd.toggle,
         {description = "mpc toggle", group = "mpd"}),
-    awful.key({ altkey }, ";", feign.widget.mpd.stop,
+    awful.key({ altkey }, ";", lame.widget.mpd.stop,
         {description = "mpc stop", group = "mpd"}),
     awful.key({ altkey }, "[",
         function ()
-			feign.widget.mpd.prev()
+			lame.widget.mpd.prev()
         end,
         {description = "mpc prev", group = "mpd"}),
     awful.key({ altkey }, "]",
         function ()
-			feign.widget.mpd.next()
+			lame.widget.mpd.next()
         end,
         {description = "mpc next", group = "mpd"}),
     awful.key({ altkey }, "=",
         function ()
-			feign.widget.mpd.seek(10)
+			lame.widget.mpd.seek(10)
         end,
         {description = "mpc seek +10", group = "mpd"}),
     awful.key({ altkey }, "-",
         function ()
-			feign.widget.mpd.seek(-10)
+			lame.widget.mpd.seek(-10)
         end,
         {description = "mpc seek -10", group = "mpd"}),
 	awful.key({ altkey }, "0",
         function ()
-			feign.widget.mpd.seek(0)
+			lame.widget.mpd.seek(0)
         end,
         {description = "restart song", group = "mpd"}),
 	awful.key({ modkey }, "Up",
         function ()
-			feign.widget.mpd.volume(5)
+			lame.widget.mpd.volume(5)
         end,
         {description = "mpd volume up", group = "mpd"}),
 	awful.key({ modkey }, "Down",
         function ()
-			feign.widget.mpd.volume(-5)
+			lame.widget.mpd.volume(-5)
         end,
         {description = "mpd volume down", group = "mpd"}),
-	awful.key({ modkey }, "v", feign.widget.visualizer.toggle,
+	awful.key({ modkey }, "v", lame.widget.visualizer.toggle,
 		{description = "toggle visualizer", group = "mpd"}),
-	awful.key({ modkey, "Shift" }, "v", feign.widget.fluidsim.toggle,
+	awful.key({ modkey, "Shift" }, "v", lame.widget.fluidsim.toggle,
 		{description = "toggle fluid simulation", group = "custom"}),
     -- User programs
     awful.key({ modkey }, "q",
@@ -590,19 +590,19 @@ local laptopkeys = gears.table.join(
         {description = "hibernate", group = "custom"}),
     -- brightness
     awful.key({ }, "XF86MonBrightnessUp",
-		feign.widget.brightness.increase,
+		lame.widget.brightness.increase,
 		{description = "brightness up", group = "hotkeys"}),
 
     awful.key({ }, "XF86MonBrightnessDown",
-		feign.widget.brightness.decrease,
+		lame.widget.brightness.decrease,
 		{description = "brightness down", group = "hotkeys"}),
 	awful.key({ modkey, altkey }, "b",
-		feign.widget.brightness.prompt ,
+		lame.widget.brightness.prompt ,
 		{description = "brightness prompt", group = "custom"}),
 	-- mute microphone
 	awful.key({}, "XF86AudioMicMute",
         function ()
-			feign.widget.volume.toggle_mic_mute()
+			lame.widget.volume.toggle_mic_mute()
         end,
         {description = "toggle microphone mute", group = "hotkeys"}),
 
@@ -660,7 +660,7 @@ local pckeys = gears.table.join(
         {description = "playerctl play-pause", group = "custom"}),
 	awful.key({ altkey }, "XF86AudioMute",
         function ()
-			feign.widget.volume.toggle_mic_mute()
+			lame.widget.volume.toggle_mic_mute()
         end,
         {description = "mpd volume down", group = "mpd"}),
     awful.key({ modkey }, "g",
@@ -945,13 +945,13 @@ keys.mode_keys = gears.table.join(
 	awful.key({}, "Escape",
 		function ()
 			root.keys(keys.globalkeys)
-			feign.widget.keymodebox.set_text("")
+			lame.widget.keymodebox.set_text("")
 		end
 	),
 	awful.key({}, "f",
 		function ()
 			root.keys(keys.quick_keys)
-			feign.widget.keymodebox.set_text("- QUICK -")
+			lame.widget.keymodebox.set_text("- QUICK -")
 		end)
 )
 
@@ -1099,17 +1099,17 @@ keys.quick_keys = gears.table.join(
 	awful.key({}, "v",
 		function ()
 			root.keys(keys.quickmove_keys)
-			feign.widget.keymodebox.set_text("- MOVE -")
+			lame.widget.keymodebox.set_text("- MOVE -")
 		end),
 	awful.key({}, "r",
 		function ()
 			root.keys(keys.quickrun_keys)
-			feign.widget.keymodebox.set_text("- RUN -")
+			lame.widget.keymodebox.set_text("- RUN -")
 		end),
 	awful.key({ "Shift" }, "r",
 		function ()
 			root.keys(keys.quickresize_keys)
-			feign.widget.keymodebox.set_text("- RESIZE -")
+			lame.widget.keymodebox.set_text("- RESIZE -")
 		end),
 	awful.key({}, "c",
 		function ()
@@ -1124,7 +1124,7 @@ keys.quick_keys = gears.table.join(
 
 			if jointable then
 				root.keys(keys.quickfirefox_keys)
-				feign.widget.keymodebox.set_text(mode_text)
+				lame.widget.keymodebox.set_text(mode_text)
 			end
 		end)
 )
@@ -1209,7 +1209,7 @@ keys.titlebar_buttons = gears.table.join(
 )
 
 keys.root_buttons = gears.table.join(
-    awful.button({ }, 3, function () feign.widget.main_menu:toggle() end),
+    awful.button({ }, 3, function () lame.widget.main_menu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 )

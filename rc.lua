@@ -13,7 +13,7 @@ local awful         = require("awful")
 local wibox         = require("wibox")
 local beautiful     = require("beautiful")
 local naughty       = require("naughty")
-local helpers = require("feign.helpers")
+local helpers = require("lame.helpers")
 local prefs = require("prefs")
 local keys = require("keys")
 -- }}}

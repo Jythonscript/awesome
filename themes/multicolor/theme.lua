@@ -10,9 +10,9 @@ local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local naughty  = require("naughty")
-local helpers = require("feign.helpers")
-local feign = require("feign")
-local markup = require("feign.markup")
+local helpers = require("lame.helpers")
+local lame = require("lame")
+local markup = require("lame.markup")
 local keys = require("keys")
 local ipairs
 local os    = { getenv = os.getenv, setlocale = os.setlocale, execute = os.execute }
@@ -108,7 +108,7 @@ local mytextclock = wibox.widget.textclock(markup("#7788af", "%Y/%m/%d ") .. mar
 mytextclock.font = theme.font
 
 -- Calendar
-feign.widget.cal.init(mytextclock)
+lame.widget.cal.init(mytextclock)
 
 --change systray monitor
 local systray = wibox.widget.systray()
@@ -168,8 +168,8 @@ function theme.at_screen_connect(s)
 			{
 				layout = wibox.layout.fixed.horizontal,
 				spacing = 5,
-				feign.widget.keymodebox.widget,
-				feign.widget.mpd.widget,
+				lame.widget.keymodebox.widget,
+				lame.widget.mpd.widget,
 			},
         },
 		s.mytasklist,
@@ -177,12 +177,12 @@ function theme.at_screen_connect(s)
 			layout = wibox.layout.fixed.horizontal,
 			spacing = 5,
 			systray,
-			feign.widget.pacman,
-			feign.widget.redshift,
-			feign.widget.volume.widget,
-			feign.widget.memory.widget,
-			feign.widget.cpu.widget,
-			feign.widget.bat.widget,
+			lame.widget.pacman,
+			lame.widget.redshift,
+			lame.widget.volume.widget,
+			lame.widget.memory.widget,
+			lame.widget.cpu.widget,
+			lame.widget.bat.widget,
 			mytextclock,
 		},
     }

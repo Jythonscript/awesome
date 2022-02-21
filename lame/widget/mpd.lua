@@ -3,7 +3,7 @@ local wibox = require("wibox")
 local lain = require("lain")
 local gears = require("gears")
 local beautiful = require("beautiful")
-local markup = require("feign.markup")
+local markup = require("lame.markup")
 
 local mpdicon = wibox.widget.imagebox()
 local minimized = false

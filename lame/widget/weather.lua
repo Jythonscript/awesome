@@ -1,5 +1,5 @@
 local lain = require("lain")
-local markup = require("feign.markup")
+local markup = require("lame.markup")
 local beautiful = require("beautiful")
 local naughty = require("naughty")
 local prefs = require("prefs")

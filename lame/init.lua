@@ -1,10 +1,10 @@
-local widget = {}
+local return_table = {}
 
-return setmetatable(widget, {
+return setmetatable(return_table, {
 	__index = function(table, key)
 		local module = rawget(table, key)
 		if not module then
-			module = require("feign.widget." .. key)
+			module = require("lame." .. key)
 			rawset(table, key, module)
 		end
 		return module

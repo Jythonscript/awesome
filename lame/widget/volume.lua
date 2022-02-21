@@ -1,6 +1,6 @@
 local wibox = require("wibox")
 local awful = require("awful")
-local markup = require("feign.markup")
+local markup = require("lame.markup")
 
 -- ALSA volume
 local volume = {}

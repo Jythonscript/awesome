@@ -1,4 +1,4 @@
-local markup = require("feign.markup")
+local markup = require("lame.markup")
 local lain = require("lain")
 local beautiful = require("beautiful")
 

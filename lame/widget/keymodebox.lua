@@ -1,6 +1,6 @@
 local beautiful = require("beautiful")
 local wibox = require("wibox")
-local markup = require("feign.markup")
+local markup = require("lame.markup")
 
 local keymodebox = {}
 

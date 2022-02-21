@@ -1,5 +1,5 @@
 local awful = require("awful")
-local helpers = require("feign.helpers")
+local helpers = require("lame.helpers")
 
 local fluidsim = {}
 

@@ -1,5 +1,5 @@
 local awful = require("awful")
-local feign = require("feign")
+local lame = require("lame")
 local beautiful = require("beautiful")
 
 pacman = {}
@@ -8,7 +8,7 @@ pacman.widget = awful.widget.watch("checkupdates", 3600,
 function(widget,stdout)
 	local _, lines = stdout:gsub('\n','\n')
 	pacman.last_output = stdout
-	widget:set_markup(feign.markup("#4286f4", lines))
+	widget:set_markup(lame.markup("#4286f4", lines))
 end)
 
 pacman_t = awful.tooltip {}
@@ -29,7 +29,7 @@ pacman.widget:connect_signal("mouse::enter", function()
 		end
 
 		pacman_t.text = text
-		--pacman_t.markup = feign.markup(beautiful.tooltip_fg, text)
+		--pacman_t.markup = lame.markup(beautiful.tooltip_fg, text)
 	end)
 end)
 

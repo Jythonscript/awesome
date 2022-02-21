@@ -1,7 +1,7 @@
 local gears = require("gears")
 local wibox = require("wibox")
 local awful = require("awful")
-local markup = require("feign.markup")
+local markup = require("lame.markup")
 
 memory = {}
 memory.widget = wibox.widget.textbox()

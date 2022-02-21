@@ -1,5 +1,5 @@
 local lain = require("lain")
-local markup = require("feign.markup")
+local markup = require("lame.markup")
 
 local fs = lain.widget.fs({
 	followtag = true,

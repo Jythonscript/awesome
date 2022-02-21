@@ -1,7 +1,7 @@
 local awful = require("awful")
 local prefs = require("prefs")
 local beautiful = require("beautiful")
-local helpers = require("feign.helpers")
+local helpers = require("lame.helpers")
 
 local visualizer = {}
 
