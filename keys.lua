@@ -552,7 +552,13 @@ keys.globalkeys = gears.table.join(
 				history_path = gears.filesystem.get_dir("cache") .. "/history",
 				completion_callback = awful.completion.shell,
 				exe_callback = function(cmd)
-					awful.spawn.with_shell("source $HOME/.func.zsh && " .. cmd)
+					local call = helpers.parse_for_line_callback_commands(cmd)
+					local command = "source $HOME/.func.zsh && "..cmd
+					if not call then
+						awful.spawn.with_shell(command)
+					else
+						awful.spawn.easy_async_with_shell(command, call)
+					end
 				end
 			}
 		end,

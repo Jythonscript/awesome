@@ -2,6 +2,7 @@ local awful = require("awful")
 local prefs = require("prefs")
 local beautiful = require("beautiful")
 local gears = require("gears")
+local naughty = require("naughty")
 
 local helpers = {}
 
@@ -51,6 +52,29 @@ helpers.parse_for_special_run_commands = function(in_cmd)
 	end
 	return in_cmd
 end
+
+local function clip_and_notify(stdout)
+	stdout = stdout:gsub("[\n\r]", "")
+	local cmd = "echo '"..stdout.."' | tr -d '\\n' | nohup xclip -selection clipboard > /dev/null"
+	awful.spawn.with_shell(cmd)
+	naughty.notify { text = stdout }
+end
+
+local line_callback_commands = {
+	{"sym", clip_and_notify},
+	{"q", clip_and_notify},
+}
+
+helpers.parse_for_line_callback_commands = function(in_cmd)
+	local command = in_cmd:match("^([^ ]+)")
+	for _, cmd in ipairs(line_callback_commands) do
+		if command == cmd[1] then
+			return cmd[2]
+		end
+	end
+	return nil
+end
+
 -- }}} Special run prompt commands
 
 -- Accepts rules; however, the current release (4.2) applies rules in a weird order: rules won't work
