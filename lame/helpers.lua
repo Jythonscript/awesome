@@ -225,50 +225,41 @@ helpers.unminimize = function()
 	end
 end
 
+helpers.swap_tag_subnames = function(t1, t2)
+	local idx1 = string.find(t1.name, "-")
+	local idx2 = string.find(t2.name, "-")
+	local sub1 = ""
+	local sub2 = ""
+	local name1 = t1.name
+	local name2 = t2.name
+
+	if idx1 then
+		sub1 = string.sub(name1, idx1)
+		name1 = string.sub(name1, 0, idx1-1)
+	end
+	if idx2 then
+		sub2 = string.sub(name2, idx2)
+		name2 = string.sub(name2, 0, idx2-1)
+	end
+
+	t1.name = name2 .. sub1
+	t2.name = name1 .. sub2
+end
+
 helpers.move_tag_left = function()
 	local current_tag = awful.screen.focused().selected_tag
-	local current_name = current_tag.name
 	local old_index = current_tag.index
 	helpers.move_tag(-1)
 	local new_tag = awful.screen.focused().tags[old_index]
-	local new_name = new_tag.name
-
-	if current_tag and new_tag then
-		current_tag.name = theme.tagnames[current_tag.index]
-		if string.find(current_name, "-") then
-			current_tag.name = current_tag.name .. "-" .. string.sub(current_name,
-			(string.find(current_name, "-") or string.len(current_name)) + 1)
-		end
-
-		new_tag.name = theme.tagnames[new_tag.index]
-		if string.find(new_name, "-") then
-			new_tag.name = new_tag.name .. "-" .. string.sub(new_name,
-			(string.find(new_name, "-") or string.len(new_name)) + 1)
-		end
-	end
+	helpers.swap_tag_subnames(current_tag, new_tag)
 end
 
 helpers.move_tag_right = function()
 	local current_tag = awful.screen.focused().selected_tag
-	local current_name = current_tag.name
 	local old_index = current_tag.index
 	helpers.move_tag(1)
 	local new_tag = awful.screen.focused().tags[old_index]
-	local new_name = new_tag.name
-
-	if current_tag and new_tag then
-		current_tag.name = theme.tagnames[current_tag.index]
-		if string.find(current_name, "-") then
-			current_tag.name = current_tag.name .. "-" .. string.sub(current_name,
-			(string.find(current_name, "-") or string.len(current_name)) + 1)
-		end
-
-		new_tag.name = theme.tagnames[new_tag.index]
-		if string.find(new_name, "-") then
-			new_tag.name = new_tag.name .. "-" .. string.sub(new_name,
-			(string.find(new_name, "-") or string.len(new_name)) + 1)
-		end
-	end
+	helpers.swap_tag_subnames(current_tag, new_tag)
 end
 
 helpers.view_tag_index = function(i)
