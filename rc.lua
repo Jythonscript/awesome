@@ -64,7 +64,7 @@ helpers.run_once({
 	{"thunderbird"},
 	--{"redshift -r"},
 	{"firefox"},
-	{"discord"},
+	{"discord --start-minimized"},
 	{"flatpak run com.todoist.Todoist"},
 	{"unclutter --timeout 5"},
 	{"mpd"},
