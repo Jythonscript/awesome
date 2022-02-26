@@ -262,6 +262,22 @@ helpers.move_tag_right = function()
 	helpers.swap_tag_subnames(current_tag, new_tag)
 end
 
+helpers.swap_monitor_tags = function()
+	clienttables = {}
+	idx = 1
+	for s in screen do
+		local t = s.selected_tag
+		local c = t:clients()
+		clienttables[idx] = c
+		idx = idx + 1
+	end
+	for _, clients in ipairs(clienttables) do
+		for _, c in ipairs(clients) do
+			c:move_to_screen()
+		end
+	end
+end
+
 helpers.view_tag_index = function(i)
 	local screen = awful.screen.focused()
 	local tag = screen.tags[i]

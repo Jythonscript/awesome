@@ -993,19 +993,7 @@ keys.quickmove_keys = gears.table.join(
 		function () client.focus:move_to_screen() end),
 	awful.key({ "Shift" }, "s",
 		function ()
-			clienttables = {}
-			idx = 1
-			for s in screen do
-				local t = s.selected_tag
-				local c = t:clients()
-				clienttables[idx] = c
-				idx = idx + 1
-			end
-			for _, clients in ipairs(clienttables) do
-				for _, c in ipairs(clients) do
-					c:move_to_screen()
-				end
-			end
+			helpers.swap_monitor_tags()
 		end)
 )
 
