@@ -321,6 +321,11 @@ keys.globalkeys = gears.table.join(
 			awful.spawn(prefs.terminal)
 		end,
 		{description = "open a terminal", group = "launcher"}),
+    awful.key({ altkey }, "Return",
+		function ()
+			awful.spawn(prefs.terminal)
+		end,
+		{description = "open a terminal", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r",
 		function()
             local cmd = "find ~/.config/awesome/ -iname '*.lua' -exec luac -o - {} \\;"
