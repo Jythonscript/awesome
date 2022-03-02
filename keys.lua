@@ -1069,6 +1069,8 @@ keys.quick_keys = gears.table.join(
 		function () awful.screen.focus_bydirection("left") end),
 	awful.key({}, "e",
 		function () awful.screen.focus_bydirection("right") end),
+	awful.key({}, "t",
+		function () awful.spawn(prefs.terminal) end),
 	awful.key({ "Shift" }, "a",
 		function () awful.client.focus.byidx(-1) end),
 	awful.key({ "Shift" }, "d",
