@@ -167,9 +167,6 @@ client.connect_signal("mouse::enter", function(c)
     end
 end)
 
--- Custom borders
-client.connect_signal("focus", helpers.border_adjust)
-
 -- No border for maximized clients
 client.connect_signal("focus",
     function(c)
