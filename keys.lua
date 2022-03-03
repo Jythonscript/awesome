@@ -236,6 +236,12 @@ keys.globalkeys = gears.table.join(
 			lame.widget.keymodebox.set_text("- QUICK -")
 		end,
 		{description = "enable quick key mode", group = "hotkeys"}),
+	awful.key({ modkey }, "f",
+		function ()
+			root.keys(keys.quick_keys)
+			lame.widget.keymodebox.set_text("- QUICK -")
+		end,
+		{description = "enable quick key mode", group = "hotkeys"}),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j",
@@ -683,16 +689,11 @@ local pckeys = gears.table.join(
 
 -- client keys
 keys.clientkeys = gears.table.join(
-    awful.key({ modkey }, "f",
+    awful.key({ modkey, "Shift" }, "f",
         function (c)
 			c.fullscreen = not c.fullscreen
         end,
         {description = "toggle fullscreen", group = "client"}),
-    awful.key({ modkey, "Shift" }, "f",
-        function (c)
-			c.fullscreen = false
-        end,
-        {description = "disable fullscreen", group = "client"}),
 	awful.key({ modkey, "Control" }, "f",
 		function(c)
 			c.fullscreen = not c.fullscreen
