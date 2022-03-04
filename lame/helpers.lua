@@ -225,7 +225,8 @@ helpers.unminimize = function()
 	end
 end
 
-helpers.swap_tag_subnames = function(t1, t2)
+helpers.swap_tag_subnames = function(t1, t2, swapnames)
+	if not swapnames then swapnames = false end
 	local idx1 = string.find(t1.name, "-")
 	local idx2 = string.find(t2.name, "-")
 	local sub1 = ""
@@ -242,8 +243,13 @@ helpers.swap_tag_subnames = function(t1, t2)
 		name2 = string.sub(name2, 0, idx2-1)
 	end
 
-	t1.name = name2 .. sub1
-	t2.name = name1 .. sub2
+	if swapnames then
+		t1.name = name2 .. sub1
+		t2.name = name1 .. sub2
+	else
+		t1.name = name1 .. sub2
+		t2.name = name2 .. sub1
+	end
 end
 
 helpers.move_tag_left = function()
@@ -251,7 +257,7 @@ helpers.move_tag_left = function()
 	local old_index = current_tag.index
 	helpers.move_tag(-1)
 	local new_tag = awful.screen.focused().tags[old_index]
-	helpers.swap_tag_subnames(current_tag, new_tag)
+	helpers.swap_tag_subnames(current_tag, new_tag, true)
 end
 
 helpers.move_tag_right = function()
@@ -259,14 +265,21 @@ helpers.move_tag_right = function()
 	local old_index = current_tag.index
 	helpers.move_tag(1)
 	local new_tag = awful.screen.focused().tags[old_index]
-	helpers.swap_tag_subnames(current_tag, new_tag)
+	helpers.swap_tag_subnames(current_tag, new_tag, true)
 end
 
 helpers.swap_monitor_tags = function()
-	clienttables = {}
-	idx = 1
+	local clienttables = {}
+	local idx = 1
+	local prevtag
+	local t = nil
 	for s in screen do
-		local t = s.selected_tag
+		prevtag = t
+		t = s.selected_tag
+		if prevtag then
+			naughty.notify {text="hi"}
+			helpers.swap_tag_subnames(t, prevtag, false)
+		end
 		local c = t:clients()
 		clienttables[idx] = c
 		idx = idx + 1
