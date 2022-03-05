@@ -492,10 +492,6 @@ keys.globalkeys = gears.table.join(
 			lame.widget.mpd.volume(-5)
         end,
         {description = "mpd volume down", group = "mpd"}),
-	awful.key({ modkey }, "v", lame.widget.visualizer.toggle,
-		{description = "toggle visualizer", group = "mpd"}),
-	awful.key({ modkey, "Shift" }, "v", lame.widget.fluidsim.toggle,
-		{description = "toggle fluid simulation", group = "custom"}),
     -- User programs
     awful.key({ modkey }, "q",
 		function ()
@@ -689,12 +685,17 @@ local pckeys = gears.table.join(
 
 -- client keys
 keys.clientkeys = gears.table.join(
-    awful.key({ modkey, "Shift" }, "f",
-        function (c)
+	awful.key({ modkey }, "v",
+		function (c)
 			c.fullscreen = not c.fullscreen
+		end,
+		{description = "toggle fullscreen", group = "client"}),
+    awful.key({ modkey, "Shift" }, "v",
+        function (c)
+			c.fullscreen = false
         end,
-        {description = "toggle fullscreen", group = "client"}),
-	awful.key({ modkey, "Control" }, "f",
+        {description = "disable fullscreen", group = "client"}),
+	awful.key({ modkey, "Control" }, "v",
 		function(c)
 			c.fullscreen = not c.fullscreen
 			c.fullscreen = not c.fullscreen
@@ -983,7 +984,9 @@ keys.quickrun_keys = gears.table.join(
 	awful.key({}, "e",
 		function () awful.spawn("flatpak run com.todoist.Todoist") end),
 	awful.key({}, "r",
-		function () awful.spawn("dmenu_run -nb '#000000' -sb '#428ff4'") end)
+		function () awful.spawn("dmenu_run -nb '#000000' -sb '#428ff4'") end),
+	awful.key({}, "v", lame.widget.visualizer.toggle),
+	awful.key({ "Shift" }, "v", lame.widget.fluidsim.toggle)
 )
 
 keys.quickmove_keys = gears.table.join(
