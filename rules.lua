@@ -115,5 +115,11 @@ awful.rules.rules = {
 			minimized = true,
 		}
 	},
+	{
+		rule = { class = "steam_app_620" },
+		properties = {
+			fullscreen = true,
+		}
+	}
 }
 -- }}}
