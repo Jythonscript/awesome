@@ -41,6 +41,7 @@ local special_run_commands = {
 	{"tx", popup_program},
 	{"td", popup_program},
 	{"q", popup_when_no_args},
+	{"jpc", popup_program},
 }
 
 helpers.parse_for_special_run_commands = function(in_cmd)
