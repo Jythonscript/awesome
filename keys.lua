@@ -1064,6 +1064,33 @@ keys.quickfirefox_keys = gears.table.join(
 		end)
 )
 
+keys.quickmedia_keys = gears.table.join(
+	awful.key({}, "s",
+		lame.widget.mpd.toggle),
+	awful.key({}, "w",
+		lame.widget.mpd.stop),
+	awful.key({}, "d",
+		lame.widget.mpd.next),
+	awful.key({}, "a",
+		lame.widget.mpd.prev),
+	awful.key({}, "q",
+		function () lame.widget.mpd.seek(-10) end),
+	awful.key({}, "e",
+		function () lame.widget.mpd.seek(10) end),
+	awful.key({ "Shift" }, "s",
+		function () awful.spawn("playerctl play-pause") end),
+	awful.key({ "Shift" }, "w",
+		function () awful.spawn("playerctl stop") end),
+	awful.key({ "Shift" }, "d",
+		function () awful.spawn("playerctl next") end),
+	awful.key({ "Shift" }, "a",
+		function () awful.spawn("playerctl previous") end),
+	awful.key({ "Shift" }, "q",
+		function () awful.spawn("playerctl position -10") end),
+	awful.key({ "Shift" }, "e",
+		function () awful.spawn("playerctl position +10") end)
+)
+
 keys.quick_keys = gears.table.join(
 	awful.key({}, "a",
 		awful.tag.viewprev),
@@ -1115,6 +1142,11 @@ keys.quick_keys = gears.table.join(
 		function ()
 			root.keys(keys.quickresize_keys)
 			lame.widget.keymodebox.set_text("- RESIZE -")
+		end),
+	awful.key({}, "g",
+		function ()
+			root.keys(keys.quickmedia_keys)
+			lame.widget.keymodebox.set_text("- MEDIA-")
 		end),
 	awful.key({}, "c",
 		function ()
@@ -1185,6 +1217,7 @@ keys.quickrun_keys = gears.table.join(keys.globalkeys, keys.quickrun_keys, keys.
 keys.quickmove_keys = gears.table.join(keys.globalkeys, keys.quickmove_keys, keys.mode_keys)
 keys.quickresize_keys = gears.table.join(keys.globalkeys, keys.quickresize_keys, keys.mode_keys)
 keys.quickfirefox_keys = gears.table.join(keys.globalkeys, keys.quickfirefox_keys, keys.mode_keys)
+keys.quickmedia_keys = gears.table.join(keys.globalkeys, keys.quickmedia_keys, keys.mode_keys)
 
 keys.clientbuttons = gears.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
