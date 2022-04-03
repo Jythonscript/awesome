@@ -1077,6 +1077,10 @@ keys.quickmedia_keys = gears.table.join(
 		function () lame.widget.mpd.seek(-10) end),
 	awful.key({}, "e",
 		function () lame.widget.mpd.seek(10) end),
+	awful.key({}, "1",
+		lame.widget.volume.dec),
+	awful.key({}, "2",
+		lame.widget.volume.inc),
 	awful.key({ "Shift" }, "s",
 		function () awful.spawn("playerctl play-pause") end),
 	awful.key({ "Shift" }, "w",
@@ -1088,7 +1092,11 @@ keys.quickmedia_keys = gears.table.join(
 	awful.key({ "Shift" }, "q",
 		function () awful.spawn("playerctl position -10") end),
 	awful.key({ "Shift" }, "e",
-		function () awful.spawn("playerctl position +10") end)
+		function () awful.spawn("playerctl position +10") end),
+	awful.key({ "Shift" }, "1",
+		function () lame.widget.mpd.volume(-5) end),
+	awful.key({ "Shift" }, "2",
+		function () lame.widget.mpd.volume(5) end)
 )
 
 keys.quick_keys = gears.table.join(
