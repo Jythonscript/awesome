@@ -57,8 +57,10 @@ end
 
 local function clip_and_notify(stdout)
 	stdout = stdout:gsub("[\n\r]", "")
-	local cmd = "echo '"..stdout.."' | tr -d '\\n' | nohup xclip -selection clipboard > /dev/null"
-	awful.spawn.with_shell(cmd)
+	local cmd1 = "echo '"..stdout.."' | tr -d '\\n' | nohup xclip -selection clipboard > /dev/null"
+	local cmd2 = "echo '"..stdout.."' | tr -d '\\n' | nohup xclip -selection primary > /dev/null"
+	awful.spawn.with_shell(cmd1)
+	awful.spawn.with_shell(cmd2)
 	naughty.notify { text = stdout }
 end
 
