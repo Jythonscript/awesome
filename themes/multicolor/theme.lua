@@ -159,33 +159,63 @@ function theme.at_screen_connect(s)
 	s.mywibox = awful.wibar({ position = "top", screen = s, height = prefs.wibar_height, bg = "#000102", fg = theme.fg_normal })
 
     -- Add widgets to the wibox
-    s.mywibox:setup {
-        layout = wibox.layout.align.horizontal,
-        { -- Left widgets
-            layout = wibox.layout.fixed.horizontal,
-            s.mytaglist,
-            s.mypromptbox,
-			{
+	if not prefs.laptop then
+		s.mywibox:setup {
+			layout = wibox.layout.align.horizontal,
+			{ -- Left widgets
+				layout = wibox.layout.fixed.horizontal,
+				s.mytaglist,
+				s.mypromptbox,
+				{
+					layout = wibox.layout.fixed.horizontal,
+					spacing = 5,
+					lame.widget.keymodebox.widget,
+					lame.widget.mpd.widget,
+				},
+			},
+			s.mytasklist,
+			{ -- Right widgets
 				layout = wibox.layout.fixed.horizontal,
 				spacing = 5,
-				lame.widget.keymodebox.widget,
-				lame.widget.mpd.widget,
+				systray,
+				lame.widget.pacman,
+				lame.widget.redshift,
+				lame.widget.volume.widget,
+				lame.widget.memory.widget,
+				lame.widget.cpu.widget,
+				mytextclock,
 			},
-        },
-		s.mytasklist,
-		{ -- Right widgets
-			layout = wibox.layout.fixed.horizontal,
-			spacing = 5,
-			systray,
-			lame.widget.pacman,
-			lame.widget.redshift,
-			lame.widget.volume.widget,
-			lame.widget.memory.widget,
-			lame.widget.cpu.widget,
-			lame.widget.bat.widget,
-			mytextclock,
-		},
-    }
+		}
+	else
+		-- Add widgets to the wibox
+		s.mywibox:setup {
+			layout = wibox.layout.align.horizontal,
+			{ -- Left widgets
+				layout = wibox.layout.fixed.horizontal,
+				s.mytaglist,
+				s.mypromptbox,
+				{
+					layout = wibox.layout.fixed.horizontal,
+					spacing = 5,
+					lame.widget.keymodebox.widget,
+					lame.widget.mpd.widget,
+				},
+			},
+			s.mytasklist,
+			{ -- Right widgets
+				layout = wibox.layout.fixed.horizontal,
+				spacing = 5,
+				systray,
+				lame.widget.pacman,
+				lame.widget.redshift,
+				lame.widget.volume.widget,
+				lame.widget.memory.widget,
+				lame.widget.cpu.widget,
+				lame.widget.bat.widget,
+				mytextclock,
+			},
+		}
+	end
 end
 
 return theme
