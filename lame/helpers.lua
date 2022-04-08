@@ -401,6 +401,17 @@ helpers.terminal_same_directory = function()
 	)
 end
 
+helpers.capture = function(cmd, raw)
+	local f = assert(io.popen(cmd, 'r'))
+	local s = assert(f:read('*a'))
+	f:close()
+	if raw then return s end
+	s = string.gsub(s, '^%s+', '')
+	s = string.gsub(s, '%s+$', '')
+	s = string.gsub(s, '[\n\r]+', ' ')
+	return s
+end
+
 if not prefs.laptop then
 	helpers.keypress = function(key, window)
 		if not window then window = client.focus.window end

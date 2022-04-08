@@ -550,6 +550,12 @@ keys.globalkeys = gears.table.join(
 		function ()
 			awful.prompt.run {
 				prompt = "Run: ",
+				keypressed_callback = function(mod, key, cmd)
+					if mod.Control and key == "v" then
+						clip = helpers.capture("xclip -out -selection clipboard")
+						return true, cmd .. clip
+					end
+				end,
 				hooks = {
 					{{}, "Return", function(cmd)
 						return helpers.parse_for_special_run_commands(cmd)
