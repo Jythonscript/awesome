@@ -281,7 +281,6 @@ helpers.swap_monitor_tags = function()
 		prevtag = t
 		t = s.selected_tag
 		if prevtag then
-			naughty.notify {text="hi"}
 			helpers.swap_tag_subnames(t, prevtag, false)
 		end
 		local c = t:clients()
