@@ -70,6 +70,7 @@ helpers.run_once({
 	{"mpd"},
 	{"easystroke"},
 	{prefs.compositor},
+	{"alacritty --class=hidden,Alacritty"},
 })
 
 -- append platform run_once

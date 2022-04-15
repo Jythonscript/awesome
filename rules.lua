@@ -71,6 +71,16 @@ awful.rules.rules = {
 	    }
 	},
 	{
+		rule = { class = "Alacritty", instance = "hidden" },
+		properties = {
+			hidden = true,
+			tag = beautiful.tagnames[9],
+			focusable = false,
+			below = true,
+			skip_taskbar = true,
+		}
+	},
+	{
 	    rule = { class = "Surf", instance = "surf" },
 	    properties = {
 			tag = beautiful.tagnames[4],
