@@ -11,11 +11,11 @@ local helpers = {}
 -- Also sets the instance of program to the command name; may need changing if terminal ~= urxvt(c)
 local function terminal_program(cmd)
 	local program = cmd:match("^([^ ]+)")
-	return prefs.terminal .. " -name " .. program .. " -e " .. cmd
+	return (prefs.popupterm or prefs.terminal) .. " -name " .. program .. " -e " .. cmd
 end
 
 local function popup_program(cmd)
-	return prefs.terminal .. " -name popup -bg black -geometry 160x20 -e zsh -c \"source ~/.func.zsh && " .. cmd .. "\""
+	return (prefs.popupterm or prefs.terminal) .. " -name popup -bg black -geometry 160x20 -e zsh -c \"source ~/.func.zsh && " .. cmd .. "\""
 end
 
 local function popup_when_no_args(cmd)

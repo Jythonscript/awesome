@@ -8,7 +8,7 @@ local visualizer = {}
 -- Visualizer
 -- terminal pretty much needs to be urxvt(c)
 visualizer.spawn = function(s)
-	awful.spawn(prefs.terminal .. "\
+	awful.spawn((prefs.popupterm or prefs.terminal) .. "\
 	-font 'xft:Fira Mono:size=11'\
 	-scollBar false\
 	-sl 0\
