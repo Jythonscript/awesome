@@ -1026,9 +1026,10 @@ keys.quickresize_keys = gears.table.join(
 	awful.key({}, "d",
 		function () awful.tag.incmwfact(0.1) end),
 	awful.key({}, "Tab",
-		function () awful.tag.setmwfact(0.5) end),
-	awful.key({ "Shift" }, "Tab",
-		function () awful.screen.focused().selected_tag.master_count = 1 end)
+		function ()
+			awful.tag.setmwfact(0.5)
+			awful.screen.focused().selected_tag.master_count = 1
+		end)
 )
 
 keys.quickfirefox_keys = gears.table.join(
