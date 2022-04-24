@@ -8,11 +8,6 @@ local prefs = require("prefs")
 local bat = lain.widget.bat({
 	settings = function()
 		local perc = bat_now.perc ~= "N/A" and bat_now.perc .. "%" or bat_now.perc
-
-		if bat_now.ac_status == 1 then
-			perc = perc .. " plug"
-		end
-
 		widget:set_markup(markup.fontfg(beautiful.font, beautiful.fg_normal, perc .. " "))
 	end
 
