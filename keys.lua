@@ -994,7 +994,7 @@ keys.quickrun_keys = gears.table.join(
 	awful.key({}, "s",
 		function () awful.spawn("flatpak run com.github.IsmaelMartinez.teams_for_linux") end),
 	awful.key({}, "b",
-		function () awful.spawn("bitwarden") end),
+		function () awful.spawn("bitwarden-desktop") end),
 	awful.key({}, "v", lame.widget.visualizer.toggle),
 	awful.key({ "Shift" }, "v", lame.widget.fluidsim.toggle)
 )
