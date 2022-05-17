@@ -40,6 +40,7 @@ local special_run_commands = {
 	{"mp", popup_when_no_args},
 	{"shaders", popup_when_no_args},
 	{"tx", popup_program},
+	{"ved", popup_program},
 	{"td", popup_program},
 	{"q", popup_when_no_args},
 	{"jpc", popup_program},
