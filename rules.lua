@@ -40,6 +40,13 @@ awful.rules.rules = {
 	  properties = { tag = beautiful.tagnames[3] } },
     { rule = { class = "Steam" },
       properties = { tag = beautiful.tagnames[5] } },
+    { rule = { class = "Lutris" },
+      properties = {
+		  maximized = false,
+		  floating = false,
+		  titlebars_enabled = false,
+	  }
+	},
 	{
 	    rule = { class = "URxvt" },
 	    except_any = { instance = { "vis", "ncmpcpp" } },
