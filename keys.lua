@@ -226,7 +226,7 @@ keys.globalkeys = gears.table.join(
         {description = "focus right", group = "client"}),
     awful.key({ modkey }, "w",
 		function ()
-			lame.widget.main_menu:toggle()
+			lame.widget.dashboard.toggle()
 		end,
 		{description = "show main menu", group = "awesome"}),
 	-- key modes

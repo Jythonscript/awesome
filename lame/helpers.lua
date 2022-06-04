@@ -3,6 +3,7 @@ local prefs = require("prefs")
 local beautiful = require("beautiful")
 local gears = require("gears")
 local naughty = require("naughty")
+local wibox = require("wibox")
 
 local helpers = {}
 
@@ -173,20 +174,20 @@ helpers.no_picom_when_focused_setup = function(c)
 	end)
 
 	c:connect_signal("unfocus",
-		function(c2)
-			awful.spawn(prefs.compositor)
+	function(c2)
+		awful.spawn(prefs.compositor)
 	end)
 end
 
 helpers.add_tag = function(layout)
 	awful.prompt.run {
-        prompt       = "New tag name: ",
-        textbox      = awful.screen.focused().mypromptbox.widget,
-        exe_callback = function(name)
-            if not name or #name == 0 then return end
-            awful.tag.add(name, { screen = awful.screen.focused(), layout = layout or awful.layout.suit.tile }):view_only()
-        end
-    }
+		prompt       = "New tag name: ",
+		textbox      = awful.screen.focused().mypromptbox.widget,
+		exe_callback = function(name)
+			if not name or #name == 0 then return end
+			awful.tag.add(name, { screen = awful.screen.focused(), layout = layout or awful.layout.suit.tile }):view_only()
+		end
+	}
 end
 
 helpers.rename_tag = function()
@@ -208,18 +209,18 @@ helpers.rename_tag = function()
 end
 
 helpers.move_tag = function(pos)
-    local tag = awful.screen.focused().selected_tag
-    if tonumber(pos) <= -1 then
+	local tag = awful.screen.focused().selected_tag
+	if tonumber(pos) <= -1 then
 		tag.index = tag.index - 1
-    else
+	else
 		tag.index = tag.index + 1
-    end
+	end
 end
 
 helpers.delete_tag = function()
-    local t = awful.screen.focused().selected_tag
-    if not t then return end
-    t:delete()
+	local t = awful.screen.focused().selected_tag
+	if not t then return end
+	t:delete()
 end
 
 helpers.unminimize = function()
@@ -421,6 +422,19 @@ else
 	helpers.keypress = function(key, window)
 		awful.spawn.with_shell("sleep 0.15 && xdotool key '"..key.."'")
 	end
+end
+
+helpers.rrect = function(radius)
+	return function(cr, width, height)
+		gears.shape.rounded_rect(cr, width, height, radius)
+	end
+end
+
+helpers.vertical_pad = function(height)
+    return wibox.widget{
+        forced_height = height,
+        layout = wibox.layout.fixed.vertical
+    }
 end
 
 return helpers

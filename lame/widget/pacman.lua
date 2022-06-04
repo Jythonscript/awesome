@@ -33,4 +33,11 @@ pacman.widget:connect_signal("mouse::enter", function()
 	end)
 end)
 
-return pacman.widget
+pacman.get_num_upgradable = function()
+	if not pacman.last_output then return -1 end
+
+	local _, lines = pacman.last_output:gsub('\n','\n')
+	return lines
+end
+
+return pacman
