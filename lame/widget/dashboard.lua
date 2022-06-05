@@ -6,6 +6,7 @@ local markup = require("lame.markup")
 local lame = require("lame")
 local prefs = require("prefs")
 local gears = require("gears")
+local keys = require("keys")
 
 local table = {}
 
@@ -23,6 +24,7 @@ table.wibox = wibox {
 	type = "dock"
 }
 local dashboard = table.wibox
+local prevkeys
 
 awful.placement.maximize(dashboard)
 dashboard.bg = "#000000CC"
@@ -291,10 +293,32 @@ dashboard:setup {
 	layout = wibox.layout.align.vertical
 }
 
+dashboard:buttons(gears.table.join(
+	awful.button({}, 2, function ()
+		table.toggle()
+	end)
+))
+
+table.dashboard_keys = gears.table.join(
+	awful.key({}, "q", function ()
+		table.toggle()
+	end),
+	awful.key({}, "Escape", function ()
+		table.toggle()
+	end)
+)
+
 table.toggle = function ()
 	local s = awful.screen.focused()
 	dashboard.screen = s
 	dashboard.visible = not dashboard.visible
+
+	if dashboard.visible then
+		prevkeys = root.keys()
+		root.keys(gears.table.join(prevkeys, table.dashboard_keys))
+	else
+		root.keys(prevkeys)
+	end
 end
 
 return table
