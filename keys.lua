@@ -228,7 +228,7 @@ keys.globalkeys = gears.table.join(
 		function ()
 			lame.widget.dashboard.toggle()
 		end,
-		{description = "show main menu", group = "awesome"}),
+		{description = "toggle dashboard", group = "widgets"}),
 	-- key modes
 	awful.key({ altkey }, "f",
 		function ()
@@ -388,9 +388,9 @@ keys.globalkeys = gears.table.join(
 		{description = "decrease the number of columns", group = "layout"}),
     awful.key({ modkey }, "space",
 		function ()
-			awful.layout.set(awful.layout.suit.tile)
+			lame.widget.dashboard.toggle()
 		end,
-		{description = "switch between tile left and tile above", group = "layout"}),
+		{description = "toggle dashboard", group = "widgets"}),
     awful.key({ modkey, "Control" }, "n",
 		helpers.unminimize,
 		{description = "restore minimized", group = "client"}),

@@ -273,7 +273,6 @@ dashboard:setup {
 			{
 				clock_box,
 				calendar_box,
-				-- pacman_box,
 				layout = wibox.layout.align.vertical
 			},
 			{
@@ -299,26 +298,10 @@ dashboard:buttons(gears.table.join(
 	end)
 ))
 
-table.dashboard_keys = gears.table.join(
-	awful.key({}, "q", function ()
-		table.toggle()
-	end),
-	awful.key({}, "Escape", function ()
-		table.toggle()
-	end)
-)
-
 table.toggle = function ()
 	local s = awful.screen.focused()
 	dashboard.screen = s
 	dashboard.visible = not dashboard.visible
-
-	if dashboard.visible then
-		prevkeys = root.keys()
-		root.keys(gears.table.join(prevkeys, table.dashboard_keys))
-	else
-		root.keys(prevkeys)
-	end
 end
 
 return table
