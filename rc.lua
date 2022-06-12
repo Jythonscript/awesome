@@ -62,9 +62,9 @@ awful.layout.layouts = {
 helpers.run_once({
 	{"light-locker"},
 	{"thunderbird"},
-	{prefs.redshift_command or "redshift"},
+	{prefs.redshift_command or "redshift", {}, "redshift"},
 	{"firefox"},
-	{"discord --start-minimized"},
+	{"discord"},
 	{"flatpak run com.todoist.Todoist"},
 	{"unclutter --timeout 5"},
 	{"mpd"},
