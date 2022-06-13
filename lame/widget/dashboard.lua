@@ -108,13 +108,14 @@ local user_widget = wibox.widget {
 local user_box = create_boxed_widget(user_widget, 300, 340, box_background)
 
 -- pacman widget
-local pacman_packages = wibox.widget.textbox()
+local pacman_textbox = wibox.widget.textbox()
+pacman_textbox:set_markup(markup.font(big_font, "..."))
 local pacman_widget = wibox.widget {
 	{
 		align = "center",
 		valign = "center",
 		font = beautiful.font,
-		widget = pacman_packages
+		widget = pacman_textbox
 	},
 	{
 		align = "center",
@@ -130,8 +131,9 @@ local pacman_box = create_boxed_widget(pacman_widget, 200, 100, box_background)
 
 dashboard:connect_signal("property::visible", function ()
 	if dashboard.visible then
-		pacman_packages:set_markup(markup.fontfg(big_font,
-		"#FFFFFF", lame.widget.pacman.get_num_upgradable()))
+		lame.widget.pacman.num_upgradable_callback(function (output)
+			pacman_textbox:set_markup(markup.font(big_font, output))
+		end)
 	end
 end)
 

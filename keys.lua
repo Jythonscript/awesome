@@ -829,9 +829,7 @@ keys.taglist_buttons = gears.table.join(
 		if client.focus then
 			client.focus:toggle_tag(t)
 		end
-	end),
-	awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
-	awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
+	end)
 )
 
 keys.tasklist_buttons = gears.table.join(
@@ -851,26 +849,8 @@ keys.tasklist_buttons = gears.table.join(
 			c:raise()
 		end
 	end),
-	awful.button({ }, 2, function()
-		local instance = nil
-
-		return function ()
-			if instance and instance.wibox.visible then
-				instance:hide()
-				instance = nil
-			else
-				instance = awful.menu.clients({ theme = { width = 250 } })
-			end
-		end
-	end),
 	awful.button({ }, 3, function(c)
 		c:kill()
-	end),
-	awful.button({ }, 4, function ()
-		awful.client.focus.byidx(1)
-	end),
-	awful.button({ }, 5, function ()
-		awful.client.focus.byidx(-1)
 	end),
 	awful.button({ }, 8, helpers.stackprev),
 	awful.button({ }, 9, helpers.stacknext)
@@ -1262,6 +1242,18 @@ keys.titlebar_buttons = gears.table.join(
 		local c = mouse.object_under_pointer()
 		c:emit_signal("request::activate", "titlebar", {raise = true})
 		awful.mouse.client.resize(c)
+	end)
+)
+
+keys.wibox_buttons = gears.table.join(
+	awful.button({}, 2, function ()
+		lame.widget.dashboard.toggle()
+	end),
+    awful.button({ }, 4, function ()
+		awful.tag.viewnext()
+	end),
+    awful.button({ }, 5, function ()
+		awful.tag.viewprev()
 	end)
 )
 

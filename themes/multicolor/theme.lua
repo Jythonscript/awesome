@@ -158,9 +158,7 @@ function theme.at_screen_connect(s)
 	-- append platform shortcuts
 	s.mywibox = awful.wibar({ position = "top", screen = s, height = prefs.wibar_height, bg = "#000102", fg = theme.fg_normal })
 
-	s.mywibox:buttons(gears.table.join(
-		awful.button({}, 2, lame.widget.dashboard.toggle)
-	))
+	s.mywibox:buttons(keys.wibox_buttons)
 
     -- Add widgets to the wibox
 	if not prefs.laptop then
