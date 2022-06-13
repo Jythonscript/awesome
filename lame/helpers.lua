@@ -439,4 +439,8 @@ helpers.vertical_pad = function(height)
     }
 end
 
+helpers.font_dpi = function (font, size)
+	return font .. " " .. math.floor(prefs.dpi(size))
+end
+
 return helpers

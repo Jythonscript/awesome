@@ -8,13 +8,16 @@ local prefs = require("prefs")
 local gears = require("gears")
 local keys = require("keys")
 
+local dpi = prefs.dpi
+local font_dpi = helpers.font_dpi
+
 local table = {}
 
 local box_radius = 12
 local box_gap = 6
-local big_font = "xos4 Terminus 34"
-local medium_font = "xos4 Terminus 20"
-local small_font = "xos4 Terminus 12"
+local big_font = font_dpi("xos4 Terminus",34)
+local medium_font = font_dpi("xos4 Terminus",20)
+local small_font = font_dpi("xos4 Terminus",12)
 local box_background = "#2e2e2e"
 local dark_text_color = "#636363"
 
@@ -67,10 +70,10 @@ end
 
 -- user widget
 local user_picture_container = wibox.container.background()
-user_picture_container.shape = helpers.rrect(40)
+user_picture_container.shape = helpers.rrect(dpi(40))
 -- user_picture_container.shape = gears.shape.circle
-user_picture_container.forced_height = 140
-user_picture_container.forced_width = 140
+user_picture_container.forced_height = dpi(140)
+user_picture_container.forced_width = dpi(140)
 local user_picture = wibox.widget {
 	{
 		wibox.widget.imagebox(prefs.profile_picture),
@@ -99,13 +102,13 @@ end)
 
 local user_widget = wibox.widget {
 	user_picture,
-	helpers.vertical_pad(24),
+	helpers.vertical_pad(dpi(24)),
 	user_text,
-	helpers.vertical_pad(4),
+	helpers.vertical_pad(dpi(4)),
 	host_text,
 	layout = wibox.layout.fixed.vertical
 }
-local user_box = create_boxed_widget(user_widget, 300, 340, box_background)
+local user_box = create_boxed_widget(user_widget, dpi(300), dpi(340), box_background)
 
 -- pacman widget
 local pacman_textbox = wibox.widget.textbox()
@@ -123,11 +126,19 @@ local pacman_widget = wibox.widget {
 		markup = markup.fontfg(medium_font, "#FFFFFF", "out-of-date packages"),
 		widget = wibox.widget.textbox()
 	},
-	spacing = 6,
+	spacing = dpi(6),
 	layout = wibox.layout.fixed.vertical
 }
 
-local pacman_box = create_boxed_widget(pacman_widget, 200, 100, box_background)
+local pacman_box = create_boxed_widget(pacman_widget, dpi(200), dpi(100), box_background)
+pacman_box:buttons(gears.table.join(
+	awful.button({}, 1, function ()
+		lame.widget.pacman.refresh()
+		lame.widget.pacman.num_upgradable_callback(function (output)
+			pacman_textbox:set_markup(markup.font(big_font, output))
+		end)
+	end)
+))
 
 dashboard:connect_signal("property::visible", function ()
 	if dashboard.visible then
@@ -156,7 +167,7 @@ local clock_widget = wibox.widget {
 	layout = wibox.layout.align.vertical
 }
 
-local clock_box = create_boxed_widget(clock_widget, 300, 200, box_background)
+local clock_box = create_boxed_widget(clock_widget, dpi(300), dpi(200), box_background)
 
 local decorate_calendar = function(widget, flag, date)
 	if widget.get_text and widget.set_markup then
@@ -172,16 +183,16 @@ end
 
 local calendar_widget = wibox.widget {
 	date = os.date('*t'),
-	font = "Fira Mono 15",
+	font = font_dpi("Fira Mono",15),
 	fn_embed = decorate_calendar,
 	font = small_font,
 	widget = wibox.widget.calendar.month
 }
 
-local calendar_box = create_boxed_widget(calendar_widget, 300, 300, box_background)
+local calendar_box = create_boxed_widget(calendar_widget, dpi(300), dpi(300), box_background)
 
 -- program launchers
-local launcher_font = "Font Awesome 24"
+local launcher_font = font_dpi("Font Awesome", 24)
 local launcher_setup = function(textbox, box, color, program)
 	box:connect_signal("mouse::enter", function ()
 		textbox:set_markup(markup.fg.color(color,textbox.text))
@@ -198,33 +209,33 @@ end
 
 local firefox_textbox = wibox.widget.textbox(utf8.char(0xf269))
 firefox_textbox.font = launcher_font
-local firefox_box = create_boxed_widget(firefox_textbox, 100, 100, box_background)
+local firefox_box = create_boxed_widget(firefox_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(firefox_textbox, firefox_box, "#ff9400", "firefox")
 
 local chromium_textbox = wibox.widget.textbox(utf8.char(0xf268))
 chromium_textbox.font = launcher_font
-local chromium_box = create_boxed_widget(chromium_textbox, 100, 100, box_background)
+local chromium_box = create_boxed_widget(chromium_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(chromium_textbox, chromium_box, "#4688f4", "chromium")
 
 local terminal_textbox = wibox.widget.textbox(utf8.char(0xf120))
 terminal_textbox.font = launcher_font
-local terminal_box = create_boxed_widget(terminal_textbox, 100, 100, box_background)
+local terminal_box = create_boxed_widget(terminal_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(terminal_textbox, terminal_box, "#000000", prefs.terminal)
 
 local discord_textbox = wibox.widget.textbox(utf8.char(0xf392))
 discord_textbox.font = launcher_font
-local discord_box = create_boxed_widget(discord_textbox, 100, 100, box_background)
+local discord_box = create_boxed_widget(discord_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(discord_textbox, discord_box, "#5865f2", "discord")
 
 local steam_textbox = wibox.widget.textbox(utf8.char(0xf3f6))
 steam_textbox.font = launcher_font
-local steam_box = create_boxed_widget(steam_textbox, 100, 100, box_background)
+local steam_box = create_boxed_widget(steam_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(steam_textbox, steam_box, "#000000", "steam")
 
 -- lock widget
 local lock_textbox = wibox.widget.textbox(utf8.char(0xf023))
 lock_textbox.font = launcher_font
-local lock_box = create_boxed_widget(lock_textbox, 100, 100, box_background)
+local lock_box = create_boxed_widget(lock_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(lock_textbox, lock_box, dark_text_color, "light-locker-command -l")
 
 -- gaming widget
@@ -234,7 +245,7 @@ local gaming_off_color = dark_text_color
 local gaming_textbox = wibox.widget.textbox()
 gaming_textbox.font = launcher_font
 gaming_textbox:set_markup(markup.fontfg(launcher_font, gaming_off_color, utf8.char(0xf11b)))
-local gaming_box = create_boxed_widget(gaming_textbox, 100, 100, box_background)
+local gaming_box = create_boxed_widget(gaming_textbox, dpi(100), dpi(100), box_background)
 gaming_box:buttons(gears.table.join(
 	awful.button({}, 1, function ()
 		gaming_on = not gaming_on
