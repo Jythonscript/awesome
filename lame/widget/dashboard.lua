@@ -9,7 +9,7 @@ local gears = require("gears")
 local keys = require("keys")
 
 local dpi = prefs.dpi
-local font_dpi = helpers.font_dpi
+local font_dpi = prefs.font_dpi or helpers.font_dpi
 
 local table = {}
 
