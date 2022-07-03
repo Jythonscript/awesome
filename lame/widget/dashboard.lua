@@ -18,6 +18,7 @@ local box_gap = 6
 local big_font = font_dpi("xos4 Terminus",34)
 local medium_font = font_dpi("xos4 Terminus",20)
 local small_font = font_dpi("xos4 Terminus",12)
+local icon_font = font_dpi("Font Awesome", 24)
 local box_background = "#2e2e2e"
 local dark_text_color = "#636363"
 
@@ -27,7 +28,6 @@ table.wibox = wibox {
 	type = "dock"
 }
 local dashboard = table.wibox
-local prevkeys
 
 awful.placement.maximize(dashboard)
 dashboard.bg = "#000000CC"
@@ -80,7 +80,7 @@ local user_picture = wibox.widget {
 		widget = user_picture_container,
 		-- bg = "#00FF00",
 	},
-	shape = helpers.rrect(box_radius / 2),
+	shape = helpers.rrect(box_radius),
 	-- bg = "#FFFFFF",
 	widget = wibox.container.background
 }
@@ -192,7 +192,6 @@ local calendar_widget = wibox.widget {
 local calendar_box = create_boxed_widget(calendar_widget, dpi(300), dpi(300), box_background)
 
 -- program launchers
-local launcher_font = font_dpi("Font Awesome", 24)
 local launcher_setup = function(textbox, box, color, program)
 	box:connect_signal("mouse::enter", function ()
 		textbox:set_markup(markup.fg.color(color,textbox.text))
@@ -208,33 +207,33 @@ local launcher_setup = function(textbox, box, color, program)
 end
 
 local firefox_textbox = wibox.widget.textbox(utf8.char(0xf269))
-firefox_textbox.font = launcher_font
+firefox_textbox.font = icon_font
 local firefox_box = create_boxed_widget(firefox_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(firefox_textbox, firefox_box, "#ff9400", "firefox")
 
 local chromium_textbox = wibox.widget.textbox(utf8.char(0xf268))
-chromium_textbox.font = launcher_font
+chromium_textbox.font = icon_font
 local chromium_box = create_boxed_widget(chromium_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(chromium_textbox, chromium_box, "#4688f4", "chromium")
 
 local terminal_textbox = wibox.widget.textbox(utf8.char(0xf120))
-terminal_textbox.font = launcher_font
+terminal_textbox.font = icon_font
 local terminal_box = create_boxed_widget(terminal_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(terminal_textbox, terminal_box, "#000000", prefs.terminal)
 
 local discord_textbox = wibox.widget.textbox(utf8.char(0xf392))
-discord_textbox.font = launcher_font
+discord_textbox.font = icon_font
 local discord_box = create_boxed_widget(discord_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(discord_textbox, discord_box, "#5865f2", "discord")
 
 local steam_textbox = wibox.widget.textbox(utf8.char(0xf3f6))
-steam_textbox.font = launcher_font
+steam_textbox.font = icon_font
 local steam_box = create_boxed_widget(steam_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(steam_textbox, steam_box, "#000000", "steam")
 
 -- lock widget
 local lock_textbox = wibox.widget.textbox(utf8.char(0xf023))
-lock_textbox.font = launcher_font
+lock_textbox.font = icon_font
 local lock_box = create_boxed_widget(lock_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(lock_textbox, lock_box, dark_text_color, "light-locker-command -l")
 
@@ -243,8 +242,8 @@ local gaming_on = false
 local gaming_on_color = "#ffffff"
 local gaming_off_color = dark_text_color
 local gaming_textbox = wibox.widget.textbox()
-gaming_textbox.font = launcher_font
-gaming_textbox:set_markup(markup.fontfg(launcher_font, gaming_off_color, utf8.char(0xf11b)))
+gaming_textbox.font = icon_font
+gaming_textbox:set_markup(markup.fontfg(icon_font, gaming_off_color, utf8.char(0xf11b)))
 local gaming_box = create_boxed_widget(gaming_textbox, dpi(100), dpi(100), box_background)
 gaming_box:buttons(gears.table.join(
 	awful.button({}, 1, function ()
@@ -262,11 +261,226 @@ gaming_box:buttons(gears.table.join(
 -- fortune widget
 -- TODO
 
--- MPD widget
--- TODO
+-- Music widget
+local music_image = wibox.widget.imagebox()
+local music_title = wibox.widget.textbox()
+local music_artist = wibox.widget.textbox()
+local music_playpause_button = wibox.widget.textbox()
+local music_backward_button = wibox.widget.textbox()
+local music_forward_button = wibox.widget.textbox()
+
+local music_playing_text = utf8.char(0xf04c)
+local music_paused_text = utf8.char(0xf04b)
+
+local music_widget = wibox.widget {
+	{
+		{
+			{
+				{
+					widget = wibox.widget.textbox(),
+					text = utf8.char(0xf001),
+					font = icon_font,
+					align = "center",
+					valign = "center"
+				},
+				{
+					widget = music_image,
+				},
+				layout = wibox.layout.stack
+			},
+			widget = wibox.container.background(),
+			forced_width = dpi(280),
+			-- forced_height = dpi(100),
+			shape_clip = true,
+			shape = helpers.rrect(box_radius),
+			bg = dark_text_color,
+			align = "center"
+		},
+		helpers.vertical_pad(dpi(40)),
+		{
+			font = medium_font,
+			text = "...",
+			align = "center",
+			valign = "center",
+			widget = music_title
+		},
+		helpers.vertical_pad(dpi(10)),
+		{
+			font = small_font,
+			text = "...",
+			align = "center",
+			valign = "center",
+			widget = music_artist
+		},
+		helpers.vertical_pad(dpi(10)),
+		{
+			{
+				font = icon_font,
+				text = utf8.char(0xf04a),
+				align = "center",
+				widget = music_backward_button
+			},
+			{
+				font = icon_font,
+				text = utf8.char(0xf04b),
+				align = "center",
+				widget = music_playpause_button
+			},
+			{
+				font = icon_font,
+				text = utf8.char(0xf04e),
+				align = "center",
+				widget = music_forward_button
+			},
+			spacing = dpi(30),
+			align = "center",
+			valign = "center",
+			layout = wibox.layout.flex.horizontal
+		},
+		-- spacing = dpi(40),
+		align = "center",
+		valign = "center",
+		layout = wibox.layout.fixed.vertical
+	},
+	widget = wibox.container.margin,
+	margins = dpi(10)
+}
+
+local music_box = create_boxed_widget(music_widget, dpi(300), dpi(450), box_background)
+
+local music_text_update = function()
+
+	lame.widget.music.playerctl_callback(function (player_now)
+		music_title.text = player_now.title
+		music_artist.text = player_now.artist
+		music_image.image = player_now.artUrl or beautiful.no_music_image
+
+		if player_now.playing then
+			music_playpause_button.text = music_playing_text
+		else
+			music_playpause_button.text = music_paused_text
+		end
+	end)
+end
+
+music_playpause_button:buttons(gears.table.join(
+	awful.button({}, 1, function ()
+		lame.widget.music.playerctl_play_pause(music_text_update)
+	end)
+))
+
+music_forward_button:buttons(gears.table.join(
+	awful.button({}, 1, function ()
+		lame.widget.music.playerctl_next(music_text_update)
+	end)
+))
+
+music_backward_button:buttons(gears.table.join(
+	awful.button({}, 1, function ()
+		lame.widget.music.playerctl_previous(music_text_update)
+	end)
+))
+
+dashboard:connect_signal("property::visible", music_text_update)
+
+awful.spawn.with_line_callback("playerctl metadata -F --format '{{status}} {{title}} {{artist}} {{artUrl}}'", {
+	stdout = music_text_update
+})
+
+music_image:buttons(gears.table.join(
+	awful.button({}, 1, function ()
+		lame.widget.music.playerctl_play_pause(music_text_update)
+	end),
+	awful.button({}, 4, function ()
+		lame.widget.music.playerctl_next(music_text_update)
+	end),
+	awful.button({}, 5, function ()
+		lame.widget.music.playerctl_previous(music_text_update)
+	end)
+))
 
 -- Volume widget
--- TODO
+local volume_textbox = wibox.widget.textbox()
+local volume_slider = wibox.container.background()
+local volume_background = wibox.container.background()
+local volume_slider_max = dpi(300)
+
+local volume_box = wibox.widget {
+	{
+		{
+			{
+				{
+					{
+						widget = wibox.widget.textbox()
+					},
+					widget = volume_slider,
+					bg = dark_text_color,
+					shape = helpers.rrect(box_radius),
+					forced_width = 0
+				},
+				{
+					{
+						widget = wibox.widget.textbox()
+					},
+					widget = wibox.container.background()
+				},
+				layout = wibox.layout.align.horizontal
+			},
+			{
+				nil,
+				{
+					nil,
+					{
+						widget = volume_textbox,
+						text = '20%',
+						font = medium_font,
+						align = 'center',
+						valign = 'center',
+					},
+					layout = wibox.layout.align.vertical,
+					expand = "none"
+				},
+				layout = wibox.layout.align.horizontal,
+				expand = "none"
+			},
+			layout = wibox.layout.stack
+		},
+		widget = volume_background,
+		shape = helpers.rrect(box_radius),
+		shape_clip = true,
+		bg = box_background,
+		forced_width = volume_slider_max,
+		forced_height = dpi(100),
+	},
+	margins = box_gap,
+	color = '#ff000000',
+	widget = wibox.container.margin
+}
+
+local volume_box_update = function(vol)
+	local width = volume_slider_max * (vol / 100)
+	volume_slider.forced_width = width
+	volume_textbox.text = vol .. "%"
+end
+
+volume_box:buttons(gears.table.join(
+	awful.button({}, 4, function ()
+		lame.widget.volume.inc(2, function (vol)
+			volume_box_update(vol)
+		end)
+	end),
+	awful.button({}, 5, function ()
+		lame.widget.volume.dec(2, function (vol)
+			volume_box_update(vol)
+		end)
+	end)
+))
+
+dashboard:connect_signal("property::visible", function ()
+	lame.widget.volume.volume_callback(function (vol)
+		volume_box_update(vol)
+	end)
+end)
 
 dashboard:setup {
 	nil,
@@ -295,6 +509,11 @@ dashboard:setup {
 				discord_box,
 				steam_box,
 				layout = wibox.layout.flex.vertical
+			},
+			{
+				music_box,
+				volume_box,
+				layout = wibox.layout.align.vertical
 			},
 			layout = wibox.layout.fixed.horizontal
 		},

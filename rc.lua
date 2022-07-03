@@ -68,7 +68,7 @@ helpers.run_once({
 	{"flatpak run com.todoist.Todoist"},
 	{"unclutter --timeout 5"},
 	{"mpd"},
-	{"easystroke"},
+	{"mygestures --device 'Virtual core pointer' --without-brush"},
 	{prefs.compositor},
 	{"alacritty --class=hidden,Alacritty"},
 })

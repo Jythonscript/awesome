@@ -6,19 +6,38 @@ local markup = require("lame.markup")
 local volume = {}
 volume.widget = wibox.widget.textbox()
 
-volume.inc = function(percent)
+volume.volume_callback = function(callback)
+	local cmd = "amixer get Master"
+	awful.spawn.easy_async_with_shell(cmd, function(stdout)
+
+		local vol, playback = string.match(stdout, "Playback [%d]+ %[([%d]+)%%%] %[([%l]*)")
+
+		if not vol or not playback then return end
+
+		vol = tonumber(vol)
+		callback(vol)
+	end)
+end
+
+volume.inc = function(percent, callback)
 	if not percent then percent = 2 end
 	if percent >= 0 then
 		percent = percent .. "%+"
 	else
 		percent = -1 * percent .. "%-"
 	end
-	awful.spawn.easy_async("amixer set Master " .. percent, volume.update)
+	awful.spawn.easy_async("amixer set Master " .. percent, function ()
+		if callback then
+			volume.update(callback)
+		else
+			volume.update()
+		end
+	end)
 end
 
-volume.dec = function(percent)
+volume.dec = function(percent, callback)
 	if not percent then percent = 2 end
-	volume.inc(-percent)
+	volume.inc(-percent, callback)
 end
 
 volume.set = function(percent)
@@ -34,7 +53,7 @@ volume.toggle_mic_mute = function()
 	awful.spawn.easy_async("amixer set Capture toggle", volume.update)
 end
 
-volume.update = function()
+volume.update = function(callback)
 	local cmd = "amixer get Master && amixer get Capture"
 
 	awful.spawn.easy_async_with_shell(cmd, function(stdout)
@@ -58,6 +77,10 @@ volume.update = function()
 		end
 
 		volume.widget:set_markup(markup("#7493d2", text))
+
+		if callback then
+			callback(vol)
+		end
 	end)
 end
 
