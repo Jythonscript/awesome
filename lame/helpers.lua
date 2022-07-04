@@ -443,4 +443,10 @@ helpers.font_dpi = function (font, size)
 	return font .. " " .. math.floor(prefs.dpi(size))
 end
 
+helpers.notify = function(mytext)
+	naughty.notify {
+		text = mytext
+	}
+end
+
 return helpers
