@@ -2,6 +2,8 @@ local awful = require("awful")
 
 local tab = {}
 
+tab.player = ""
+
 tab.mpd_toggle = function()
 	awful.spawn("mpc toggle")
 end
@@ -28,42 +30,13 @@ tab.mpd_volume = function(perc)
 	awful.spawn("mpc volume " .. perc)
 end
 
--- tab.playerctl_callback = function(callback)
--- 	local cmd = "playerctl status && playerctl metadata"
-
--- 	local player_now = {
--- 		playing = false,
--- 		title = "...",
--- 		artist = "...",
--- 		artUrl = nil
--- 	}
-
--- 	awful.spawn.easy_async_with_shell(cmd, function (stdout)
--- 		for line in stdout:gmatch("[^\n]+") do
--- 			for k,v in line:gmatch("[%w]+%s[%w]+:([%w]+)[%s]+(.*)$") do
--- 				if k == "title" then player_now.title = v end
--- 				if k == "artist" then player_now.artist = v end
--- 				if k == "artUrl" then
--- 					local _, idx = v:find("file://")
--- 					local img = v:sub(idx+1)
--- 					player_now.artUrl = img
--- 				end
--- 			end
--- 			if line:find("^Playing$") then
--- 				player_now.playing = true
--- 			end
--- 		end
-
--- 		callback(player_now)
--- 	end)
--- end
-
 tab.playerctl_callback = function(callback)
 	local cmd = [[
-playerctl metadata --format '{{status}}
+playerctl metadata -p "]]..tab.player..[[" --format '{{status}}
 {{trunc(title,60)}}
 {{artist}}
-{{mpris:artUrl}}']]
+{{mpris:artUrl}}'
+]]
 
 	local player_now = {
 		playing = false,
@@ -75,6 +48,7 @@ playerctl metadata --format '{{status}}
 	awful.spawn.easy_async_with_shell(cmd, function (stdout)
 
 		local t = {}
+
 		for str in stdout:gmatch("[^\n]+") do
 			table.insert(t,str)
 		end
@@ -98,15 +72,46 @@ playerctl metadata --format '{{status}}
 end
 
 tab.playerctl_play_pause = function(callback)
-	awful.spawn.easy_async("playerctl play-pause", callback)
+	awful.spawn.easy_async("playerctl play-pause -p '"..tab.player.."'", callback)
 end
 
 tab.playerctl_next = function(callback)
-	awful.spawn.easy_async("playerctl next", callback)
+	awful.spawn.easy_async("playerctl next -p '"..tab.player.."'", callback)
 end
 
 tab.playerctl_previous = function(callback)
-	awful.spawn.easy_async("playerctl previous", callback)
+	awful.spawn.easy_async("playerctl previous -p '"..tab.player.."'", callback)
+end
+
+tab.playerctl_next_player = function(callback, skip_func)
+	if not skip_func then skip_func = function(i) return i+1 end end
+	local cmd = "playerctl -l"
+
+	awful.spawn.easy_async(cmd, function(stdout)
+		local players = {}
+		local next_index = -1
+		local next_player = ""
+		for str in stdout:gmatch("[^\n]+") do
+			table.insert(players, str)
+		end
+		if tab.player == "" then
+			tab.player = players[1] or ""
+		end
+
+		for i, p in ipairs(players) do
+			if p == tab.player then
+				next_index = ((skip_func(i)-1) % (#players))+1
+			end
+		end
+
+		next_player = players[next_index] or ""
+		tab.player = next_player
+		callback()
+	end)
+end
+
+tab.playerctl_previous_player = function(callback)
+	tab.playerctl_next_player(callback, function(i) return i-1 end)
 end
 
 return tab

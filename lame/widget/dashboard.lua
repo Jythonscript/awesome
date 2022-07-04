@@ -396,6 +396,16 @@ music_image:buttons(gears.table.join(
 	end),
 	awful.button({}, 5, function ()
 		lame.widget.music.playerctl_previous(music_text_update)
+	end),
+	awful.button({}, 8, function ()
+		lame.widget.music.playerctl_previous_player(function ()
+			music_text_update()
+		end)
+	end),
+	awful.button({}, 9, function ()
+		lame.widget.music.playerctl_next_player(function ()
+			music_text_update()
+		end)
 	end)
 ))
 
