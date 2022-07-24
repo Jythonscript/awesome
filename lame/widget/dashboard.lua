@@ -223,11 +223,6 @@ firefox_textbox.font = icon_font
 local firefox_box = create_boxed_widget(firefox_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(firefox_textbox, firefox_box, "#ff9400", "firefox")
 
-local chromium_textbox = wibox.widget.textbox(utf8.char(0xf268))
-chromium_textbox.font = icon_font
-local chromium_box = create_boxed_widget(chromium_textbox, dpi(100), dpi(100), box_background)
-launcher_setup(chromium_textbox, chromium_box, "#4688f4", "chromium")
-
 local terminal_textbox = wibox.widget.textbox(utf8.char(0xf120))
 terminal_textbox.font = icon_font
 local terminal_box = create_boxed_widget(terminal_textbox, dpi(100), dpi(100), box_background)
@@ -237,6 +232,11 @@ local discord_textbox = wibox.widget.textbox(utf8.char(0xf392))
 discord_textbox.font = icon_font
 local discord_box = create_boxed_widget(discord_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(discord_textbox, discord_box, "#5865f2", "discord")
+
+local todoist_textbox = wibox.widget.textbox(utf8.char(0xf0ca))
+todoist_textbox.font = icon_font
+local todoist_box = create_boxed_widget(todoist_textbox, dpi(100), dpi(100), box_background)
+launcher_setup(todoist_textbox, todoist_box, "#4688f4", "flatpak run com.todoist.Todoist")
 
 local steam_textbox = wibox.widget.textbox(utf8.char(0xf3f6))
 steam_textbox.font = icon_font
@@ -302,13 +302,12 @@ local music_widget = wibox.widget {
 			},
 			widget = wibox.container.background(),
 			forced_width = dpi(280),
-			-- forced_height = dpi(100),
 			shape_clip = true,
 			shape = helpers.rrect(box_radius),
 			bg = dark_text_color,
 			align = "center"
 		},
-		helpers.vertical_pad(dpi(40)),
+		helpers.vertical_pad(dpi(30)),
 		{
 			font = medium_font,
 			text = "...",
@@ -526,9 +525,9 @@ dashboard:setup {
 			},
 			{
 				firefox_box,
-				chromium_box,
 				terminal_box,
 				discord_box,
+				todoist_box,
 				steam_box,
 				layout = wibox.layout.flex.vertical
 			},
