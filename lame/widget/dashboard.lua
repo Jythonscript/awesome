@@ -145,6 +145,11 @@ dashboard:connect_signal("property::visible", function ()
 		lame.widget.pacman.num_upgradable_callback(function (output)
 			pacman_textbox:set_markup(markup.font(big_font, output))
 		end)
+		lame.widget.pacman.date_callback(function (d)
+			local total_sec = os.difftime(os.time(), d)
+			local days = math.floor(total_sec / 60 / 60 / 24)
+			pacman_date_textbox.text = days .. " days out-of-date"
+		end)
 	end
 end)
 
@@ -200,7 +205,7 @@ local launcher_setup = function(textbox, box, color, program)
 		textbox.text = textbox.text
 	end)
 	box:buttons(gears.table.join(
-		awful.button({}, 1, function ()
+		awful.button({}, keys.mouse1, function ()
 			awful.spawn(program)
 		end)
 	))
@@ -246,7 +251,7 @@ gaming_textbox.font = icon_font
 gaming_textbox:set_markup(markup.fontfg(icon_font, gaming_off_color, utf8.char(0xf11b)))
 local gaming_box = create_boxed_widget(gaming_textbox, dpi(100), dpi(100), box_background)
 gaming_box:buttons(gears.table.join(
-	awful.button({}, 1, function ()
+	awful.button({}, keys.mouse1, function ()
 		gaming_on = not gaming_on
 		if gaming_on then
 			gaming_textbox:set_markup(markup.fg.color(gaming_on_color, gaming_textbox.text))
@@ -364,19 +369,19 @@ local music_text_update = function()
 end
 
 music_playpause_button:buttons(gears.table.join(
-	awful.button({}, 1, function ()
+	awful.button({}, keys.mouse1, function ()
 		lame.widget.music.playerctl_play_pause(music_text_update)
 	end)
 ))
 
 music_forward_button:buttons(gears.table.join(
-	awful.button({}, 1, function ()
+	awful.button({}, keys.mouse1, function ()
 		lame.widget.music.playerctl_next(music_text_update)
 	end)
 ))
 
 music_backward_button:buttons(gears.table.join(
-	awful.button({}, 1, function ()
+	awful.button({}, keys.mouse1, function ()
 		lame.widget.music.playerctl_previous(music_text_update)
 	end)
 ))
@@ -388,21 +393,21 @@ awful.spawn.with_line_callback("playerctl metadata -F --format '{{status}} {{tit
 })
 
 music_image:buttons(gears.table.join(
-	awful.button({}, 1, function ()
+	awful.button({}, keys.mouse1, function ()
 		lame.widget.music.playerctl_play_pause(music_text_update)
 	end),
-	awful.button({}, 4, function ()
+	awful.button({}, keys.mwheelup, function ()
 		lame.widget.music.playerctl_next(music_text_update)
 	end),
-	awful.button({}, 5, function ()
+	awful.button({}, keys.mwheeldown, function ()
 		lame.widget.music.playerctl_previous(music_text_update)
 	end),
-	awful.button({}, 8, function ()
+	awful.button({}, keys.mouse4, function ()
 		lame.widget.music.playerctl_previous_player(function ()
 			music_text_update()
 		end)
 	end),
-	awful.button({}, 9, function ()
+	awful.button({}, keys.mouse5, function ()
 		lame.widget.music.playerctl_next_player(function ()
 			music_text_update()
 		end)
@@ -474,12 +479,12 @@ local volume_box_update = function(vol)
 end
 
 volume_box:buttons(gears.table.join(
-	awful.button({}, 4, function ()
+	awful.button({}, keys.mwheelup, function ()
 		lame.widget.volume.inc(2, function (vol)
 			volume_box_update(vol)
 		end)
 	end),
-	awful.button({}, 5, function ()
+	awful.button({}, keys.mwheeldown, function ()
 		lame.widget.volume.dec(2, function (vol)
 			volume_box_update(vol)
 		end)
@@ -535,7 +540,7 @@ dashboard:setup {
 }
 
 dashboard:buttons(gears.table.join(
-	awful.button({}, 2, function ()
+	awful.button({}, keys.mouse3, function ()
 		table.toggle()
 	end)
 ))

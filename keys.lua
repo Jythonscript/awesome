@@ -11,10 +11,17 @@ local beautiful = require("beautiful")
 
 local prefs = require("prefs")
 
+local keys = {}
+
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-
-local keys = {}
+keys.mouse1 = 1
+keys.mouse2 = 3
+keys.mouse3 = 2
+keys.mouse4 = 8
+keys.mouse5 = 9
+keys.mwheelup = 4
+keys.mwheeldown = 5
 
 -- {{{ Key bindings
 keys.globalkeys = gears.table.join(
@@ -817,45 +824,6 @@ keys.clientkeys = gears.table.join(
 	{description = "switch to next blank tag", group = "tag"})
 )
 
-keys.taglist_buttons = gears.table.join(
-	awful.button({ }, 1, function(t) t:view_only() end),
-	awful.button({ modkey }, 1, function(t)
-		if client.focus then
-			client.focus:move_to_tag(t)
-		end
-	end),
-	awful.button({ }, 3, awful.tag.viewtoggle),
-	awful.button({ modkey }, 3, function(t)
-		if client.focus then
-			client.focus:toggle_tag(t)
-		end
-	end)
-)
-
-keys.tasklist_buttons = gears.table.join(
-	awful.button({ }, 1, function (c)
-		if c == client.focus then
-			c.minimized = true
-		else
-			-- Without this, the following
-			-- :isvisible() makes no sense
-			c.minimized = false
-			if not c:isvisible() and c.first_tag then
-				c.first_tag:view_only()
-			end
-			-- This will also un-minimize
-			-- the client, if needed
-			client.focus = c
-			c:raise()
-		end
-	end),
-	awful.button({ }, 3, function(c)
-		c:kill()
-	end),
-	awful.button({ }, 8, helpers.stackprev),
-	awful.button({ }, 9, helpers.stacknext)
-)
-
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
@@ -1221,11 +1189,6 @@ keys.quickresize_keys = gears.table.join(keys.globalkeys, keys.quickresize_keys,
 keys.quickfirefox_keys = gears.table.join(keys.globalkeys, keys.quickfirefox_keys, keys.mode_keys)
 keys.quickmedia_keys = gears.table.join(keys.globalkeys, keys.quickmedia_keys, keys.mode_keys)
 
-keys.clientbuttons = gears.table.join(
-    awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
-    awful.button({ modkey }, 1, awful.mouse.client.move),
-    awful.button({ modkey }, 3, awful.mouse.client.resize))
-
 -- append platform shortcuts
 if not prefs.laptop then
 	keys.globalkeys = gears.table.join(keys.globalkeys, pckeys)
@@ -1234,14 +1197,58 @@ else
 end
 
 -- {{{ Mouse bindings
--- buttons for the titlebar
+keys.clientbuttons = gears.table.join(
+    awful.button({ }, keys.mouse1, function (c) client.focus = c; c:raise() end),
+    awful.button({ modkey }, keys.mouse1, awful.mouse.client.move),
+    awful.button({ modkey }, keys.mouse2, awful.mouse.client.resize)
+)
+
+keys.taglist_buttons = gears.table.join(
+	awful.button({ }, keys.mouse1, function(t) t:view_only() end),
+	awful.button({ modkey }, keys.mouse1, function(t)
+		if client.focus then
+			client.focus:move_to_tag(t)
+		end
+	end),
+	awful.button({ }, keys.mouse2, awful.tag.viewtoggle),
+	awful.button({ modkey }, keys.mouse2, function(t)
+		if client.focus then
+			client.focus:toggle_tag(t)
+		end
+	end)
+)
+
+keys.tasklist_buttons = gears.table.join(
+	awful.button({ }, keys.mouse1, function (c)
+		if c == client.focus then
+			c.minimized = true
+		else
+			-- Without this, the following
+			-- :isvisible() makes no sense
+			c.minimized = false
+			if not c:isvisible() and c.first_tag then
+				c.first_tag:view_only()
+			end
+			-- This will also un-minimize
+			-- the client, if needed
+			client.focus = c
+			c:raise()
+		end
+	end),
+	awful.button({ }, keys.mouse2, function(c)
+		c:kill()
+	end),
+	awful.button({ }, keys.mouse4, function () helpers.stackprev() end),
+	awful.button({ }, keys.mouse5, function () helpers.stacknext() end)
+)
+
 keys.titlebar_buttons = gears.table.join(
-	awful.button({ }, 1, function()
+	awful.button({ }, keys.mouse1, function()
 		local c = mouse.object_under_pointer()
 		c:emit_signal("request::activate", "titlebar", {raise = true})
 		awful.mouse.client.move(c)
 	end),
-	awful.button({ }, 3, function()
+	awful.button({ }, keys.mouse2, function()
 		local c = mouse.object_under_pointer()
 		c:emit_signal("request::activate", "titlebar", {raise = true})
 		awful.mouse.client.resize(c)
@@ -1249,22 +1256,22 @@ keys.titlebar_buttons = gears.table.join(
 )
 
 keys.wibox_buttons = gears.table.join(
-	awful.button({}, 2, function ()
-		lame.widget.dashboard.toggle()
-	end),
-    awful.button({ }, 4, function ()
+	awful.button({}, keys.mwheelup, function ()
 		awful.tag.viewnext()
 	end),
-    awful.button({ }, 5, function ()
+	awful.button({}, keys.mwheeldown, function ()
 		awful.tag.viewprev()
+	end),
+	awful.button({}, keys.mouse3, function ()
+		lame.widget.dashboard.toggle()
 	end)
 )
 
 keys.root_buttons = gears.table.join(
-	awful.button({ }, 2, function () lame.widget.dashboard.toggle() end),
-    awful.button({ }, 3, function () lame.widget.main_menu:toggle() end),
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
+    awful.button({ }, keys.mouse2, function () lame.widget.main_menu:toggle() end),
+	awful.button({ }, keys.mouse3, function () lame.widget.dashboard.toggle() end),
+    awful.button({ }, keys.mwheelup, awful.tag.viewnext),
+    awful.button({ }, keys.mwheeldown, awful.tag.viewprev)
 )
 -- }}}
 

@@ -1,6 +1,7 @@
 local wibox = require("wibox")
 local awful = require("awful")
 local markup = require("lame.markup")
+local keys = require("keys")
 
 -- ALSA volume
 local volume = {}
@@ -88,19 +89,19 @@ end
 volume.update()
 
 volume.widget:buttons(awful.util.table.join(
-    awful.button({}, 1, function() -- left click
+    awful.button({}, keys.mouse1, function()
         awful.spawn("pavucontrol")
     end),
-    awful.button({}, 2, function() -- middle click
-		volume.toggle_mic_mute()
-    end),
-    awful.button({}, 3, function() -- right click
+    awful.button({}, keys.mouse2, function()
 		volume.toggle_mute()
     end),
-    awful.button({}, 4, function() -- scroll up
+    awful.button({}, keys.mouse3, function()
+		volume.toggle_mic_mute()
+    end),
+    awful.button({}, keys.mwheelup, function()
 		volume.inc(1)
     end),
-    awful.button({}, 5, function() -- scroll down
+    awful.button({}, keys.mwheeldown, function()
 		volume.dec(1)
     end)
 ))

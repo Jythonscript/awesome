@@ -4,6 +4,7 @@ local lain = require("lain")
 local gears = require("gears")
 local beautiful = require("beautiful")
 local markup = require("lame.markup")
+local keys = require("keys")
 
 local mpdicon = wibox.widget.imagebox()
 local minimized = false
@@ -143,18 +144,18 @@ mpd.volume = function(perc)
 end
 
 mpd.widget:buttons(gears.table.join(
-	awful.button({ }, 1, function()
+	awful.button({ }, keys.mouse1, function()
 		mpd.toggle()
 	end),
-	awful.button({ }, 2, function()
-	end),
-	awful.button({ }, 3, function()
+	awful.button({ }, keys.mouse2, function()
 		minimized = not minimized
 	end),
-	awful.button({ }, 4, function()
+	awful.button({ }, keys.mouse3, function()
+	end),
+	awful.button({ }, keys.mwheelup, function()
 		mpd.next()
 	end),
-	awful.button({ }, 5, function()
+	awful.button({ }, keys.mwheeldown, function()
 		mpd.prev()
 	end)
 ))

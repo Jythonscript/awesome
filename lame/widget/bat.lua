@@ -4,6 +4,7 @@ local markup = require("lame.markup")
 local beautiful = require("beautiful")
 local naughty = require("naughty")
 local prefs = require("prefs")
+local keys = require("keys")
 
 local bat = lain.widget.bat({
 	settings = function()
@@ -14,23 +15,11 @@ local bat = lain.widget.bat({
 })
 
 bat.widget:buttons(awful.util.table.join(
-	awful.button({}, 1, function() -- left click
+	awful.button({}, keys.mouse1, function()
 		-- update battery percentage number in widget
 		bat.update()
 		battery_info_toggle()
 		battery_info_toggle()
-	end),
-	awful.button({}, 2, function() -- middle click
-
-	end),
-	awful.button({}, 3, function() -- right click
-
-	end),
-	awful.button({}, 4, function() -- scroll up
-
-	end),
-	awful.button({}, 5, function() -- scroll down
-
 	end)
 ))
 
