@@ -141,7 +141,8 @@ pacman_box:buttons(gears.table.join(
 		end)
 		lame.widget.pacman.date_callback(function (d)
 			local total_sec = os.difftime(os.time(), d)
-			local days = math.floor(total_sec / 60 / 60 / 24)
+			local days = total_sec / 60 / 60 / 24
+			days = math.floor(days + 0.5)
 			pacman_date_textbox.text = days .. " days out-of-date"
 		end)
 	end)
@@ -154,7 +155,8 @@ dashboard:connect_signal("property::visible", function ()
 		end)
 		lame.widget.pacman.date_callback(function (d)
 			local total_sec = os.difftime(os.time(), d)
-			local days = math.floor(total_sec / 60 / 60 / 24)
+			local days = total_sec / 60 / 60 / 24
+			days = math.floor(days + 0.5)
 			pacman_date_textbox.text = days .. " days out-of-date"
 		end)
 	end
