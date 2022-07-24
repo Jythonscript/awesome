@@ -112,19 +112,21 @@ local user_box = create_boxed_widget(user_widget, dpi(300), dpi(340), box_backgr
 
 -- pacman widget
 local pacman_textbox = wibox.widget.textbox()
-pacman_textbox:set_markup(markup.font(big_font, "..."))
+local pacman_date_textbox = wibox.widget.textbox()
 local pacman_widget = wibox.widget {
 	{
 		align = "center",
 		valign = "center",
-		font = beautiful.font,
+		font = big_font,
+		text = "...",
 		widget = pacman_textbox
 	},
 	{
 		align = "center",
 		valign = "center",
-		markup = markup.fontfg(medium_font, "#FFFFFF", "out-of-date packages"),
-		widget = wibox.widget.textbox()
+		font = medium_font,
+		text = "... days out-of-date",
+		widget = pacman_date_textbox
 	},
 	spacing = dpi(6),
 	layout = wibox.layout.fixed.vertical
@@ -132,10 +134,15 @@ local pacman_widget = wibox.widget {
 
 local pacman_box = create_boxed_widget(pacman_widget, dpi(200), dpi(100), box_background)
 pacman_box:buttons(gears.table.join(
-	awful.button({}, 1, function ()
+	awful.button({}, keys.mouse1, function ()
 		lame.widget.pacman.refresh()
 		lame.widget.pacman.num_upgradable_callback(function (output)
 			pacman_textbox:set_markup(markup.font(big_font, output))
+		end)
+		lame.widget.pacman.date_callback(function (d)
+			local total_sec = os.difftime(os.time(), d)
+			local days = math.floor(total_sec / 60 / 60 / 24)
+			pacman_date_textbox.text = days .. " days out-of-date"
 		end)
 	end)
 ))

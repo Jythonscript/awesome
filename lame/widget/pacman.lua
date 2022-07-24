@@ -46,6 +46,17 @@ pacman.num_upgradable_callback = function(callback)
 	pacman.checkupdates_async(callback)
 end
 
+pacman.date_callback = function(callback)
+	local cmd = "grep -P \"Running 'pacman (-Syu|-S -y -u)\" /var/log/pacman.log | tail -n 1"
+	awful.spawn.easy_async_with_shell(cmd, function(stdout)
+		if stdout then
+			y, mo, d, h, mi, s = string.match(stdout, "%[(%d+)%-(%d+)%-(%d+)T(%d+):(%d+):(%d+)")
+			date = os.time { year=y, month=mo, day=d, hour=h, min=mi, sec=s }
+			callback(date)
+		end
+	end)
+end
+
 pacman.widget:connect_signal("mouse::enter", function()
 	local cmd = "grep \"Running 'pacman -Syu\" /var/log/pacman.log | tail -n 1"
 	awful.spawn.easy_async_with_shell(cmd, function(stdout)
@@ -61,7 +72,6 @@ pacman.widget:connect_signal("mouse::enter", function()
 		end
 
 		pacman_t.text = text
-		--pacman_t.markup = lame.markup(beautiful.tooltip_fg, text)
 	end)
 end)
 
