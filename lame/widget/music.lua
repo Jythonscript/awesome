@@ -67,20 +67,26 @@ playerctl metadata -p "]]..tab.player..[[" --format '{{status}}
 			player_now.artUrl = nil
 		end
 
-		callback(player_now)
+		if callback then callback(player_now) end
 	end)
 end
 
 tab.playerctl_play_pause = function(callback)
-	awful.spawn.easy_async("playerctl play-pause -p '"..tab.player.."'", callback)
+	awful.spawn.easy_async("playerctl play-pause -p '"..tab.player.."'", function ()
+		if callback then callback() end
+	end)
 end
 
 tab.playerctl_next = function(callback)
-	awful.spawn.easy_async("playerctl next -p '"..tab.player.."'", callback)
+	awful.spawn.easy_async("playerctl next -p '"..tab.player.."'", function ()
+		if callback then callback() end
+	end)
 end
 
 tab.playerctl_previous = function(callback)
-	awful.spawn.easy_async("playerctl previous -p '"..tab.player.."'", callback)
+	awful.spawn.easy_async("playerctl previous -p '"..tab.player.."'", function()
+		if callback then callback() end
+	end)
 end
 
 tab.playerctl_next_player = function(callback, skip_func)
@@ -106,12 +112,32 @@ tab.playerctl_next_player = function(callback, skip_func)
 
 		next_player = players[next_index] or ""
 		tab.player = next_player
-		callback()
+		if callback then callback() end
 	end)
 end
 
 tab.playerctl_previous_player = function(callback)
 	tab.playerctl_next_player(callback, function(i) return i-1 end)
+end
+
+tab.playerctl_stop = function(callback)
+	local cmd = "playerctl stop"
+	awful.spawn.easy_async(cmd, function()
+		if callback then callback() end
+	end)
+end
+
+tab.playerctl_position = function(amount, callback)
+	local cmd = "playerctl position "
+	if amount > 0 then
+		cmd = cmd .. "+" .. amount
+	else
+		cmd = cmd .. "-" .. amount
+	end
+
+	awful.spawn.easy_async(cmd, function()
+		if callback then callback() end
+	end)
 end
 
 return tab
