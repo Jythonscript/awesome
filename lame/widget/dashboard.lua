@@ -7,6 +7,7 @@ local lame = require("lame")
 local prefs = require("prefs")
 local gears = require("gears")
 local keys = require("keys")
+local naughty = require("naughty")
 
 local dpi = prefs.dpi
 local font_dpi = prefs.font_dpi or helpers.font_dpi
@@ -133,6 +134,7 @@ local pacman_widget = wibox.widget {
 }
 
 local pacman_box = create_boxed_widget(pacman_widget, dpi(200), dpi(100), box_background)
+local pacman_notification = nil
 pacman_box:buttons(gears.table.join(
 	awful.button({}, keys.mouse1, function ()
 		lame.widget.pacman.refresh()
@@ -144,6 +146,21 @@ pacman_box:buttons(gears.table.join(
 			local days = total_sec / 60 / 60 / 24
 			days = math.floor(days + 0.5)
 			pacman_date_textbox.text = days .. " days out-of-date"
+		end)
+	end),
+	awful.button({}, keys.mouse2, function ()
+		lame.widget.pacman.upgrade_list_callback(function (stdout)
+			if pacman_notification then
+				pacman_notification.visible = false
+				naughty.destroy(pacman_notification)
+				pacman_notification = nil
+			else
+				pacman_notification = naughty.notify {
+					text = stdout:gsub('%s*$',''),
+					font = small_font,
+					timeout = 0
+				}
+			end
 		end)
 	end)
 ))
@@ -579,6 +596,15 @@ table.toggle = function ()
 	local s = awful.screen.focused()
 	dashboard.screen = s
 	dashboard.visible = not dashboard.visible
+
+	-- cleanup
+	if not dashboard.visible then
+		if pacman_notification then
+			pacman_notification.visible = false
+			naughty.destroy(pacman_notification)
+			pacman_notification = false
+		end
+	end
 end
 
 return table

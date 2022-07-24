@@ -16,7 +16,7 @@ end)
 pacman_t = awful.tooltip {}
 pacman_t:add_to_object(pacman.widget)
 
--- helper recursion function for num_upgradable_callback
+-- helper recursion function for upgrade_list_callback
 pacman.checkupdates_async = function(callback_arg)
 	awful.spawn.easy_async("checkupdates", function(stdout, stderr, reason, exit_code)
 		if exit_code == 1 then
@@ -31,19 +31,24 @@ pacman.checkupdates_async = function(callback_arg)
 			}
 			return
 		else
-			local _, lines = stdout:gsub('\n','\n')
-			callback_arg(lines)
+			callback_arg(stdout)
 		end
 	end)
 end
 
-pacman.num_upgradable_callback = function(callback)
+pacman.upgrade_list_callback = function(callback)
 	if pacman.last_output then
-		local _, lines = pacman.last_output:gsub('\n','\n')
-		callback(lines)
+		callback(pacman.last_output)
 		return
 	end
 	pacman.checkupdates_async(callback)
+end
+
+pacman.num_upgradable_callback = function(callback)
+	pacman.upgrade_list_callback(function (stdout)
+		local _, lines = stdout:gsub('\n','\n')
+		callback(lines)
+	end)
 end
 
 pacman.date_callback = function(callback)
