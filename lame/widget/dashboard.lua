@@ -270,6 +270,27 @@ gaming_box:buttons(gears.table.join(
 	end)
 ))
 
+-- awake widget
+local awake_on = false
+local awake_on_color = '#ffffff'
+local awake_off_color = dark_text_color
+local awake_textbox = wibox.widget.textbox()
+awake_textbox.font = icon_font
+awake_textbox:set_markup(markup.fontfg(icon_font, awake_off_color, utf8.char(0xf06e)))
+local awake_box = create_boxed_widget(awake_textbox, dpi(100), dpi(100), box_background)
+awake_box:buttons(gears.table.join(
+	awful.button({}, keys.mouse1, function ()
+		awake_on = not awake_on
+		if awake_on then
+			awake_textbox:set_markup(markup.fg.color(awake_on_color, awake_textbox.text))
+			awful.spawn("xset s off -dpms")
+		else
+			awake_textbox:set_markup(markup.fg.color(awake_off_color, awake_textbox.text))
+			awful.spawn("xset s on dpms")
+		end
+	end)
+))
+
 -- fortune widget
 -- TODO
 
@@ -513,6 +534,7 @@ dashboard:setup {
 				{
 					lock_box,
 					gaming_box,
+					awake_box,
 					layout = wibox.layout.flex.horizontal
 				},
 				pacman_box,
