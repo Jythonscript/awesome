@@ -43,15 +43,15 @@ end
 
 volume.set = function(percent)
 	if not percent then percent = 0 end
-	awful.spawn.easy_async("amixer set Master " .. percent .. "%", volume.update)
+	awful.spawn.easy_async("amixer set Master " .. percent .. "%", function () volume.update() end)
 end
 
 volume.toggle_mute = function()
-	awful.spawn.easy_async("amixer -q set Master toggle", volume.update)
+	awful.spawn.easy_async("amixer -q set Master toggle", function () volume.update() end)
 end
 
 volume.toggle_mic_mute = function()
-	awful.spawn.easy_async("amixer set Capture toggle", volume.update)
+	awful.spawn.easy_async("amixer set Capture toggle", function () volume.update() end)
 end
 
 volume.update = function(callback)

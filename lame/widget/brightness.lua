@@ -2,19 +2,13 @@ local awful = require("awful")
 
 local brightness = {}
 
-brightness.increase = function(args)
-	local amount
-	if not args.amount then
-		amount = 5
-	end
+brightness.increase = function(amount)
+	if not amount then amount = 5 end
 	awful.util.spawn("xbacklight -inc " .. amount)
 end
 
-brightness.decrease = function(args)
-	local amount
-	if not args.amount then
-		amount = 5
-	end
+brightness.decrease = function(amount)
+	if not amount then amount = 5 end
 	awful.util.spawn("xbacklight -dec " .. amount)
 end
 
