@@ -449,4 +449,32 @@ helpers.notify = function(mytext)
 	}
 end
 
+helpers.get_screenshot_name = function()
+	return os.getenv("HOME") ..
+		"/Pictures/Screenshots/" ..
+		os.date("%Y-%m-%d@%H:%M:%S") .. ".png"
+end
+
+helpers.copy_file = function(fn)
+	awful.spawn.with_shell("xclip -selection clipboard -target image/png -i " .. fn)
+end
+
+helpers.screenshot = function()
+	local fn = helpers.get_screenshot_name()
+	local s_geo = mouse.screen.geometry
+	awful.spawn.easy_async("import -window root -crop " ..
+		s_geo.width .. "x" .. s_geo.height ..
+		"+" .. s_geo.x .. "+" .. s_geo.y ..
+		" " .. fn, function ()
+			helpers.copy_file(fn)
+	end)
+end
+
+helpers.select_screenshot = function()
+	local fn = helpers.get_screenshot_name()
+	awful.spawn.easy_async("import " .. fn, function ()
+		helpers.copy_file(fn)
+	end)
+end
+
 return helpers

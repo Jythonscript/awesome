@@ -40,26 +40,14 @@ keys.globalkeys = gears.table.join(
         {description = "toggle secondary mouse pressed", group = "custom"}),
 	awful.key({ modkey }, "p",
 		function()
-			local s_geo = mouse.screen.geometry
-			awful.spawn("import -window root -crop " ..
-			s_geo.width .. "x" .. s_geo.height ..
-			"+" .. s_geo.x .. "+" .. s_geo.y ..
-			" " .. os.getenv("HOME") .. "/Pictures/Screenshots/" ..
-			os.date("%Y-%m-%d@%H:%M:%S") .. ".png")
+			helpers.screenshot()
 		end,
 		{description = "single display screenshot", group = "hotkeys"}),
-    awful.key({ modkey, "Shift" }, "p",
+	awful.key({ modkey }, "s",
 		function()
-			os.execute("scrot -e 'mv $f ~/Pictures/Screenshots/'")
-			naughty.notify({text = "full screenshot taken"})
+			helpers.select_screenshot()
 		end,
-        {description = "take a scrot screenshot", group = "hotkeys"}),
-
-	awful.key({ modkey }, "s", function()
-		awful.spawn.with_shell("sleep 0.2;scrot -s -fe 'mv $f ~/Pictures/Screenshots/';zsh;")
-	end,
-              {description = "take a scrot screenshot with selection", group = "hotkeys"}),
-
+		{description = "selection screenshot", group = "hotkeys"}),
 	awful.key({ modkey, "Shift" }, "s",
 		function()
 			doSloppyFocus = not doSloppyFocus
