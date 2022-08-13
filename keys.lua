@@ -487,6 +487,16 @@ keys.globalkeys = gears.table.join(
 			lame.widget.mpd.volume(-5)
         end,
         {description = "mpd volume down", group = "mpd"}),
+	awful.key({ modkey }, "XF86AudioRaiseVolume",
+		function ()
+			lame.widget.mpd.volume(5)
+		end,
+		{description = "mpd volume down", group = "mpd"}),
+	awful.key({ modkey }, "XF86AudioLowerVolume",
+		function ()
+			lame.widget.mpd.volume(-5)
+		end,
+        {description = "mpd volume down", group = "mpd"}),
     -- User programs
     awful.key({ modkey }, "q",
 		function ()
