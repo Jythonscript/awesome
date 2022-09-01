@@ -17,7 +17,9 @@ pacman_t = awful.tooltip {}
 pacman_t:add_to_object(pacman.widget)
 
 -- helper recursion function for upgrade_list_callback
-pacman.checkupdates_async = function(callback_arg)
+pacman.checkupdates_async = function(callback_arg, max_tries)
+	if not max_tries then max_tries = 5 end
+	if max_tries <= 0 then return end
 	awful.spawn.easy_async("checkupdates", function(stdout, stderr, reason, exit_code)
 		if exit_code == 1 then
 			gears.timer {
@@ -26,7 +28,7 @@ pacman.checkupdates_async = function(callback_arg)
 				single_shot = true,
 				call_now = true,
 				callback = function ()
-					pacman.checkupdates_async(callback_arg)
+					pacman.checkupdates_async(callback_arg, max_tries-1)
 				end
 			}
 			return
