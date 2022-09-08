@@ -455,7 +455,7 @@ helpers.get_screenshot_name = function()
 		os.date("%Y-%m-%d@%H:%M:%S") .. ".png"
 end
 
-helpers.copy_file = function(fn)
+helpers.copy_image = function(fn)
 	awful.spawn.with_shell("xclip -selection clipboard -target image/png -i " .. fn)
 end
 
@@ -465,15 +465,17 @@ helpers.screenshot = function()
 	awful.spawn.easy_async("import -window root -crop " ..
 		s_geo.width .. "x" .. s_geo.height ..
 		"+" .. s_geo.x .. "+" .. s_geo.y ..
-		" " .. fn, function ()
-			helpers.copy_file(fn)
-	end)
+		" " .. fn,
+			function ()
+				helpers.copy_image(fn)
+			end
+	)
 end
 
 helpers.select_screenshot = function()
 	local fn = helpers.get_screenshot_name()
 	awful.spawn.easy_async("import " .. fn, function ()
-		helpers.copy_file(fn)
+		helpers.copy_image(fn)
 	end)
 end
 
