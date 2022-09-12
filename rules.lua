@@ -31,7 +31,7 @@ awful.rules.rules = {
     { rule = { class = "Gimp", role = "gimp-image-window" },
           properties = { maximized = true } },
 
-    { rule = { class = "Thunderbird" },
+    { rule = { class = "thunderbird" },
       properties = { tag = beautiful.tagnames[2], titlebars_enabled = false } },
 
     { rule = { class = "discord" },
