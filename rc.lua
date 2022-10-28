@@ -70,7 +70,7 @@ helpers.run_once({
 	{"mpd"},
 	{"mygestures --device 'Virtual core pointer' --without-brush"},
 	{prefs.compositor},
-	{"alacritty --class=hidden,Alacritty"},
+	{"alacritty --class=Alacritty,hidden"},
 })
 
 -- append platform run_once
