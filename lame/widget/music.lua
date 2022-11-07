@@ -8,6 +8,10 @@ tab.mpd_toggle = function()
 	awful.spawn("mpc toggle")
 end
 
+tab.mpd_stop = function()
+	awful.spawn("mpc stop")
+end
+
 tab.mpd_next = function()
 	awful.spawn("mpc next")
 end

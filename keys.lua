@@ -448,53 +448,53 @@ keys.globalkeys = gears.table.join(
 			lame.widget.music.playerctl_play_pause()
 		end,
 		{description = "playerctl play-pause", group = "custom"}),
-    awful.key({ altkey }, "'", function () lame.widget.mpd.toggle() end,
+    awful.key({ altkey }, "'", function () lame.widget.music.mpd_toggle() end,
         {description = "mpc toggle", group = "mpd"}),
-    awful.key({ altkey }, ";", function () lame.widget.mpd.stop() end,
+    awful.key({ altkey }, ";", function () lame.widget.music.mpd_stop() end,
         {description = "mpc stop", group = "mpd"}),
     awful.key({ altkey }, "[",
         function ()
-			lame.widget.mpd.prev()
+			lame.widget.music.mpd_prev()
         end,
         {description = "mpc prev", group = "mpd"}),
     awful.key({ altkey }, "]",
         function ()
-			lame.widget.mpd.next()
+			lame.widget.music.mpd_next()
         end,
         {description = "mpc next", group = "mpd"}),
     awful.key({ altkey }, "=",
         function ()
-			lame.widget.mpd.seek(10)
+			lame.widget.music.mpd_seek(10)
         end,
         {description = "mpc seek +10", group = "mpd"}),
     awful.key({ altkey }, "-",
         function ()
-			lame.widget.mpd.seek(-10)
+			lame.widget.music.mpd_seek(-10)
         end,
         {description = "mpc seek -10", group = "mpd"}),
 	awful.key({ altkey }, "0",
         function ()
-			lame.widget.mpd.seek(0)
+			lame.widget.music.mpd_seek(0)
         end,
         {description = "restart song", group = "mpd"}),
 	awful.key({ modkey }, "Up",
         function ()
-			lame.widget.mpd.volume(5)
+			lame.widget.music.mpd_volume(5)
         end,
         {description = "mpd volume up", group = "mpd"}),
 	awful.key({ modkey }, "Down",
         function ()
-			lame.widget.mpd.volume(-5)
+			lame.widget.music.mpd_volume(-5)
         end,
         {description = "mpd volume down", group = "mpd"}),
 	awful.key({ modkey }, "XF86AudioRaiseVolume",
 		function ()
-			lame.widget.mpd.volume(5)
+			lame.widget.music.mpd_volume(5)
 		end,
 		{description = "mpd volume down", group = "mpd"}),
 	awful.key({ modkey }, "XF86AudioLowerVolume",
 		function ()
-			lame.widget.mpd.volume(-5)
+			lame.widget.music.mpd_volume(-5)
 		end,
         {description = "mpd volume down", group = "mpd"}),
     -- User programs
@@ -1026,17 +1026,17 @@ keys.quickfirefox_keys = gears.table.join(
 
 keys.quickmedia_keys = gears.table.join(
 	awful.key({}, "s",
-		function () lame.widget.mpd.toggle () end),
+		function () lame.widget.music.mpd_toggle() end),
 	awful.key({}, "w",
-		function () lame.widget.mpd.stop() end),
+		function () lame.widget.music.mpd_stop() end),
 	awful.key({}, "d",
-		function () lame.widget.mpd.next() end),
+		function () lame.widget.music.mpd_next() end),
 	awful.key({}, "a",
-		function () lame.widget.mpd.prev() end),
+		function () lame.widget.music.mpd_prev() end),
 	awful.key({}, "q",
-		function () lame.widget.mpd.seek(-10) end),
+		function () lame.widget.music.mpd_seek(-10) end),
 	awful.key({}, "e",
-		function () lame.widget.mpd.seek(10) end),
+		function () lame.widget.music.mpd_seek(10) end),
 	awful.key({}, "1",
 		function () lame.widget.volume.dec() end),
 	awful.key({}, "2",
@@ -1054,9 +1054,9 @@ keys.quickmedia_keys = gears.table.join(
 	awful.key({ "Shift" }, "e",
 		function () lame.widget.music.playerctl_position(10) end),
 	awful.key({ "Shift" }, "1",
-		function () lame.widget.mpd.volume(-5) end),
+		function () lame.widget.music.mpd_volume(-5) end),
 	awful.key({ "Shift" }, "2",
-		function () lame.widget.mpd.volume(5) end)
+		function () lame.widget.music.mpd_volume(5) end)
 )
 
 keys.quick_keys = gears.table.join(
