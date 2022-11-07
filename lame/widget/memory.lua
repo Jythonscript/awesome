@@ -1,35 +1,30 @@
-local gears = require("gears")
 local wibox = require("wibox")
 local awful = require("awful")
+local notify = require("lame.helpers").notify
 local markup = require("lame.markup")
 
 memory = {}
 memory.widget = wibox.widget.textbox()
 
-memory.update = function()
+memory.setup = function(textcolor)
 	mem = {}
-	swap = {}
 
-	local cmd = "free --mebi"
-	awful.spawn.easy_async(cmd, function(stdout)
-		mem.total, mem.used, mem.free, mem.shared, mem.buf, mem.available
-			= string.match(stdout, "Mem:[%s]+([%d]+)[%s]+([%d]+)[%s]+([%d]+)[%s]+([%d]+)[%s]+([%d]+)[%s]+([%d]+)")
-		swap.total, swap.used, swap.free
-			= string.match(stdout, "Swap:[%s]+([%d]+)[%s]+([%d]+)[%s]+([%d]+)")
+	if not textcolor then textcolor = "#e0da37" end
 
-		local text = ""
-		if mem.used and swap.used then
-			text = string.format("%.1fG", (mem.used + swap.used) / 1024)
+	local cmd = "free --mebi --total --seconds 3"
+
+	awful.spawn.with_line_callback(cmd, {
+		stdout = function(line)
+			mem.total, mem.used, mem.free
+				= string.match(line, "Total:[%s]+([%d]+)[%s]+([%d]+)[%s]+([%d]+)")
+
+			local text = ""
+			if mem.used then
+				text = string.format("%.1fG", mem.used / 1024)
+				memory.widget:set_markup(markup(textcolor, text))
+			end
 		end
-		memory.widget:set_markup(markup("#e0da37", text))
-	end)
+	})
 end
-gears.timer({timeout = 3,
-	autostart = true,
-	call_now = true,
-	callback =memory.update
-})
-
-memory.update()
 
 return memory

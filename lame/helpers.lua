@@ -444,6 +444,9 @@ helpers.font_dpi = function (font, size)
 end
 
 helpers.notify = function(mytext)
+	if type(mytext) ~= "string" then
+		mytext = "" .. mytext
+	end
 	naughty.notify {
 		text = mytext
 	}

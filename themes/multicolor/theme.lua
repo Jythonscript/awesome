@@ -114,6 +114,9 @@ lame.widget.cal.init(mytextclock)
 --change systray monitor
 local systray = wibox.widget.systray()
 
+-- memory
+lame.widget.memory.setup()
+
 -- Eminent-like task filtering
 local orig_taglist_filter = awful.widget.taglist.filter.all
 
@@ -173,7 +176,6 @@ function theme.at_screen_connect(s)
 					layout = wibox.layout.fixed.horizontal,
 					spacing = 5,
 					lame.widget.keymodebox.widget,
-					lame.widget.mpd.widget,
 				},
 			},
 			s.mytasklist,
@@ -199,7 +201,6 @@ function theme.at_screen_connect(s)
 					layout = wibox.layout.fixed.horizontal,
 					spacing = 5,
 					lame.widget.keymodebox.widget,
-					lame.widget.mpd.widget,
 				},
 			},
 			s.mytasklist,
