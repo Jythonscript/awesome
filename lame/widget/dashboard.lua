@@ -212,15 +212,50 @@ local decorate_calendar = function(widget, flag, date)
 	return widget
 end
 
-local calendar_widget = wibox.widget {
-	date = os.date('*t'),
-	font = font_dpi("Fira Mono",15),
-	fn_embed = decorate_calendar,
-	font = small_font,
-	widget = wibox.widget.calendar.month
-}
+local calendar_offset = 0
+
+calendar_widget = wibox.widget {
+		date = os.date('*t'),
+		font = font_dpi("Fira Mono",15),
+		fn_embed = decorate_calendar,
+		font = small_font,
+		widget = wibox.widget.calendar.month
+	}
+
+function calendar_inc(offset)
+	calendar_offset = calendar_offset + offset
+	local today = os.date('*t')
+	local new_date = os.date('*t')
+	new_date.month = new_date.month + calendar_offset
+	while new_date.month > 12 do
+		new_date.month = new_date.month - 12
+		new_date.year = new_date.year + 1
+	end
+	while new_date.month < 1 do
+		new_date.month = new_date.month + 12
+		new_date.year = new_date.year - 1
+	end
+	if new_date.month ~= today.month or new_date.year ~= today.year then
+		new_date.day = nil
+	end
+	calendar_widget.date = new_date
+end
+
 
 local calendar_box = create_boxed_widget(calendar_widget, dpi(300), dpi(300), box_background)
+
+dashboard:connect_signal("property::visible", function ()
+	calendar_widget.date = os.date('*t')
+end)
+
+calendar_box:buttons(gears.table.join(
+	awful.button({}, keys.mouse1, function ()
+		calendar_inc(-1)
+	end),
+	awful.button({}, keys.mouse2, function ()
+		calendar_inc(1)
+	end)
+))
 
 -- program launchers
 local launcher_setup = function(textbox, box, color, program)
