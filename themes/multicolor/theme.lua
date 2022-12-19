@@ -117,6 +117,9 @@ local systray = wibox.widget.systray()
 -- memory
 lame.widget.memory.setup()
 
+-- cpu
+lame.widget.cpu.init()
+
 -- Eminent-like task filtering
 local orig_taglist_filter = awful.widget.taglist.filter.all
 
@@ -164,7 +167,7 @@ function theme.at_screen_connect(s)
 
 	s.mywibox:buttons(keys.wibox_buttons)
 
-    -- Add widgets to the wibox
+	-- PC wibox widgets
 	if not prefs.laptop then
 		s.mywibox:setup {
 			layout = wibox.layout.align.horizontal,
@@ -190,7 +193,7 @@ function theme.at_screen_connect(s)
 			},
 		}
 	else
-		-- Add widgets to the wibox
+		-- Laptop wibox widgets
 		s.mywibox:setup {
 			layout = wibox.layout.align.horizontal,
 			{ -- Left widgets

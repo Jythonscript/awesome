@@ -482,4 +482,8 @@ helpers.select_screenshot = function()
 	end)
 end
 
+helpers.floor_mult = function(num, nearest)
+	return math.floor(num / nearest) * nearest
+end
+
 return helpers

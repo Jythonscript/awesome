@@ -332,6 +332,7 @@ keys.globalkeys = gears.table.join(
             local cmd = "find ~/.config/awesome/ -iname '*.lua' -exec luac -o - {} \\;"
             awful.spawn.easy_async_with_shell(cmd, function(stdout, stderr, reason, exit_code)
                 if stderr == "" then
+					awful.spawn("killall cpu-usage")
                     awesome.restart()
                 else
                     naughty.notify({
