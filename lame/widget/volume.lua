@@ -8,14 +8,15 @@ local volume = {}
 volume.widget = wibox.widget.textbox()
 
 volume.volume_callback = function(callback)
-	local cmd = "amixer get Master"
+	local cmd = "wpctl get-volume @DEFAULT_AUDIO_SINK@"
 	awful.spawn.easy_async_with_shell(cmd, function(stdout)
 
-		local vol, playback = string.match(stdout, "Playback [%d]+ %[([%d]+)%%%] %[([%l]*)")
+		local vol = string.match(stdout, "Volume: (%S+)")
 
-		if not vol or not playback then return end
+		if not vol then return end
 
-		vol = tonumber(vol)
+		vol = math.floor(tonumber(vol) * 100)
+
 		callback(vol)
 	end)
 end
@@ -27,7 +28,7 @@ volume.inc = function(percent, callback)
 	else
 		percent = -1 * percent .. "%-"
 	end
-	awful.spawn.easy_async("amixer set Master " .. percent, function ()
+	awful.spawn.easy_async("wpctl set-volume @DEFAULT_AUDIO_SINK@ " .. percent, function ()
 		if callback then
 			volume.update(callback)
 		else
@@ -43,37 +44,41 @@ end
 
 volume.set = function(percent)
 	if not percent then percent = 0 end
-	awful.spawn.easy_async("amixer set Master " .. percent .. "%", function () volume.update() end)
+	awful.spawn.easy_async("wpctl set-volume @DEFAULT_AUDIO_SINK@ " .. percent .. "%", function () volume.update() end)
 end
 
 volume.toggle_mute = function()
-	awful.spawn.easy_async("amixer -q set Master toggle", function () volume.update() end)
+	awful.spawn.easy_async("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle", function () volume.update() end)
 end
 
 volume.toggle_mic_mute = function()
-	awful.spawn.easy_async("amixer set Capture toggle", function () volume.update() end)
+	awful.spawn.easy_async("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle", function () volume.update() end)
 end
 
 volume.update = function(callback)
-	local cmd = "amixer get Master && amixer get Capture"
+	local cmd = "wpctl get-volume @DEFAULT_AUDIO_SINK@ && wpctl get-volume @DEFAULT_AUDIO_SOURCE@"
 
 	awful.spawn.easy_async_with_shell(cmd, function(stdout)
-		local vol, playback = string.match(stdout, "Playback [%d]+ %[([%d]+)%%%] %[([%l]*)")
-		local mic_vol, mic_playback = string.match(stdout, "Capture [%d]+ %[([%d]+)%%%] %[([%l]*)")
+		local line1, line2 = string.match(stdout, "([^\n]*)\n(.*)\n")
 
-		if not vol or not playback or not mic_vol or not mic_playback then return end
+		local vol, muted = string.match(line1, "Volume: (%S+)%s?(.*)")
+		local mic_vol, mic_muted = string.match(line2, "Volume: (%S+)%s?(.*)")
 
-		vol = tonumber(vol)
-		mic_vol = tonumber(mic_vol)
+		if not vol or not mic_vol then return end
+
+		vol = math.floor(tonumber(vol) * 100)
+		mic_vol = math.floor(tonumber(mic_vol) * 100)
+		muted = (muted == "[MUTED]")
+		mic_muted = (mic_muted == "[MUTED]")
 
 		local text = "" .. vol
-		if vol == 0 or playback == "off" then
+		if vol == 0 or muted then
 			text = text .. "M"
 		else
 			text = text .. "%"
 		end
 
-		if mic_playback == "off" then
+		if mic_muted then
 			text = text .. " " .. utf8.char(0xf131)
 		end
 
@@ -97,12 +102,6 @@ volume.widget:buttons(awful.util.table.join(
     end),
     awful.button({}, keys.mouse3, function()
 		volume.toggle_mic_mute()
-    end),
-    awful.button({}, keys.mwheelup, function()
-		volume.inc(1)
-    end),
-    awful.button({}, keys.mwheeldown, function()
-		volume.dec(1)
     end)
 ))
 
