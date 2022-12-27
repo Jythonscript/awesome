@@ -2,6 +2,7 @@ local wibox = require("wibox")
 local awful = require("awful")
 local markup = require("lame.markup")
 local keys = require("keys")
+local gears = require("gears")
 
 -- ALSA volume
 local volume = {}
@@ -60,6 +61,19 @@ volume.update = function(callback)
 
 	awful.spawn.easy_async_with_shell(cmd, function(stdout)
 		local line1, line2 = string.match(stdout, "([^\n]*)\n(.*)\n")
+
+		if not line1 or not line2 then
+			gears.timer {
+				timeout = 3,
+				autostart = true,
+				call_now = true,
+				callback = function ()
+					volume.update(callback)
+				end,
+				single_shot = true,
+			}
+			return
+		end
 
 		local vol, muted = string.match(line1, "Volume: (%S+)%s?(.*)")
 		local mic_vol, mic_muted = string.match(line2, "Volume: (%S+)%s?(.*)")
