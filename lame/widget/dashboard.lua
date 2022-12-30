@@ -214,13 +214,13 @@ end
 
 local calendar_offset = 0
 
-calendar_widget = wibox.widget {
-		date = os.date('*t'),
-		font = font_dpi("Fira Mono",15),
-		fn_embed = decorate_calendar,
-		font = small_font,
-		widget = wibox.widget.calendar.month
-	}
+local calendar_widget = wibox.widget {
+	date = os.date('*t'),
+	fn_embed = decorate_calendar,
+	font = small_font,
+	widget = wibox.widget.calendar.month,
+	forced_width = dpi(250),
+}
 
 function calendar_inc(offset)
 	calendar_offset = calendar_offset + offset
