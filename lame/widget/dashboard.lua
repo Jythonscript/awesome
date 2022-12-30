@@ -246,6 +246,7 @@ local calendar_box = create_boxed_widget(calendar_widget, dpi(300), dpi(300), bo
 
 dashboard:connect_signal("property::visible", function ()
 	calendar_widget.date = os.date('*t')
+	calendar_offset = 0
 end)
 
 calendar_box:buttons(gears.table.join(
