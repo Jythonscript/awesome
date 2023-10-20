@@ -278,6 +278,11 @@ firefox_textbox.font = icon_font
 local firefox_box = create_boxed_widget(firefox_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(firefox_textbox, firefox_box, "#ff9400", "firefox")
 
+local chromium_textbox = wibox.widget.textbox(utf8.char(0xf268))
+chromium_textbox.font = icon_font
+local chromium_box = create_boxed_widget(chromium_textbox, dpi(100), dpi(100), box_background)
+launcher_setup(chromium_textbox, chromium_box, "#4b8bf5", "chromium")
+
 local terminal_textbox = wibox.widget.textbox(utf8.char(0xf120))
 terminal_textbox.font = icon_font
 local terminal_box = create_boxed_widget(terminal_textbox, dpi(100), dpi(100), box_background)
@@ -602,7 +607,7 @@ dashboard:setup {
 			},
 			{
 				firefox_box,
-				terminal_box,
+				chromium_box,
 				discord_box,
 				todoist_box,
 				steam_box,
