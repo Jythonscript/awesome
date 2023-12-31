@@ -71,7 +71,7 @@ helpers.run_once({
 	{"mpDris2"},
 	{"mygestures --device 'Virtual core pointer' --without-brush"},
 	{prefs.compositor},
-	{"alacritty --class=Alacritty,hidden"},
+	{"alacritty --class=hidden,Alacritty"},
 })
 
 -- append platform run_once
