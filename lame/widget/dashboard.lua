@@ -273,6 +273,22 @@ local launcher_setup = function(textbox, box, color, program)
 	))
 end
 
+local image_launcher_setup = function(imagebox, image_path, box, color, program)
+	box:connect_signal("mouse::enter", function ()
+		image_widget = imagebox:get_children_by_id("image_widget")[1]
+		image_widget.image = gears.color.recolor_image(image_path, color)
+	end)
+	box:connect_signal("mouse::leave", function ()
+		image_widget = imagebox:get_children_by_id("image_widget")[1]
+		image_widget.image = image_path
+	end)
+	box:buttons(gears.table.join(
+		awful.button({}, keys.mouse1, function ()
+			awful.spawn(program)
+		end)
+	))
+end
+
 local firefox_textbox = wibox.widget.textbox(utf8.char(0xf269))
 firefox_textbox.font = icon_font
 local firefox_box = create_boxed_widget(firefox_textbox, dpi(100), dpi(100), box_background)
@@ -297,6 +313,20 @@ local todoist_textbox = wibox.widget.textbox(utf8.char(0xf0ca))
 todoist_textbox.font = icon_font
 local todoist_box = create_boxed_widget(todoist_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(todoist_textbox, todoist_box, "#4688f4", "flatpak run com.todoist.Todoist")
+
+local slippi_image = beautiful.confdir .. "/icons/slippi.svg"
+local slippi_imagebox = wibox.widget {
+	{
+		id = "image_widget",
+		image = slippi_image,
+		widget = wibox.widget.imagebox,
+	},
+	margins = dpi(30),
+	widget = wibox.container.margin,
+}
+
+local slippi_box = create_boxed_widget(slippi_imagebox, dpi(100), dpi(100), box_background)
+image_launcher_setup(slippi_imagebox, slippi_image, slippi_box, "#44a963", "slippi-launcher")
 
 local steam_textbox = wibox.widget.textbox(utf8.char(0xf3f6))
 steam_textbox.font = icon_font
@@ -609,7 +639,7 @@ dashboard:setup {
 				firefox_box,
 				chromium_box,
 				discord_box,
-				todoist_box,
+				slippi_box,
 				steam_box,
 				layout = wibox.layout.flex.vertical
 			},
