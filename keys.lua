@@ -622,7 +622,7 @@ local laptopkeys = gears.table.join(
 		lame.widget.brightness.decrease,
 		{description = "brightness down", group = "hotkeys"}),
 	awful.key({ modkey, altkey }, "b",
-		lame.widget.brightness.prompt ,
+		lame.widget.brightness.prompt,
 		{description = "brightness prompt", group = "custom"}),
 	-- mute microphone
 	awful.key({}, "XF86AudioMicMute",

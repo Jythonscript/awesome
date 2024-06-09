@@ -101,6 +101,7 @@ volume.update = function(callback)
 		if callback then
 			callback(vol)
 		end
+		awesome.emit_signal("custom::volume_changed", vol)
 	end)
 end
 

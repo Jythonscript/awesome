@@ -594,6 +594,7 @@ local volume_box_update = function(vol)
 	volume_slider.forced_width = width
 	volume_textbox.text = vol .. "%"
 end
+awesome.connect_signal("custom::volume_changed", volume_box_update)
 
 volume_box:buttons(gears.table.join(
 	awful.button({}, keys.mwheelup, function ()
