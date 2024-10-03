@@ -683,6 +683,11 @@ local pckeys = gears.table.join(
 			lame.widget.music.playerctl_play_pause()
         end,
         {description = "playerctl play-pause", group = "custom"}),
+	awful.key({}, "XF86AudioPause",
+        function ()
+			lame.widget.music.playerctl_play_pause()
+        end,
+        {description = "playerctl play-pause", group = "custom"}),
 	awful.key({ altkey }, "XF86AudioMute",
         function ()
 			lame.widget.volume.toggle_mic_mute()
