@@ -333,6 +333,11 @@ steam_textbox.font = icon_font
 local steam_box = create_boxed_widget(steam_textbox, dpi(100), dpi(100), box_background)
 launcher_setup(steam_textbox, steam_box, "#000000", "steam")
 
+local bitwarden_textbox = wibox.widget.textbox(utf8.char(0xf132))
+bitwarden_textbox.font = icon_font
+local bitwarden_box = create_boxed_widget(bitwarden_textbox, dpi(100), dpi(100), box_background)
+launcher_setup(bitwarden_textbox, bitwarden_box, "#175ddc", "bitwarden-desktop")
+
 -- lock widget
 local lock_textbox = wibox.widget.textbox(utf8.char(0xf023))
 lock_textbox.font = icon_font
@@ -641,6 +646,7 @@ dashboard:setup {
 				chromium_box,
 				discord_box,
 				slippi_box,
+				bitwarden_box,
 				steam_box,
 				layout = wibox.layout.flex.vertical
 			},
