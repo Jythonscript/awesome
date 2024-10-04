@@ -16,6 +16,7 @@ local table = {}
 
 local box_radius = 12
 local box_gap = 6
+local box_width = 80
 local big_font = font_dpi("xos4 Terminus",34)
 local medium_font = font_dpi("xos4 Terminus",20)
 local small_font = font_dpi("xos4 Terminus",12)
@@ -291,27 +292,27 @@ end
 
 local firefox_textbox = wibox.widget.textbox(utf8.char(0xf269))
 firefox_textbox.font = icon_font
-local firefox_box = create_boxed_widget(firefox_textbox, dpi(100), dpi(100), box_background)
+local firefox_box = create_boxed_widget(firefox_textbox, dpi(box_width), dpi(box_width), box_background)
 launcher_setup(firefox_textbox, firefox_box, "#ff9400", "firefox")
 
 local chromium_textbox = wibox.widget.textbox(utf8.char(0xf268))
 chromium_textbox.font = icon_font
-local chromium_box = create_boxed_widget(chromium_textbox, dpi(100), dpi(100), box_background)
+local chromium_box = create_boxed_widget(chromium_textbox, dpi(box_width), dpi(box_width), box_background)
 launcher_setup(chromium_textbox, chromium_box, "#4b8bf5", "chromium")
 
 local terminal_textbox = wibox.widget.textbox(utf8.char(0xf120))
 terminal_textbox.font = icon_font
-local terminal_box = create_boxed_widget(terminal_textbox, dpi(100), dpi(100), box_background)
+local terminal_box = create_boxed_widget(terminal_textbox, dpi(box_width), dpi(box_width), box_background)
 launcher_setup(terminal_textbox, terminal_box, "#000000", prefs.terminal)
 
 local discord_textbox = wibox.widget.textbox(utf8.char(0xf392))
 discord_textbox.font = icon_font
-local discord_box = create_boxed_widget(discord_textbox, dpi(100), dpi(100), box_background)
+local discord_box = create_boxed_widget(discord_textbox, dpi(box_width), dpi(box_width), box_background)
 launcher_setup(discord_textbox, discord_box, "#5865f2", "discord")
 
 local todoist_textbox = wibox.widget.textbox(utf8.char(0xf0ca))
 todoist_textbox.font = icon_font
-local todoist_box = create_boxed_widget(todoist_textbox, dpi(100), dpi(100), box_background)
+local todoist_box = create_boxed_widget(todoist_textbox, dpi(box_width), dpi(box_width), box_background)
 launcher_setup(todoist_textbox, todoist_box, "#4688f4", "flatpak run com.todoist.Todoist")
 
 local slippi_image = beautiful.confdir .. "/icons/slippi.svg"
@@ -321,21 +322,21 @@ local slippi_imagebox = wibox.widget {
 		image = slippi_image,
 		widget = wibox.widget.imagebox,
 	},
-	margins = dpi(30),
+	margins = dpi(20),
 	widget = wibox.container.margin,
 }
 
-local slippi_box = create_boxed_widget(slippi_imagebox, dpi(100), dpi(100), box_background)
+local slippi_box = create_boxed_widget(slippi_imagebox, dpi(box_width), dpi(box_width), box_background)
 image_launcher_setup(slippi_imagebox, slippi_image, slippi_box, "#44a963", "slippi-launcher")
 
 local steam_textbox = wibox.widget.textbox(utf8.char(0xf3f6))
 steam_textbox.font = icon_font
-local steam_box = create_boxed_widget(steam_textbox, dpi(100), dpi(100), box_background)
+local steam_box = create_boxed_widget(steam_textbox, dpi(box_width), dpi(box_width), box_background)
 launcher_setup(steam_textbox, steam_box, "#000000", "steam")
 
 local bitwarden_textbox = wibox.widget.textbox(utf8.char(0xf132))
 bitwarden_textbox.font = icon_font
-local bitwarden_box = create_boxed_widget(bitwarden_textbox, dpi(100), dpi(100), box_background)
+local bitwarden_box = create_boxed_widget(bitwarden_textbox, dpi(box_width), dpi(box_width), box_background)
 launcher_setup(bitwarden_textbox, bitwarden_box, "#175ddc", "bitwarden-desktop")
 
 -- lock widget
