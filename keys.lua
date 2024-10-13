@@ -344,9 +344,6 @@ keys.globalkeys = gears.table.join(
             end)
         end,
               {description = "reload awesome", group = "awesome"}),
-    awful.key({ modkey, "Shift"   }, "q", awesome.quit,
-              {description = "quit awesome", group = "awesome"}),
-
     awful.key({ altkey, "Shift"   }, "l",
 		function ()
 			awful.tag.incmwfact( 0.05)
@@ -504,6 +501,11 @@ keys.globalkeys = gears.table.join(
 			awful.spawn(prefs.browser, {maximized = false})
 		end,
               {description = "run browser", group = "launcher"}),
+    awful.key({ modkey, "Shift" }, "q",
+		function ()
+			awful.spawn(prefs.private_browser, {maximized = false})
+		end,
+              {description = "run private browser", group = "launcher"}),
     awful.key({ modkey }, "a",
 		function ()
 			os.execute("rofi -show window -disable-history");
@@ -933,6 +935,8 @@ keys.quickrun_keys = gears.table.join(
 		helpers.terminal_same_directory),
 	awful.key({}, "q",
 		function () awful.spawn(prefs.browser) end),
+	awful.key({ "Shift" }, "q",
+		function () awful.spawn(prefs.private_browser) end),
 	awful.key({}, "d",
 		function () awful.spawn("discord") end),
 	awful.key({}, "c",
