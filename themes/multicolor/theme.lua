@@ -120,6 +120,9 @@ lame.widget.memory.setup()
 -- cpu
 lame.widget.cpu.init()
 
+-- temperature
+lame.widget.temp.init()
+
 -- Eminent-like task filtering
 local orig_taglist_filter = awful.widget.taglist.filter.all
 
@@ -186,6 +189,7 @@ function theme.at_screen_connect(s)
 				layout = wibox.layout.fixed.horizontal,
 				spacing = 5,
 				systray,
+				lame.widget.temp.widget,
 				lame.widget.volume.widget,
 				lame.widget.memory.widget,
 				lame.widget.cpu.widget,
@@ -211,6 +215,7 @@ function theme.at_screen_connect(s)
 				layout = wibox.layout.fixed.horizontal,
 				spacing = 5,
 				systray,
+				lame.widget.temp.widget,
 				lame.widget.volume.widget,
 				lame.widget.memory.widget,
 				lame.widget.cpu.widget,

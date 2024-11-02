@@ -18,7 +18,7 @@ cpu.widget = wibox.widget {
 cpu.init = function(timeout, color)
 	if not timeout then timeout = 2 end
 	if color then cpu.color = color end
-	local cmd = os.getenv("HOME") .. "/.config/awesome/scripts/cpu-usage"
+	local cmd = os.getenv("HOME") .. "/.config/awesome/scripts/cpu-usage " .. timeout
 
 	awful.spawn.with_line_callback(cmd, {
 		stdout = function(line)
