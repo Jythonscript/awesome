@@ -22,13 +22,12 @@ temp.temp_now = function()
 	end
 end
 
-temp.init = function(prefix_name, timeout, color)
-	if not prefix_name and prefs.prefix_name then prefix_name = prefs.prefix_name end
-	if not prefix_name and not prefs.prefix_name then prefix_name = 'k10temp' end
-	require('lame.helpers').notify(prefix_name)
+temp.init = function(prefix, timeout, color)
+	if not prefix and prefs.temperature_prefix then prefix = prefs.temperature_prefix end
+	if not prefix and not prefs.temperature_prefix then prefix = 'k10temp' end
 	if not timeout then timeout = 4 end
 	if color then temp.color = color end
-	local cmd = os.getenv("HOME") .. "/.config/awesome/scripts/temperature " .. prefix_name .. " " .. timeout
+	local cmd = os.getenv("HOME") .. "/.config/awesome/scripts/temperature " .. prefix .. " " .. timeout
 
 	awful.spawn.with_line_callback(cmd, {
 		stdout = function(line)
