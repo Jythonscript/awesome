@@ -4,7 +4,6 @@ local wibox = require("wibox")
 local awful = require("awful")
 local prefs = require("prefs")
 local gears = require("gears")
-local awesome
 
 local temp = {}
 
@@ -23,20 +22,20 @@ temp.temp_now = function()
 	end
 end
 
-temp.init = function(file_path, timeout, color)
-	if not file_path and prefs.temperature_path then file_path = prefs.temperature_path end
-	if not file_path and not prefs.temperature_path then file_path = "/sys/class/hwmon/hwmon1/temp1_input" end
+temp.init = function(prefix_name, timeout, color)
+	if not prefix_name and prefs.prefix_name then prefix_name = prefs.prefix_name end
+	if not prefix_name and not prefs.prefix_name then prefix_name = 'k10temp' end
+	require('lame.helpers').notify(prefix_name)
 	if not timeout then timeout = 4 end
 	if color then temp.color = color end
-	local cmd = os.getenv("HOME") .. "/.config/awesome/scripts/cat-loop " .. file_path .. " " .. timeout
+	local cmd = os.getenv("HOME") .. "/.config/awesome/scripts/temperature " .. prefix_name .. " " .. timeout
 
 	awful.spawn.with_line_callback(cmd, {
 		stdout = function(line)
-			local raw_temp = tonumber(line)
-			local temp_c = raw_temp / 1000
+			local temp_c = tonumber(line)
 			local text = string.format("%02.1f", temp_c)
 			temp.widget:set_markup(markup.fg.color(temp.color, text))
-				awesome.emit_signal("custom::cpu_temp", temp_c)
+			awesome.emit_signal("custom::cpu_temp", temp_c)
 		end
 	})
 end

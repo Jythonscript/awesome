@@ -3,4 +3,5 @@ prefs.lua
 icon.png
 scripts/cpu-usage
 scripts/cat-loop
+scripts/temperature
 .vscode
