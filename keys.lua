@@ -439,6 +439,17 @@ keys.globalkeys = gears.table.join(
         {description = "toggle mute", group = "hotkeys"}),
     awful.key({ altkey, "Control" }, "0", function () lame.widget.volume.set() end,
         {description = "volume 0%", group = "hotkeys"}),
+	-- Music control
+	awful.key({}, "XF86AudioPlay",
+	function ()
+		lame.widget.music.playerctl_play_pause()
+	end,
+	{description = "playerctl play-pause", group = "custom"}),
+	awful.key({}, "XF86AudioPause",
+	function ()
+		lame.widget.music.playerctl_play_pause()
+	end,
+	{description = "playerctl play-pause", group = "custom"}),
 
     -- MPD control
 	awful.key({ altkey, "Shift" }, "'",
@@ -679,17 +690,6 @@ local pckeys = gears.table.join(
 			os.execute("systemctl hibernate")
         end,
         {description = "hibernate system", group = "custom"}),
-	-- toggle mpd
-	awful.key({}, "XF86AudioPlay",
-        function ()
-			lame.widget.music.playerctl_play_pause()
-        end,
-        {description = "playerctl play-pause", group = "custom"}),
-	awful.key({}, "XF86AudioPause",
-        function ()
-			lame.widget.music.playerctl_play_pause()
-        end,
-        {description = "playerctl play-pause", group = "custom"}),
 	awful.key({ altkey }, "XF86AudioMute",
         function ()
 			lame.widget.volume.toggle_mic_mute()
