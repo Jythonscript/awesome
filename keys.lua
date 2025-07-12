@@ -450,6 +450,16 @@ keys.globalkeys = gears.table.join(
 		lame.widget.music.playerctl_play_pause()
 	end,
 	{description = "playerctl play-pause", group = "custom"}),
+	awful.key({}, "XF86AudioPrev",
+		function ()
+			lame.widget.music.playerctl_previous()
+		end,
+		{description = "playerctl previous", group = "custom"}),
+	awful.key({}, "XF86AudioNext",
+		function ()
+			lame.widget.music.playerctl_next()
+		end,
+		{description = "playerctl next", group = "custom"}),
 
     -- MPD control
 	awful.key({ altkey, "Shift" }, "'",
